@@ -3,6 +3,7 @@ import {
   useCallback,
   useEffect,
   useImperativeHandle,
+  useLayoutEffect,
   useRef,
   useState,
   type CSSProperties,
@@ -48,11 +49,42 @@ interface BookProps {
 }
 
 const SWIPE_THRESHOLD = 50
+const SPREAD_GAP = 16
 
 const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, ref) {
   const flipRef = useRef<FlipInstance | null>(null)
+  const wrapRef = useRef<HTMLDivElement>(null)
   const [current, setCurrent] = useState(0)
   const startPageRef = useRef(0)
+  const [dims, setDims] = useState({ pageW: 420, pageH: 594, spread: false })
+
+  // Size the book to fit the available stage area (minus margins) so it stays
+  // clear of the top bar and bottom toolbar. stretch mode derives height from the
+  // full container width and ignores maxHeight, which overflows; computing an
+  // exact fit avoids that.
+  const measure = useCallback(() => {
+    const stage = wrapRef.current?.parentElement
+    if (!stage) return
+    const availW = Math.max(260, stage.clientWidth - 40)
+    const availH = Math.max(340, stage.clientHeight - 28)
+    const ratio = 460 / 650
+    const spread = availW >= 720
+    // Extra outer margin so the spread parent is strictly wider than 2*pageWidth
+    // (page-flip treats parent <= 2*pageWidth as portrait).
+    const gap = spread ? SPREAD_GAP : 0
+    const maxPageH = spread ? (availW - gap) / 2 / ratio : availW / ratio
+    const pageH = Math.floor(Math.min(availH, maxPageH))
+    const pageW = Math.floor(pageH * ratio)
+    setDims((d) => (d.pageW === pageW && d.pageH === pageH && d.spread === spread ? d : { pageW, pageH, spread }))
+  }, [])
+
+  useLayoutEffect(() => {
+    measure()
+    const stage = wrapRef.current?.parentElement
+    const ro = new ResizeObserver(measure)
+    if (stage) ro.observe(stage)
+    return () => ro.disconnect()
+  }, [measure])
 
   const api = useCallback(() => flipRef.current?.pageFlip(), [])
 
@@ -140,25 +172,29 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, 
   const atLast = current >= total - 1
 
   const settings = {
-    width: 460,
-    height: 650,
-    size: 'stretch' as const,
-    minWidth: 300,
-    maxWidth: 920,
-    minHeight: 420,
-    maxHeight: 720,
+    width: dims.pageW,
+    height: dims.pageH,
+    size: 'fixed' as const,
+    minWidth: 120,
+    maxWidth: 2000,
+    minHeight: 160,
+    maxHeight: 2000,
     drawShadow: true,
     flippingTime: 650,
-    usePortrait: true,
+    // Force landscape for the spread; allow portrait only for single-page sizing.
+    usePortrait: !dims.spread,
     startZIndex: 1,
-    autoSize: true,
+    autoSize: false,
     maxShadowOpacity: 0.28,
     showCover: true,
     mobileScrollSupport: true,
     swipeDistance: 30,
     clickEventForward: true,
     startPage: startPageRef.current,
-    // Mirror mode: engine does no pointer handling; we drive flips ourselves.
+    // Native mode: let the engine handle pointer/corner peel directly.
+    // Mirror mode: the CSS mirror makes the engine's corner detection land on the
+    // wrong side, so we disable engine pointer handling and drive flips via the
+    // side arrows, keyboard, and swipe instead.
     useMouseEvents: mode === 'native',
     showPageCorners: mode === 'native',
     disableFlipByClick: mode === 'mirror',
@@ -166,15 +202,28 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, 
     style: {} as CSSProperties,
   }
 
+  const wrapStyle: CSSProperties = {
+    width: dims.spread ? dims.pageW * 2 + SPREAD_GAP : dims.pageW,
+    height: dims.pageH,
+  }
+
   return (
     <>
       <div
+        ref={wrapRef}
         className={`book-wrap${mode === 'mirror' ? ' book--mirror' : ''}`}
+        style={wrapStyle}
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
-        {/* key forces a clean re-init when the RTL strategy changes */}
-        <HTMLFlipBook key={mode} ref={flipRef} {...settings} onInit={handleInit} onFlip={handleFlip}>
+        {/* key forces a clean re-init when strategy or computed size changes */}
+        <HTMLFlipBook
+          key={`${mode}-${dims.spread ? 'L' : 'P'}-${dims.pageW}x${dims.pageH}`}
+          ref={flipRef}
+          {...settings}
+          onInit={handleInit}
+          onFlip={handleFlip}
+        >
           <CoverPage />
           <AboutPage />
           <TeamPage />

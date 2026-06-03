@@ -139,21 +139,21 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px 82px;
+  padding: 14px 16px;
   direction: rtl;
   min-height: 0;
+  overflow: hidden;
 }
 
 .book-wrap {
-  width: min(92vw, 1040px);
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  flex: 0 0 auto;
+  position: relative;
 }
 
 .flip-root {
   direction: ltr;
+  width: 100% !important;
+  height: 100% !important;
 }
 
 /* Mode A: mirror the book for true RTL look, counter-flip inner content. */
@@ -987,10 +987,7 @@ body {
     font-size: 14px;
   }
   .stage {
-    padding: 12px 40px;
-  }
-  .book-wrap {
-    width: 94vw;
+    padding: 10px 8px;
   }
   .placeholder-page {
     padding: 28px;
