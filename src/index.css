@@ -26,6 +26,7 @@ body {
 
 body {
   min-height: 100vh;
+  min-height: 100dvh;
   font-family: 'Heebo', Arial, Helvetica, sans-serif;
   color: var(--text);
   background:
@@ -37,6 +38,7 @@ body {
 /* ---------------- App shell / chrome ---------------- */
 .app {
   height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
 }
