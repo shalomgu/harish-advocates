@@ -11,7 +11,7 @@ export const cover = {
   portraitAlt: 'עו״ד ליאור חריש',
   author: 'עו״ד ליאור חריש – מייסד',
   promise: 'מקצועיות. אמינות. ניסיון.',
-  footer: 'מקצועיות. אמינות. ניסיון.',
+  footer: '',
 }
 
 export const about = {
