@@ -50,6 +50,11 @@ interface BookProps {
 
 const SWIPE_THRESHOLD = 50
 const SPREAD_GAP = 16
+// Printed-page proportions used for the two-page spread.
+const DESIGN_RATIO = 460 / 650
+// Tallest (narrowest) the single page is allowed to get on phones so it fills
+// more vertical space instead of leaving large top/bottom margins.
+const MIN_RATIO = 0.56
 
 const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, ref) {
   const flipRef = useRef<FlipInstance | null>(null)
@@ -67,14 +72,23 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, 
     if (!stage) return
     const availW = Math.max(260, stage.clientWidth - 40)
     const availH = Math.max(340, stage.clientHeight - 28)
-    const ratio = 460 / 650
     const spread = availW >= 720
-    // Extra outer margin so the spread parent is strictly wider than 2*pageWidth
-    // (page-flip treats parent <= 2*pageWidth as portrait).
-    const gap = spread ? SPREAD_GAP : 0
-    const maxPageH = spread ? (availW - gap) / 2 / ratio : availW / ratio
-    const pageH = Math.floor(Math.min(availH, maxPageH))
-    const pageW = Math.floor(pageH * ratio)
+    let pageW: number
+    let pageH: number
+    if (spread) {
+      // Spread keeps the printed-page proportions. Extra outer margin so the
+      // parent is strictly wider than 2*pageWidth (page-flip treats parent
+      // <= 2*pageWidth as portrait).
+      pageH = Math.floor(Math.min(availH, (availW - SPREAD_GAP) / 2 / DESIGN_RATIO))
+      pageW = Math.floor(pageH * DESIGN_RATIO)
+    } else {
+      // Single page (phones): width almost always limits a 0.71 page, leaving big
+      // top/bottom gaps on tall screens. Relax the aspect down to MIN_RATIO so the
+      // page grows taller and fills more of the available height.
+      const ratio = Math.min(DESIGN_RATIO, Math.max(MIN_RATIO, availW / availH))
+      pageH = Math.floor(Math.min(availH, availW / ratio))
+      pageW = Math.floor(pageH * ratio)
+    }
     setDims((d) => (d.pageW === pageW && d.pageH === pageH && d.spread === spread ? d : { pageW, pageH, spread }))
   }, [])
 
