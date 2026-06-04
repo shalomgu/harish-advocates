@@ -102,33 +102,40 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, 
 
   const api = useCallback(() => flipRef.current?.pageFlip(), [])
 
-  const next = useCallback(() => {
-    api()?.flipNext('top')
-  }, [api])
-
-  const prev = useCallback(() => {
-    const flip = api()
-    if (!flip || flip.getCurrentPageIndex() <= 0) return
-    // StPageFlip's flipPrev() can no-op while disableFlipByClick is true, so we
-    // briefly clear the flag for the (synchronous) call, then restore it.
-    const settings = flip.getSettings()
-    const previous = settings.disableFlipByClick
-    settings.disableFlipByClick = false
-    flip.flipPrev('top')
-    settings.disableFlipByClick = previous
-  }, [api])
-
-  const first = useCallback(() => api()?.flip(0), [api])
-  const last = useCallback(() => {
-    const flip = api()
-    if (flip) flip.flip(flip.getPageCount() - 1)
-  }, [api])
-  const flipTo = useCallback(
-    (index: number) => {
-      api()?.flip(index)
+  // StPageFlip's flip calls (flipPrev/flip-to-index in particular) can silently
+  // no-op while disableFlipByClick is true, which is the case in mirror mode.
+  // Every programmatic flip must briefly clear the flag for the (synchronous)
+  // call, then restore it, so all nav buttons work regardless of mode.
+  const runFlip = useCallback(
+    (action: (flip: PageFlipApi) => void) => {
+      const flip = api()
+      if (!flip) return
+      const settings = flip.getSettings()
+      const previous = settings.disableFlipByClick
+      settings.disableFlipByClick = false
+      action(flip)
+      settings.disableFlipByClick = previous
     },
     [api],
   )
+
+  const next = useCallback(() => {
+    runFlip((flip) => {
+      if (flip.getCurrentPageIndex() >= flip.getPageCount() - 1) return
+      flip.flipNext('top')
+    })
+  }, [runFlip])
+
+  const prev = useCallback(() => {
+    runFlip((flip) => {
+      if (flip.getCurrentPageIndex() <= 0) return
+      flip.flipPrev('top')
+    })
+  }, [runFlip])
+
+  const first = useCallback(() => runFlip((flip) => flip.flip(0)), [runFlip])
+  const last = useCallback(() => runFlip((flip) => flip.flip(flip.getPageCount() - 1)), [runFlip])
+  const flipTo = useCallback((index: number) => runFlip((flip) => flip.flip(index)), [runFlip])
 
   useImperativeHandle(ref, () => ({ next, prev, first, last, flip: flipTo }), [next, prev, first, last, flipTo])
 
