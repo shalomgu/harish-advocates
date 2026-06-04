@@ -23,8 +23,12 @@ const CoverPage = forwardRef<HTMLDivElement>(function CoverPage(_props, ref) {
           </figure>
           <p className="cover-author">{cover.author}</p>
           <p className="cover-promise">{cover.promise}</p>
-          <div className="cover-gold-line" aria-hidden="true" />
-          <p className="cover-footer">{cover.footer}</p>
+          {cover.footer && (
+            <>
+              <div className="cover-gold-line" aria-hidden="true" />
+              <p className="cover-footer">{cover.footer}</p>
+            </>
+          )}
         </article>
       </div>
     </Page>
