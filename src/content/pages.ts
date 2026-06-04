@@ -6,11 +6,11 @@ export const cover = {
   logo: asset('logo.svg'),
   logoAlt: 'חריש עורכי דין – Harish Advocates',
   title: 'חריש עורכי דין',
-  taglineParts: ['פתרונות משפטיים', 'ייצוג', 'ליווי', 'אסטרטגיה'],
+  taglineParts: ['יצירתיות', 'תגובתיות', 'אסטרטגיה'],
   portrait: asset('lior-harish-nobg.png'),
   portraitAlt: 'עו״ד ליאור חריש',
   author: 'עו״ד ליאור חריש – מייסד',
-  promise: 'פתרונות משפטיים. יצירתיות. תגובתיות. אסטרטגיה.',
+  promise: 'מקצועיות. אמינות. ניסיון.',
   footer: 'מקצועיות. אמינות. ניסיון.',
 }
 
