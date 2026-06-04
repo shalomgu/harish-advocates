@@ -11,8 +11,8 @@ const AboutPage = forwardRef<HTMLDivElement>(function AboutPage(_props, ref) {
         </p>
       ))}
 
+      <p className="team-label">{about.teamLabel}</p>
       <div className="team">
-        <p className="team-label">{about.teamLabel}</p>
         <ul className="team-list">
           {about.teamList.map((name) => (
             <li key={name}>{name}</li>

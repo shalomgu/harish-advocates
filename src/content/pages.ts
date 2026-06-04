@@ -15,7 +15,7 @@ export const cover = {
 }
 
 export const about = {
-  title: 'אודות',
+  title: '',
   badge: 'חריש עורכי דין',
   paragraphs: [
     'המשרד נוסד בסוף שנת 1996 על ידי עו״ד ליאור חריש, יוצא משרד הרצוג, פוקס, נאמן ושות׳.',
