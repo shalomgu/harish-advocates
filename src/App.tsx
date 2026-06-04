@@ -50,16 +50,6 @@ export default function App() {
         <div className="page-status">{shared.pageStatus(current + 1, total)}</div>
         <div className="spacer" />
 
-        <div className="mode-toggle" title={shared.modeToggle.label}>
-          <span>{shared.modeToggle.label}:</span>
-          <button className={mode === 'mirror' ? 'active' : ''} onClick={() => setModeAndUrl('mirror')}>
-            {shared.modeToggle.mirror}
-          </button>
-          <button className={mode === 'native' ? 'active' : ''} onClick={() => setModeAndUrl('native')}>
-            {shared.modeToggle.native}
-          </button>
-        </div>
-
         <button
           className="icon-btn"
           aria-pressed={thumbsOpen}
