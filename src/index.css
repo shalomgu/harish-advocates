@@ -992,9 +992,53 @@ body {
   .placeholder-page {
     padding: 28px;
   }
+  /* On phones the flip page is much shorter than the viewport, so vh-based
+     spacing overflows the card and clips the footer. Pin sizes to the card and
+     distribute the content instead. */
   .cover-face {
     width: 100%;
     height: 100%;
+    justify-content: space-between;
+    padding: 14px 16px;
+  }
+  .cover-face::after {
+    inset: 10px;
+  }
+  .cover-logo {
+    width: min(96px, 26vw);
+    margin-bottom: 0;
+    padding: 6px 8px;
+  }
+  .cover-title {
+    margin: 0;
+    font-size: clamp(22px, 6.4vw, 30px);
+  }
+  .cover-gold-line {
+    margin-bottom: 0;
+  }
+  .cover-tagline {
+    margin-bottom: 0;
+    padding: 6px 10px;
+    font-size: clamp(10px, 3vw, 13px);
+  }
+  .cover-portrait {
+    width: min(104px, 27vw);
+    height: min(104px, 27vw);
+    margin-bottom: 0;
+  }
+  .cover-author {
+    margin: 0;
+    font-size: clamp(12px, 3.4vw, 15px);
+  }
+  .cover-promise {
+    margin-bottom: 0;
+    padding: 5px 14px;
+    font-size: clamp(11px, 3.2vw, 14px);
+  }
+  .cover-footer {
+    margin: 0;
+    padding-top: 8px;
+    font-size: clamp(10px, 3vw, 13px);
   }
   .side-arrow {
     font-size: 34px;

@@ -10,7 +10,7 @@ function readInitialMode(): RtlMode {
 
 export default function App() {
   const bookRef = useRef<BookHandle>(null)
-  const [mode, setMode] = useState<RtlMode>(readInitialMode)
+  const [mode] = useState<RtlMode>(readInitialMode)
   const [current, setCurrent] = useState(0)
   const [total, setTotal] = useState(pageTitles.length)
   const [thumbsOpen, setThumbsOpen] = useState(false)
@@ -19,13 +19,6 @@ export default function App() {
     setCurrent(cur)
     if (tot) setTotal(tot)
   }, [])
-
-  const setModeAndUrl = (next: RtlMode) => {
-    setMode(next)
-    const url = new URL(window.location.href)
-    url.searchParams.set('rtl', next)
-    window.history.replaceState({}, '', url)
-  }
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
