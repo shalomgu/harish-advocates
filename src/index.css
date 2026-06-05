@@ -748,17 +748,17 @@ body {
   }
 }
 
-.media-lightbox-inner {
+.media-stage {
   position: relative;
   max-width: min(440px, 92vw);
   max-height: 92vh;
 }
 
-.media-lightbox-inner--image {
+.media-stage--image {
   max-width: min(760px, 94vw);
 }
 
-.media-lightbox-inner video {
+.media-stage video {
   display: block;
   width: 100%;
   max-height: 88vh;
@@ -777,12 +777,107 @@ body {
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
 }
 
+/* ---- 3D carousel (CSS-variable driven: rotate + recede + blur by distance) ---- */
+.carousel3d {
+  position: relative;
+  height: min(74vh, 600px);
+  aspect-ratio: 256 / 512;
+  perspective: 500px;
+  transform-style: preserve-3d;
+}
+
+.carousel3d-card {
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+  transform: rotateY(calc(var(--offset) * 50deg)) scaleY(calc(1 + var(--abs-offset) * -0.4))
+    translateZ(calc(var(--abs-offset) * -30rem)) translateX(calc(var(--direction) * -5rem));
+  filter: blur(calc(var(--abs-offset) * 1rem));
+  transition: all 0.3s ease-out;
+}
+
+.carousel3d-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+  user-select: none;
+}
+
+/* Carousel controls */
+.carousel-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--accent);
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+  transition: transform 0.15s ease, background 0.15s ease, opacity 0.15s ease;
+  z-index: 5;
+}
+
+.carousel-nav:hover:not(:disabled),
+.carousel-nav:focus-visible {
+  background: #fff;
+  transform: translateY(-50%) scale(1.07);
+}
+
+.carousel-nav:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+/* RTL: previous on the right, next on the left (matches the book arrows). */
+.carousel-prev {
+  inset-inline-end: clamp(8px, 3vw, 28px);
+}
+
+.carousel-next {
+  inset-inline-start: clamp(8px, 3vw, 28px);
+}
+
+.carousel-dots {
+  position: absolute;
+  inset-block-end: 16px;
+  inset-inline: 0;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  z-index: 5;
+}
+
+.carousel-dot {
+  width: 9px;
+  height: 9px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.carousel-dot.active {
+  background: #fff;
+}
+
 .media-lightbox-close {
   position: absolute;
-  top: -14px;
-  inset-inline-end: -14px;
-  width: 38px;
-  height: 38px;
+  top: 16px;
+  inset-inline-end: 16px;
+  width: 40px;
+  height: 40px;
   border: 0;
   border-radius: 50%;
   background: #fff;
@@ -793,6 +888,7 @@ body {
   display: grid;
   place-items: center;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+  z-index: 6;
 }
 
 .tips-page .video-tile--link .video-media::after {

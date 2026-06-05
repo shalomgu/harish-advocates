@@ -180,8 +180,11 @@ export interface TipVideo {
 }
 
 export interface TipArticle {
-  image: string
   title: string
+  // Image shown on the card.
+  thumbnail: string
+  // Carousel slides shown in the enlarged view.
+  images: string[]
 }
 
 export const tips = {
@@ -197,7 +200,25 @@ export const tips = {
   articles: {
     heading: 'מאמרים ומדריכים',
     items: [
-      { image: asset('renters-guide.png'), title: 'המדריך המשפטי למשכירי דירות' },
+      {
+        title: 'המדריך המשפטי למשכירי דירות',
+        thumbnail: asset('renters-guide.png'),
+        images: [asset('renters-guide.png')],
+      },
+      {
+        title: 'המדריך המשפטי למשכירי דירות (קרוסלה)',
+        thumbnail: asset('renters-guide.png'),
+        images: [
+          asset('renters-slide-1.png'),
+          asset('renters-slide-2.png'),
+          asset('renters-slide-3.png'),
+          asset('renters-slide-4.png'),
+          asset('renters-slide-5.png'),
+          asset('renters-slide-6.png'),
+          asset('renters-slide-7.png'),
+          asset('renters-slide-8.png'),
+        ],
+      },
     ] as TipArticle[],
   },
 }
@@ -221,16 +242,16 @@ export const media = {
 export const contact = {
   title: 'צור קשר',
   intro: 'מוכנים לדון בצרכים המשפטיים שלכם? פנו אלינו לייעוץ משפטי מקצועי.',
-  address: { title: '📍 כתובת', lines: ['חריש עורכי דין', 'אחדות העבודה 3, גבעתיים'] },
-  phone: { title: '📞 טלפון', tel: '037528111', telDisplay: '03-7528111', fax: 'פקס: 03-7528011' },
+  address: { title: '📍 כתובת', lines: ['חריש עורכי דין', ' דליה 7, גבעתיים'] },
+  phone: { title: '📞 טלפון', titleMobile: '📞 סלולרי', tel: '037528111', telDisplay: '03-7528111', mobile: '0522778848', mobileDisplay: '052-2778848'  },
   email: { title: '✉️ דוא"ל', address: 'harish-l@barak.net.il' },
   hours: { title: '🕐 שעות', lines: ['בתיאום מראש', 'ייעוץ מקצועי זמין'] },
-  footer: '© חריש עורכי דין · אתר זה מיועד למטרות מידע בלבד',
 }
 
 export const backCover = {
   logo: asset('harish-logo-contact.jpg'),
   logoAlt: 'חריש עורכי דין – Harish Advocates',
+  footer: '© חריש עורכי דין · אתר זה מיועד למטרות מידע בלבד',
   links: [
     { label: 'אינסטגרם', href: 'https://www.instagram.com/liorharish/' },
     { label: 'פייסבוק', href: 'https://www.facebook.com/liorharish' },
