@@ -23,7 +23,7 @@ const BackCoverPage = forwardRef<HTMLDivElement>(function BackCoverPage(_props, 
     ref={ref} 
     variant="backcover"
     showFooter
-    footer={<p>className="cover-footer" {backCover.footer}</p>}
+    footer={<p className="cover-footer back-cover-footer">{backCover.footer}</p>}
     >
       <div className="back-cover-logo-wrap">
       <img src={cover.logo} alt={cover.logoAlt} className="cover-logo" />

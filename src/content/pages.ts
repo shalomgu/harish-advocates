@@ -197,6 +197,10 @@ export const tips = {
     items: [
       { type: 'video', url: asset('monopol.mp4'), label: 'מונופול' },
       { type: 'video', url: asset('lior-likes.mp4'), label: 'ליאור ממליץ' },
+      { type: 'video', url: asset('will.mp4'), label: 'צוואה' },
+      { type: 'video', url: asset('will-diy.mp4'), label: 'צוואה – לערוך לבד?' },
+      { type: 'video', url: asset('yipuy-koach-mitmashech.mp4'), label: 'ייפוי כוח מתמשך' },
+      { type: 'video', url: asset('copy-rights.mp4'), label: 'זכויות יוצרים' },
     ] as TipVideo[],
   },
   articles: {
@@ -253,7 +257,7 @@ export const backCover = {
   logo: asset('harish-logo-contact.jpg'),
   logoAlt: 'חריש עורכי דין – Harish Advocates',
   intro: 'ליצירת קשר מיידי, תיאום פגישה או קבלת מידע נוסף לחצו על אחת האפשרויות הבאות:',
-  footer: '© חריש עורכי דין · אתר זה מיועד למטרות מידע בלבד',
+  footer: '© חריש עורכי דין - המידע באתר הינו כללי ואינו מהווה תחליף ליעוץ משפטי',
   links: [
     { label: 'אינסטגרם', href: 'https://www.instagram.com/liorharish/', icon: 'instagram' },
     { label: 'פייסבוק', href: 'https://www.facebook.com/liorharish', icon: 'facebook' },
