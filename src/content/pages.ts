@@ -180,9 +180,8 @@ export interface TipVideo {
 }
 
 export interface TipArticle {
-  icon: string
+  image: string
   title: string
-  text: string
 }
 
 export const tips = {
@@ -198,9 +197,7 @@ export const tips = {
   articles: {
     heading: 'מאמרים ומדריכים',
     items: [
-      { icon: '📄', title: 'מאמר בקרוב', text: 'תוכן מקצועי יתווסף כאן בקרוב.' },
-      { icon: '📘', title: 'מדריך בקרוב', text: 'מדריך פרקטי יתווסף כאן בקרוב.' },
-      { icon: '✍️', title: 'מאמר בקרוב', text: 'תוכן מקצועי יתווסף כאן בקרוב.' },
+      { image: asset('renters-guide.png'), title: 'המדריך המשפטי למשכירי דירות' },
     ] as TipArticle[],
   },
 }

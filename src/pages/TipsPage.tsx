@@ -1,9 +1,13 @@
 import { forwardRef, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import Page from '../components/Page'
-import { tips, type TipVideo } from '../content/pages'
+import { tips } from '../content/pages'
 
-function VideoLightbox({ video, onClose }: { video: TipVideo; onClose: () => void }) {
+type LightboxItem =
+  | { kind: 'video'; src: string; poster?: string; alt: string }
+  | { kind: 'image'; src: string; alt: string }
+
+function Lightbox({ item, onClose }: { item: LightboxItem; onClose: () => void }) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
@@ -13,12 +17,19 @@ function VideoLightbox({ video, onClose }: { video: TipVideo; onClose: () => voi
   }, [onClose])
 
   return createPortal(
-    <div className="video-lightbox" onClick={onClose}>
-      <div className="video-lightbox-inner" onClick={(e) => e.stopPropagation()}>
-        <button className="video-lightbox-close" onClick={onClose} aria-label="סגירה">
+    <div className="media-lightbox" onClick={onClose}>
+      <div
+        className={`media-lightbox-inner${item.kind === 'image' ? ' media-lightbox-inner--image' : ''}`}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button className="media-lightbox-close" onClick={onClose} aria-label="סגירה">
           ×
         </button>
-        <video src={video.url} poster={video.poster} controls autoPlay playsInline onEnded={onClose} />
+        {item.kind === 'video' ? (
+          <video src={item.src} poster={item.poster} controls autoPlay playsInline onEnded={onClose} />
+        ) : (
+          <img className="media-lightbox-image" src={item.src} alt={item.alt} />
+        )}
       </div>
     </div>,
     document.body,
@@ -26,7 +37,7 @@ function VideoLightbox({ video, onClose }: { video: TipVideo; onClose: () => voi
 }
 
 const TipsPage = forwardRef<HTMLDivElement>(function TipsPage(_props, ref) {
-  const [active, setActive] = useState<TipVideo | null>(null)
+  const [active, setActive] = useState<LightboxItem | null>(null)
 
   return (
     <Page ref={ref} pageClass="tips-page" showHeader title={tips.title}>
@@ -35,7 +46,11 @@ const TipsPage = forwardRef<HTMLDivElement>(function TipsPage(_props, ref) {
         <div className="video-grid">
           {tips.videos.items.map((video) =>
             video.type === 'video' ? (
-              <button className="video-tile video-tile--play" key={video.url} onClick={() => setActive(video)}>
+              <button
+                className="video-tile video-tile--play"
+                key={video.url}
+                onClick={() => setActive({ kind: 'video', src: video.url, poster: video.poster, alt: video.label })}
+              >
                 <span className="video-media">
                   <video src={video.url} poster={video.poster} muted playsInline preload="metadata" tabIndex={-1} />
                   <span className="video-play" aria-hidden="true">
@@ -80,19 +95,25 @@ const TipsPage = forwardRef<HTMLDivElement>(function TipsPage(_props, ref) {
       <section className="tips-section">
         <h3>{tips.articles.heading}</h3>
         <div className="article-grid">
-          {tips.articles.items.map((article, i) => (
-            <article className="article-card" key={i}>
-              <span className="article-icon" aria-hidden="true">
-                {article.icon}
+          {tips.articles.items.map((article) => (
+            <button
+              className="article-card"
+              key={article.image}
+              onClick={() => setActive({ kind: 'image', src: article.image, alt: article.title })}
+            >
+              <span className="article-thumb">
+                <img src={article.image} alt={article.title} loading="lazy" />
+                <span className="article-zoom" aria-hidden="true">
+                  ⤢
+                </span>
               </span>
-              <h4>{article.title}</h4>
-              <p>{article.text}</p>
-            </article>
+              <span className="article-title">{article.title}</span>
+            </button>
           ))}
         </div>
       </section>
 
-      {active && <VideoLightbox video={active} onClose={() => setActive(null)} />}
+      {active && <Lightbox item={active} onClose={() => setActive(null)} />}
     </Page>
   )
 })

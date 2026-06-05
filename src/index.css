@@ -729,8 +729,8 @@ body {
   transform: scale(1.07);
 }
 
-/* ---------------- Video lightbox (enlarged playback) ---------------- */
-.video-lightbox {
+/* ---------------- Media lightbox (enlarged video / image) ---------------- */
+.media-lightbox {
   position: fixed;
   inset: 0;
   z-index: 100;
@@ -748,13 +748,17 @@ body {
   }
 }
 
-.video-lightbox-inner {
+.media-lightbox-inner {
   position: relative;
   max-width: min(440px, 92vw);
   max-height: 92vh;
 }
 
-.video-lightbox-inner video {
+.media-lightbox-inner--image {
+  max-width: min(760px, 94vw);
+}
+
+.media-lightbox-inner video {
   display: block;
   width: 100%;
   max-height: 88vh;
@@ -763,7 +767,17 @@ body {
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
 }
 
-.video-lightbox-close {
+.media-lightbox-image {
+  display: block;
+  width: 100%;
+  max-height: 88vh;
+  object-fit: contain;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+
+.media-lightbox-close {
   position: absolute;
   top: -14px;
   inset-inline-end: -14px;
@@ -819,35 +833,63 @@ body {
 }
 
 .tips-page .article-card {
+  appearance: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding: 14px;
+  text-align: center;
+  color: inherit;
+}
+
+.tips-page .article-thumb {
+  position: relative;
+  display: block;
+  aspect-ratio: 1 / 1;
   border-radius: 12px;
-  background: rgba(29, 79, 143, 0.05);
-  border: 1px dashed rgba(29, 79, 143, 0.35);
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 8px 20px rgba(6, 38, 66, 0.18);
 }
 
-.tips-page .article-icon {
-  font-size: clamp(20px, 2.2vw, 24px);
-  line-height: 1;
+.tips-page .article-thumb img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
 }
 
-.tips-page .article-card h4 {
-  margin: 0;
-  font-size: clamp(13px, 1.35vw, 15px);
+.tips-page .article-zoom {
+  position: absolute;
+  inset-block-end: 8px;
+  inset-inline-end: 8px;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  background: rgba(11, 33, 56, 0.78);
+  color: #fff;
+  font-size: 15px;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.tips-page .article-card:hover .article-zoom,
+.tips-page .article-card:focus-visible .article-zoom {
+  background: var(--accent);
+  transform: scale(1.08);
+}
+
+.tips-page .article-title {
+  font-size: 12px;
   font-weight: 700;
-  color: var(--accent);
-  line-height: 1.35;
-}
-
-.tips-page .article-card p {
-  margin: 0;
-  font-size: clamp(12px, 1.2vw, 13px);
-  line-height: 1.55;
   color: var(--text);
-  opacity: 0.8;
-  max-width: none;
+  line-height: 1.4;
 }
 
 @media (max-width: 720px) {
