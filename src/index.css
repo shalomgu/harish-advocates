@@ -651,41 +651,132 @@ body {
   font-weight: 700;
 }
 
-/* ---------------- Tips ---------------- */
-.tips-page .tips-list {
-  display: grid;
-  gap: 10px;
+/* ---------------- Tips (חשוב לדעת) ---------------- */
+.tips-page .tips-section {
+  margin-bottom: clamp(16px, 2.6vh, 24px);
 }
 
-.tips-page .tip-card {
+.tips-page .tips-section h3 {
+  margin: 0 0 10px;
+  font-size: clamp(14px, 1.45vw, 16px);
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.tips-page .video-grid,
+.tips-page .article-grid {
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 10px;
-  align-items: start;
-  padding: 12px 14px;
-  border-radius: 10px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.tips-page .video-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.tips-page .video-media {
+  position: relative;
+  aspect-ratio: 9 / 16;
+  border-radius: 12px;
+  overflow: hidden;
+  background: linear-gradient(150deg, #0b2138, var(--accent));
+  display: grid;
+  place-items: center;
+  box-shadow: 0 8px 20px rgba(6, 38, 66, 0.18);
+}
+
+.tips-page .video-media iframe,
+.tips-page .video-media video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.tips-page .video-media video {
+  object-fit: cover;
+  background: #000;
+}
+
+.tips-page .video-tile--link .video-media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 42%, rgba(255, 255, 255, 0.14), transparent 62%);
+}
+
+.tips-page .video-play {
+  position: relative;
+  z-index: 1;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--accent);
+  font-size: 18px;
+  padding-inline-start: 3px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.tips-page .video-tile--link:hover .video-play,
+.tips-page .video-tile--link:focus-visible .video-play {
+  background: #fff;
+  transform: scale(1.07);
+}
+
+.tips-page .video-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  text-align: center;
+  line-height: 1.4;
+}
+
+.tips-page .article-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px;
+  border-radius: 12px;
   background: rgba(29, 79, 143, 0.05);
-  border-inline-start: 4px solid var(--accent);
+  border: 1px dashed rgba(29, 79, 143, 0.35);
 }
 
-.tips-page .tip-icon {
+.tips-page .article-icon {
   font-size: clamp(20px, 2.2vw, 24px);
   line-height: 1;
 }
 
-.tips-page .tip-body h3 {
-  margin: 0 0 4px;
+.tips-page .article-card h4 {
+  margin: 0;
   font-size: clamp(13px, 1.35vw, 15px);
   font-weight: 700;
   color: var(--accent);
   line-height: 1.35;
 }
 
-.tips-page .tip-body p {
+.tips-page .article-card p {
   margin: 0;
   font-size: clamp(12px, 1.2vw, 13px);
   line-height: 1.55;
+  color: var(--text);
+  opacity: 0.8;
   max-width: none;
+}
+
+@media (max-width: 720px) {
+  .tips-page .video-grid,
+  .tips-page .article-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 /* ---------------- Media ---------------- */

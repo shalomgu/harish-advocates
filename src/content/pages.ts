@@ -169,17 +169,41 @@ export const practice = {
   ] as PracticeBlock[],
 }
 
+export interface TipVideo {
+  // 'video' = self-hosted MP4, true inline playback (recommended);
+  // 'embed' = Instagram iframe preview (plays once, then links out — IG's own behavior);
+  // 'link'  = poster tile that opens the post in a new tab.
+  type: 'embed' | 'link' | 'video'
+  url: string
+  label: string
+  poster?: string
+}
+
+export interface TipArticle {
+  icon: string
+  title: string
+  text: string
+}
+
 export const tips = {
   title: 'חשוב לדעת',
-  subtitle: 'טיפים ומידע ומאמרים',
-  cards: [
-    { icon: '📋', title: 'שמרו על כל מסמך', text: 'בכל הליך משפטי, תיעוד הוא קריטי. שמרו על חוזים, תכתובות, קבלות וכל מסמך רלוונטי.' },
-    { icon: '⏱', title: 'אל תחכו לרגע האחרון', text: 'הליכים משפטיים רבים כפופים לתקופות התיישנות. פעולה מוקדמת מגדילה את סיכויי ההצלחה.' },
-    { icon: '🤝', title: 'גישור לפני ליטיגציה', text: 'הכרעה בגישור חוסכת זמן, כסף ולחץ. לא כל סכסוך חייב להגיע לבית המשפט.' },
-    { icon: '📝', title: 'חוזה בכתב תמיד', text: 'גם עם חברים ובני משפחה — הסכמות משפטיות חשובות חייבות להיות בכתב וחתומות.' },
-    { icon: '💡', title: 'ייעוץ מקדים שווה זהב', text: 'פגישת ייעוץ לפני חתימה על עסקה גדולה יכולה לחסוך עשרות אלפי שקלים בעתיד.' },
-    { icon: '🔍', title: 'בדקו לפני שקונים', text: 'לפני רכישת נכס — בדיקת עורך דין חיונית: שעבודים, עיקולים, חריגות בנייה ועוד.' },
-  ],
+  videos: {
+    heading: 'סרטוני מידע',
+    // Reusing the מהתקשורת reels for now; more will be supplied later.
+    items: [
+      { type: 'video', url: asset('monopol.mp4'), label: 'מונופול' },
+      { type: 'link', url: 'https://www.facebook.com/reel/976693994755459/?s=single_unit', label: 'סרטון מידע — פייסבוק (נפתח בלשונית חדשה)' },
+      { type: 'link', url: 'https://www.facebook.com/reel/1980494782839959', label: 'סרטון מידע נוסף — פייסבוק (נפתח בלשונית חדשה)' },
+    ] as TipVideo[],
+  },
+  articles: {
+    heading: 'מאמרים ומדריכים',
+    items: [
+      { icon: '📄', title: 'מאמר בקרוב', text: 'תוכן מקצועי יתווסף כאן בקרוב.' },
+      { icon: '📘', title: 'מדריך בקרוב', text: 'מדריך פרקטי יתווסף כאן בקרוב.' },
+      { icon: '✍️', title: 'מאמר בקרוב', text: 'תוכן מקצועי יתווסף כאן בקרוב.' },
+    ] as TipArticle[],
+  },
 }
 
 export const media = {
