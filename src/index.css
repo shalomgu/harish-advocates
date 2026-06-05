@@ -651,26 +651,30 @@ body {
   font-weight: 700;
 }
 
-/* ---------------- Tips (חשוב לדעת) ---------------- */
-.tips-page .tips-section {
+/* ---------------- Showcase (videos + articles), shared by Tips & Media ---------------- */
+.showcase {
+  display: contents;
+}
+
+.showcase-section {
   margin-bottom: clamp(16px, 2.6vh, 24px);
 }
 
-.tips-page .tips-section h3 {
+.showcase-section h3 {
   margin: 0 0 10px;
   font-size: clamp(14px, 1.45vw, 16px);
   font-weight: 700;
   color: var(--accent);
 }
 
-.tips-page .video-grid,
-.tips-page .article-grid {
+.showcase .video-grid,
+.showcase .article-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 12px;
 }
 
-.tips-page .video-tile {
+.showcase .video-tile {
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -678,7 +682,7 @@ body {
   color: inherit;
 }
 
-.tips-page .video-media {
+.showcase .video-media {
   position: relative;
   aspect-ratio: 9 / 16;
   border-radius: 12px;
@@ -689,8 +693,8 @@ body {
   box-shadow: 0 8px 20px rgba(6, 38, 66, 0.18);
 }
 
-.tips-page .video-media iframe,
-.tips-page .video-media video {
+.showcase .video-media iframe,
+.showcase .video-media video {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -698,13 +702,13 @@ body {
   border: 0;
 }
 
-.tips-page .video-media video {
+.showcase .video-media video {
   object-fit: cover;
   background: #000;
 }
 
 /* Thumbnail video inside a tile is just a preview; the tile button handles clicks. */
-.tips-page .video-tile--play {
+.showcase .video-tile--play {
   appearance: none;
   border: 0;
   padding: 0;
@@ -712,19 +716,19 @@ body {
   font: inherit;
 }
 
-.tips-page .video-tile--play .video-media video {
+.showcase .video-tile--play .video-media video {
   pointer-events: none;
 }
 
-.tips-page .video-tile--play .video-media::after {
+.showcase .video-tile--play .video-media::after {
   content: '';
   position: absolute;
   inset: 0;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.32));
 }
 
-.tips-page .video-tile--play:hover .video-play,
-.tips-page .video-tile--play:focus-visible .video-play {
+.showcase .video-tile--play:hover .video-play,
+.showcase .video-tile--play:focus-visible .video-play {
   background: #fff;
   transform: scale(1.07);
 }
@@ -893,14 +897,14 @@ body {
   z-index: 6;
 }
 
-.tips-page .video-tile--link .video-media::after {
+.showcase .video-tile--link .video-media::after {
   content: '';
   position: absolute;
   inset: 0;
   background: radial-gradient(circle at 50% 42%, rgba(255, 255, 255, 0.14), transparent 62%);
 }
 
-.tips-page .video-play {
+.showcase .video-play {
   position: relative;
   z-index: 1;
   width: 46px;
@@ -916,13 +920,13 @@ body {
   transition: transform 0.15s ease, background 0.15s ease;
 }
 
-.tips-page .video-tile--link:hover .video-play,
-.tips-page .video-tile--link:focus-visible .video-play {
+.showcase .video-tile--link:hover .video-play,
+.showcase .video-tile--link:focus-visible .video-play {
   background: #fff;
   transform: scale(1.07);
 }
 
-.tips-page .video-label {
+.showcase .video-label {
   font-size: 12px;
   font-weight: 700;
   color: var(--text);
@@ -930,7 +934,7 @@ body {
   line-height: 1.4;
 }
 
-.tips-page .article-card {
+.showcase .article-card {
   appearance: none;
   border: 0;
   padding: 0;
@@ -943,7 +947,7 @@ body {
   color: inherit;
 }
 
-.tips-page .article-thumb {
+.showcase .article-thumb {
   position: relative;
   display: block;
   aspect-ratio: 1 / 1;
@@ -953,7 +957,7 @@ body {
   box-shadow: 0 8px 20px rgba(6, 38, 66, 0.18);
 }
 
-.tips-page .article-thumb img {
+.showcase .article-thumb img {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -962,7 +966,7 @@ body {
   object-position: top;
 }
 
-.tips-page .article-zoom {
+.showcase .article-zoom {
   position: absolute;
   inset-block-end: 8px;
   inset-inline-end: 8px;
@@ -977,13 +981,13 @@ body {
   transition: transform 0.15s ease, background 0.15s ease;
 }
 
-.tips-page .article-card:hover .article-zoom,
-.tips-page .article-card:focus-visible .article-zoom {
+.showcase .article-card:hover .article-zoom,
+.showcase .article-card:focus-visible .article-zoom {
   background: var(--accent);
   transform: scale(1.08);
 }
 
-.tips-page .article-title {
+.showcase .article-title {
   font-size: 12px;
   font-weight: 700;
   color: var(--text);
@@ -991,64 +995,14 @@ body {
 }
 
 @media (max-width: 720px) {
-  .tips-page .video-grid,
-  .tips-page .article-grid {
+  .showcase .video-grid,
+  .showcase .article-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* ---------------- Media ---------------- */
-.media-page .media-section {
-  margin-bottom: clamp(14px, 2vh, 18px);
-}
-
-.media-page .media-section h3 {
-  margin: 0 0 8px;
-  font-size: clamp(14px, 1.45vw, 16px);
-  font-weight: 700;
-  color: var(--accent);
-  line-height: 1.35;
-}
-
-.media-page .media-links {
-  display: grid;
-  gap: 8px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.media-page .media-link {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 10px;
-  align-items: center;
-  padding: 10px 12px;
-  border-radius: 10px;
-  background: rgba(29, 79, 143, 0.05);
-  border-inline-start: 4px solid var(--accent);
-}
-
-.media-page .media-link a {
-  font-size: clamp(12px, 1.2vw, 13px);
-  font-weight: 700;
-  color: var(--accent);
-  text-decoration: none;
-  line-height: 1.45;
-  word-break: break-word;
-}
-
-.media-page .media-link a:hover,
-.media-page .media-link a:focus-visible {
-  text-decoration: underline;
-}
-
-.media-page .media-link-icon {
-  font-size: clamp(18px, 2vw, 22px);
-  line-height: 1;
-}
-
-.media-page .media-empty {
+/* ---------------- Showcase empty state ---------------- */
+.showcase-empty {
   margin: 0;
   font-size: clamp(12px, 1.2vw, 13px);
   line-height: 1.55;
@@ -1131,6 +1085,15 @@ body {
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
 }
 
+.back-cover-page .back-cover-intro {
+  width: min(100%, 420px);
+  margin: 0 auto;
+  text-align: center;
+  color: #fff;
+  font-size: clamp(15px, 1.6vw, 18px);
+  line-height: 1.6;
+}
+
 .back-cover-page .back-cover-links {
   display: grid;
   gap: 12px;
@@ -1141,7 +1104,9 @@ body {
 }
 
 .back-cover-page .back-cover-links a {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 12px;
   padding: 12px 16px;
   border-radius: 10px;
   color: #fff;
@@ -1156,6 +1121,26 @@ body {
 .back-cover-page .back-cover-links a:hover,
 .back-cover-page .back-cover-links a:focus-visible {
   background: rgba(255, 255, 255, 0.24);
+}
+
+.back-cover-page .back-cover-link-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.back-cover-page .back-cover-link-icon svg {
+  display: block;
+}
+
+.back-cover-page .back-cover-link-label {
+  flex: 1 1 auto;
+  text-align: center;
 }
 
 /* ---------------- Side flip zones ---------------- */

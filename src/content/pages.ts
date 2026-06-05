@@ -225,18 +225,19 @@ export const tips = {
 
 export const media = {
   title: 'מהתקשורת',
-  sections: [
-    {
-      heading: 'רדיו וטלויזיה',
-      links: [
-        { icon: '📷', label: 'צפייה בריל באינסטגרם', href: 'https://www.instagram.com/reels/DY4-iMZi0fI/' },
-        { icon: '▶', label: 'צפייה בריל בפייסבוק', href: 'https://www.facebook.com/reel/976693994755459/?s=single_unit' },
-        { icon: '▶', label: 'צפייה בריל נוסף בפייסבוק', href: 'https://www.facebook.com/reel/1980494782839959' },
-      ],
-    },
-  ],
-  pressHeading: 'עיתונות כתובה',
-  pressEmpty: 'פרסומים וכתבות — יתווספו בקרוב.',
+  videos: {
+    heading: 'רדיו וטלויזיה',
+    items: [
+      { type: 'link', url: 'https://www.instagram.com/reels/DY4-iMZi0fI/', label: 'צפייה בריל באינסטגרם' },
+      { type: 'link', url: 'https://www.facebook.com/reel/976693994755459/?s=single_unit', label: 'צפייה בריל בפייסבוק' },
+      { type: 'link', url: 'https://www.facebook.com/reel/1980494782839959', label: 'צפייה בריל נוסף בפייסבוק' },
+    ] as TipVideo[],
+  },
+  articles: {
+    heading: 'עיתונות כתובה',
+    items: [] as TipArticle[],
+    empty: 'פרסומים וכתבות — יתווספו בקרוב.',
+  },
 }
 
 export const contact = {
@@ -251,15 +252,22 @@ export const contact = {
 export const backCover = {
   logo: asset('harish-logo-contact.jpg'),
   logoAlt: 'חריש עורכי דין – Harish Advocates',
+  intro: 'ליצירת קשר מיידי, תיאום פגישה או קבלת מידע נוסף לחצו על אחת האפשרויות הבאות:',
   footer: '© חריש עורכי דין · אתר זה מיועד למטרות מידע בלבד',
   links: [
-    { label: 'אינסטגרם', href: 'https://www.instagram.com/liorharish/' },
-    { label: 'פייסבוק', href: 'https://www.facebook.com/liorharish' },
+    { label: 'אינסטגרם', href: 'https://www.instagram.com/liorharish/', icon: 'instagram' },
+    { label: 'פייסבוק', href: 'https://www.facebook.com/liorharish', icon: 'facebook' },
     {
-      label: 'וואטסאפ – תיאום פגישה',
+      label: 'וואטסאפ',
       href: 'https://wa.me/97237528111?text=%D7%91%D7%A8%D7%A6%D7%95%D7%A0%D7%99%20%D7%9C%D7%AA%D7%90%D7%9D%20%D7%A4%D7%92%D7%99%D7%A9%D7%94',
+      icon: 'whatsapp',
     },
-  ],
+    {
+      label: 'לינקדאין',
+      href: 'https://www.linkedin.com/in/lior-harish-95399622?utm_source=share_via&utm_content=profile&utm_medium=member_android',
+      icon: 'linkedin',
+    },
+  ] as { label: string; href: string; icon: 'instagram' | 'facebook' | 'whatsapp' | 'linkedin' }[],
 }
 
 export const pageTitles = [
