@@ -193,8 +193,6 @@ export const tips = {
     items: [
       { type: 'video', url: asset('monopol.mp4'), label: 'מונופול' },
       { type: 'video', url: asset('lior-likes.mp4'), label: 'ליאור ממליץ' },
-      { type: 'link', url: 'https://www.facebook.com/reel/976693994755459/?s=single_unit', label: 'סרטון מידע — פייסבוק (נפתח בלשונית חדשה)' },
-      { type: 'link', url: 'https://www.facebook.com/reel/1980494782839959', label: 'סרטון מידע נוסף — פייסבוק (נפתח בלשונית חדשה)' },
     ] as TipVideo[],
   },
   articles: {
