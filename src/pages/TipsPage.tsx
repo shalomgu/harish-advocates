@@ -68,8 +68,8 @@ function Lightbox({ item, onClose }: { item: LightboxItem; onClose: () => void }
                   style={
                     {
                       '--active': i === active ? 1 : 0,
-                      '--offset': (active - i) / 3,
-                      '--direction': Math.sign(active - i),
+                      '--offset': (i - active) / 3,
+                      '--direction': Math.sign(i - active),
                       '--abs-offset': distance / 3,
                       pointerEvents: visible ? 'auto' : 'none',
                       opacity: distance >= MAX_VISIBILITY ? 0 : 1,
@@ -84,20 +84,20 @@ function Lightbox({ item, onClose }: { item: LightboxItem; onClose: () => void }
           </div>
 
           <button
-            className="carousel-nav carousel-prev"
-            onClick={(e) => { stop(e); go(-1) }}
-            disabled={active === 0}
-            aria-label="הקודם"
-          >
-            ›
-          </button>
-          <button
-            className="carousel-nav carousel-next"
+            className="carousel-nav carousel-nav--left"
             onClick={(e) => { stop(e); go(1) }}
             disabled={active === count - 1}
             aria-label="הבא"
           >
             ‹
+          </button>
+          <button
+            className="carousel-nav carousel-nav--right"
+            onClick={(e) => { stop(e); go(-1) }}
+            disabled={active === 0}
+            aria-label="הקודם"
+          >
+            ›
           </button>
 
           <div className="carousel-dots" onClick={stop}>

@@ -811,6 +811,7 @@ body {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
+  direction: ltr;
   width: 44px;
   height: 44px;
   border: 0;
@@ -838,13 +839,14 @@ body {
   cursor: default;
 }
 
-/* RTL: previous on the right, next on the left (matches the book arrows). */
-.carousel-prev {
-  inset-inline-end: clamp(8px, 3vw, 28px);
+/* Explicit physical sides (document is dir="rtl", so logical props would flip).
+   Left arrow = next slide, right arrow = previous. */
+.carousel-nav--left {
+  left: clamp(8px, 3vw, 28px);
 }
 
-.carousel-next {
-  inset-inline-start: clamp(8px, 3vw, 28px);
+.carousel-nav--right {
+  right: clamp(8px, 3vw, 28px);
 }
 
 .carousel-dots {
