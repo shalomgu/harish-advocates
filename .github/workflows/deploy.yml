@@ -24,10 +24,10 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
-      # base must match the repo path the site is served from.
+      # Served from the custom domain root (www.harish-adv.com), so base is "/".
       - run: npm run build
         env:
-          VITE_BASE: /harish-advocates/
+          VITE_BASE: /
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
