@@ -1,8 +1,33 @@
-import { forwardRef } from 'react'
+import { forwardRef, useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import Page from '../components/Page'
-import { tips } from '../content/pages'
+import { tips, type TipVideo } from '../content/pages'
+
+function VideoLightbox({ video, onClose }: { video: TipVideo; onClose: () => void }) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [onClose])
+
+  return createPortal(
+    <div className="video-lightbox" onClick={onClose}>
+      <div className="video-lightbox-inner" onClick={(e) => e.stopPropagation()}>
+        <button className="video-lightbox-close" onClick={onClose} aria-label="סגירה">
+          ×
+        </button>
+        <video src={video.url} poster={video.poster} controls autoPlay playsInline onEnded={onClose} />
+      </div>
+    </div>,
+    document.body,
+  )
+}
 
 const TipsPage = forwardRef<HTMLDivElement>(function TipsPage(_props, ref) {
+  const [active, setActive] = useState<TipVideo | null>(null)
+
   return (
     <Page ref={ref} pageClass="tips-page" showHeader title={tips.title}>
       <section className="tips-section">
@@ -10,12 +35,15 @@ const TipsPage = forwardRef<HTMLDivElement>(function TipsPage(_props, ref) {
         <div className="video-grid">
           {tips.videos.items.map((video) =>
             video.type === 'video' ? (
-              <div className="video-tile" key={video.url}>
-                <div className="video-media">
-                  <video src={video.url} poster={video.poster} controls playsInline preload="metadata" />
-                </div>
+              <button className="video-tile video-tile--play" key={video.url} onClick={() => setActive(video)}>
+                <span className="video-media">
+                  <video src={video.url} poster={video.poster} muted playsInline preload="metadata" tabIndex={-1} />
+                  <span className="video-play" aria-hidden="true">
+                    ▶
+                  </span>
+                </span>
                 <span className="video-label">{video.label}</span>
-              </div>
+              </button>
             ) : video.type === 'embed' ? (
               <div className="video-tile" key={video.url}>
                 <div className="video-media">
@@ -63,6 +91,8 @@ const TipsPage = forwardRef<HTMLDivElement>(function TipsPage(_props, ref) {
           ))}
         </div>
       </section>
+
+      {active && <VideoLightbox video={active} onClose={() => setActive(null)} />}
     </Page>
   )
 })
