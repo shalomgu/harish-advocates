@@ -1131,11 +1131,32 @@ body {
   height: 36px;
   flex: 0 0 auto;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.16);
+  background: #fff;
 }
 
 .back-cover-page .back-cover-link-icon svg {
   display: block;
+}
+
+.back-cover-page .back-cover-link-icon--facebook {
+  color: #1877f2;
+}
+
+.back-cover-page .back-cover-link-icon--whatsapp {
+  color: #25d366;
+}
+
+.back-cover-page .back-cover-link-icon--linkedin {
+  color: #0a66c2;
+}
+
+.back-cover-page .back-cover-link-icon--instagram {
+  color: #e4405f;
+  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285aeb 90%);
+}
+
+.back-cover-page .back-cover-link-icon--instagram svg {
+  color: #fff;
 }
 
 .back-cover-page .back-cover-link-label {

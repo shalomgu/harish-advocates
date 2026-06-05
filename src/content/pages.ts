@@ -231,6 +231,7 @@ export const media = {
       { type: 'link', url: 'https://www.instagram.com/reels/DY4-iMZi0fI/', label: 'צפייה בריל באינסטגרם' },
       { type: 'link', url: 'https://www.facebook.com/reel/976693994755459/?s=single_unit', label: 'צפייה בריל בפייסבוק' },
       { type: 'link', url: 'https://www.facebook.com/reel/1980494782839959', label: 'צפייה בריל נוסף בפייסבוק' },
+      { type: 'link', url: 'https://103fm.maariv.co.il/programs/media.aspx?ZrqvnVq=EMFGKH&c41t4nzVQ=EF', label: 'ראיון ברדיו 103FM – הצעת חוק לעידוד יצור מזון לחולי צליאק' },
     ] as TipVideo[],
   },
   articles: {
@@ -259,7 +260,7 @@ export const backCover = {
     { label: 'פייסבוק', href: 'https://www.facebook.com/liorharish', icon: 'facebook' },
     {
       label: 'וואטסאפ',
-      href: 'https://wa.me/97237528111?text=%D7%91%D7%A8%D7%A6%D7%95%D7%A0%D7%99%20%D7%9C%D7%AA%D7%90%D7%9D%20%D7%A4%D7%92%D7%99%D7%A9%D7%94',
+      href: 'https://wa.me/972522778848?text=ברצוני לתאם פגישה',
       icon: 'whatsapp',
     },
     {
