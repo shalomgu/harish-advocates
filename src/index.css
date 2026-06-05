@@ -926,6 +926,15 @@ body {
   transform: scale(1.07);
 }
 
+.showcase .video-play--radio {
+  padding-inline-start: 0;
+}
+
+.showcase .video-play--radio svg {
+  width: 26px;
+  height: 26px;
+}
+
 .showcase .video-label {
   font-size: 12px;
   font-weight: 700;
@@ -1061,8 +1070,9 @@ body {
   align-items: center;
   justify-content: flex-start;
   text-align: center;
-  gap: clamp(24px, 4vh, 36px);
-  padding: clamp(32px, 6vh, 48px) clamp(16px, 3vw, 24px) clamp(28px, 5vw, 40px);
+  gap: clamp(14px, 2.4vh, 24px);
+  padding: clamp(20px, 3.5vh, 36px) clamp(16px, 3vw, 24px) clamp(20px, 4vw, 32px);
+  overflow-y: auto;
   color: #fff;
   background:
     linear-gradient(rgba(12, 43, 79, 0.2), rgba(12, 43, 79, 0.78)),
@@ -1071,9 +1081,18 @@ body {
 }
 
 .back-cover-page .back-cover-logo-wrap {
-  width: min(100%, 420px);
+  width: min(100%, 560px);
   margin: 0 auto;
   flex: 0 0 auto;
+}
+
+/* The back-cover reuses the small `.cover-logo`; enlarge it here. Two classes
+   beat the mobile `.cover-logo` rule, so it stays large on phones too. */
+.back-cover-page .cover-logo {
+  width: min(100%, 200px);
+  height: auto;
+  margin: 0 auto;
+  padding: 10px 14px;
 }
 
 .back-cover-page .back-cover-logo {

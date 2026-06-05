@@ -177,6 +177,8 @@ export interface TipVideo {
   url: string
   label: string
   poster?: string
+  // Overlay glyph shown on 'link' tiles. Defaults to a play triangle.
+  icon?: 'play' | 'radio'
 }
 
 export interface TipArticle {
@@ -228,10 +230,7 @@ export const media = {
   videos: {
     heading: 'רדיו וטלויזיה',
     items: [
-      { type: 'link', url: 'https://www.instagram.com/reels/DY4-iMZi0fI/', label: 'צפייה בריל באינסטגרם' },
-      { type: 'link', url: 'https://www.facebook.com/reel/976693994755459/?s=single_unit', label: 'צפייה בריל בפייסבוק' },
-      { type: 'link', url: 'https://www.facebook.com/reel/1980494782839959', label: 'צפייה בריל נוסף בפייסבוק' },
-      { type: 'link', url: 'https://103fm.maariv.co.il/programs/media.aspx?ZrqvnVq=EMFGKH&c41t4nzVQ=EF', label: 'ראיון ברדיו 103FM – הצעת חוק לעידוד יצור מזון לחולי צליאק' },
+      { type: 'link', url: 'https://103fm.maariv.co.il/programs/media.aspx?ZrqvnVq=EMFGKH&c41t4nzVQ=EF', label: 'ראיון ברדיו 103FM – הצעת חוק לעידוד יצור מזון לחולי צליאק', icon: 'radio' },
     ] as TipVideo[],
   },
   articles: {
