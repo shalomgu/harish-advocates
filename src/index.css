@@ -244,9 +244,14 @@ body {
 }
 
 .page-header h2 {
+  display: inline-block;
   margin: 0;
-  font-size: clamp(24px, 3.8vw, 38px);
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(29, 79, 143, 0.1);
   color: var(--accent);
+  font-size: 13px;
+  font-weight: 700;
   letter-spacing: 0.01em;
 }
 
@@ -263,7 +268,7 @@ body {
 
 .page-subtitle {
   margin: 6px 0 0;
-  font-size: clamp(13px, 1.35vw, 15px);
+  font-size: 13px;
   font-weight: 700;
   color: var(--text);
   opacity: 0.85;
