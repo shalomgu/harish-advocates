@@ -259,8 +259,8 @@ export const backCover = {
   intro: 'ליצירת קשר מיידי, תיאום פגישה או קבלת מידע נוסף לחצו על אחת האפשרויות הבאות:',
   footer: '© חריש עורכי דין - המידע באתר הינו כללי ואינו מהווה תחליף ליעוץ משפטי',
   links: [
-    { label: 'אינסטגרם', href: 'https://www.instagram.com/liorharish/', icon: 'instagram' },
-    { label: 'פייסבוק', href: 'https://www.facebook.com/liorharish', icon: 'facebook' },
+    { label: 'אינסטגרם', href: 'https://www.instagram.com/liorharish_adv?igsh=MWNsc2FjcDVxanF0NQ==', icon: 'instagram' },
+    { label: 'פייסבוק', href: 'https://www.facebook.com/share/1FsDPj9un9/', icon: 'facebook' },
     {
       label: 'וואטסאפ',
       href: 'https://wa.me/972522778848?text=ברצוני לתאם פגישה',
