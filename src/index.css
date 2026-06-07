@@ -1464,6 +1464,9 @@ body {
     position: absolute;
     inset-inline: 14px;
     bottom: 12px;
+    /* Let the two-sided inset define the width; the inherited width:100%
+       would override one side and push the row off-center. */
+    width: auto;
     margin: 0;
     z-index: 3;
     font-size: clamp(9px, 2.6vw, 12px);
