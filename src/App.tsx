@@ -14,19 +14,39 @@ export default function App() {
   const [current, setCurrent] = useState(0)
   const [total, setTotal] = useState(pageTitles.length)
   const [thumbsOpen, setThumbsOpen] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
 
   const onState = useCallback((cur: number, tot: number) => {
     setCurrent(cur)
     if (tot) setTotal(tot)
   }, [])
 
+  const goTo = useCallback((index: number) => {
+    bookRef.current?.flip(index)
+    setMenuOpen(false)
+    setThumbsOpen(false)
+  }, [])
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setThumbsOpen(false)
+      if (e.key === 'Escape') {
+        setThumbsOpen(false)
+        setMenuOpen(false)
+      }
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [])
+
+  useEffect(() => {
+    if (!menuOpen) return
+    const onPointerDown = (e: PointerEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) setMenuOpen(false)
+    }
+    window.addEventListener('pointerdown', onPointerDown)
+    return () => window.removeEventListener('pointerdown', onPointerDown)
+  }, [menuOpen])
 
   const toggleFullscreen = async () => {
     if (!document.fullscreenElement) await document.documentElement.requestFullscreen()
@@ -39,6 +59,41 @@ export default function App() {
   return (
     <div className="app">
       <header className="topbar">
+        <div className="page-menu" ref={menuRef}>
+          <button
+            type="button"
+            className={`icon-btn hamburger${menuOpen ? ' is-open' : ''}`}
+            aria-haspopup="listbox"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((v) => !v)}
+            title={shared.nav.goTo}
+            aria-label={shared.nav.goTo}
+          >
+            <span className="hamburger-lines" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </span>
+          </button>
+
+          {menuOpen && (
+            <ul className="page-menu-list" role="listbox" aria-label={shared.nav.goTo}>
+              {pageTitles.map((label, i) => (
+                <li key={label} role="option" aria-selected={i === current}>
+                  <button
+                    type="button"
+                    className={`page-menu-item${i === current ? ' active' : ''}`}
+                    onClick={() => goTo(i)}
+                  >
+                    <span className="page-menu-num">{i + 1}</span>
+                    <span className="page-menu-text">{label}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
         <div className="title">{shared.topbarTitle}</div>
         <div className="page-status">{shared.pageStatus(current + 1, total)}</div>
         <div className="spacer" />
@@ -66,10 +121,7 @@ export default function App() {
           <button
             key={label}
             className={`thumb-btn${i === current ? ' active' : ''}`}
-            onClick={() => {
-              bookRef.current?.flip(i)
-              setThumbsOpen(false)
-            }}
+            onClick={() => goTo(i)}
             title={`${i + 1}. ${label}`}
             aria-label={`${i + 1}. ${label}`}
           >

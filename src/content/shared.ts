@@ -15,6 +15,7 @@ export const shared = {
     last: 'לעמוד האחרון',
     thumbnails: 'תצוגה מקדימה',
     fullscreen: 'מסך מלא',
+    goTo: 'מעבר לעמוד',
   },
   modeToggle: {
     label: 'מצב דפדוף',

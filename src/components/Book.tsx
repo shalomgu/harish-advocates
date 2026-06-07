@@ -34,6 +34,7 @@ interface PageFlipApi {
   flipNext: (corner?: 'top' | 'bottom') => void
   flipPrev: (corner?: 'top' | 'bottom') => void
   flip: (page: number, corner?: 'top' | 'bottom') => void
+  turnToPage: (page: number) => void
   getCurrentPageIndex: () => number
   getPageCount: () => number
   getSettings: () => { disableFlipByClick: boolean }
@@ -133,9 +134,12 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, 
     })
   }, [runFlip])
 
-  const first = useCallback(() => runFlip((flip) => flip.flip(0)), [runFlip])
-  const last = useCallback(() => runFlip((flip) => flip.flip(flip.getPageCount() - 1)), [runFlip])
-  const flipTo = useCallback((index: number) => runFlip((flip) => flip.flip(index)), [runFlip])
+  // Direct jumps (first/last/menu) use turnToPage: the animated flip() can
+  // silently no-op or land mid-flight when the target is not adjacent — most
+  // visibly in mirror mode — so an instant, reliable turn is used instead.
+  const first = useCallback(() => runFlip((flip) => flip.turnToPage(0)), [runFlip])
+  const last = useCallback(() => runFlip((flip) => flip.turnToPage(flip.getPageCount() - 1)), [runFlip])
+  const flipTo = useCallback((index: number) => runFlip((flip) => flip.turnToPage(index)), [runFlip])
 
   useImperativeHandle(ref, () => ({ next, prev, first, last, flip: flipTo }), [next, prev, first, last, flipTo])
 

@@ -195,8 +195,12 @@ export interface TipArticle {
   title: string
   // Image shown on the card.
   thumbnail: string
-  // Carousel slides shown in the enlarged view.
-  images: string[]
+  // Carousel slides shown in the enlarged view (image articles).
+  images?: string[]
+  // When set, the card opens this PDF in a new tab instead of the image carousel.
+  pdf?: string
+  // Optional publication credit shown under the title.
+  source?: string
 }
 
 export const tips = {
@@ -219,11 +223,6 @@ export const tips = {
       {
         title: 'המדריך המשפטי למשכירי דירות',
         thumbnail: asset('renters-guide.png'),
-        images: [asset('renters-guide.png')],
-      },
-      {
-        title: 'המדריך המשפטי למשכירי דירות (קרוסלה)',
-        thumbnail: asset('renters-guide.png'),
         images: [
           asset('renters-slide-1.png'),
           asset('renters-slide-2.png'),
@@ -234,6 +233,48 @@ export const tips = {
           asset('renters-slide-7.png'),
           asset('renters-slide-8.png'),
         ],
+      },
+      {
+        title: 'כמה שווים מיליון לייקים',
+        source: 'דה מרקר',
+        thumbnail: asset('articles/million-likes.png'),
+        pdf: asset('articles/million-likes.pdf'),
+      },
+      {
+        title: 'ישראל היא גן עדן לחייבים',
+        source: 'דה מרקר',
+        thumbnail: asset('articles/demarker-debtors-paradise.png'),
+        pdf: asset('articles/demarker-debtors-paradise.pdf'),
+      },
+      {
+        title: 'המזומן הוגבל? העבריינים יעברו לביטקוין',
+        source: 'דה מרקר',
+        thumbnail: asset('articles/demarker-bitcoin-cash.png'),
+        pdf: asset('articles/demarker-bitcoin-cash.pdf'),
+      },
+      {
+        title: 'היזהרו מ„Winter is coming“',
+        source: 'דה מרקר',
+        thumbnail: asset('articles/demarker-wine-dine-scam.png'),
+        pdf: asset('articles/demarker-wine-dine-scam.pdf'),
+      },
+      {
+        title: 'מה זה עיתון?',
+        source: 'דה מרקר',
+        thumbnail: asset('articles/demarker-what-is-newspaper.png'),
+        pdf: asset('articles/demarker-what-is-newspaper.pdf'),
+      },
+      {
+        title: 'דרוש רובין הוד לשידורי ספורט',
+        source: 'גלובס',
+        thumbnail: asset('articles/globes-sports-broadcast.png'),
+        pdf: asset('articles/globes-sports-broadcast.pdf'),
+      },
+      {
+        title: 'איומי השביתה של לשכת עורכי הדין',
+        source: 'כלכליסט',
+        thumbnail: asset('articles/calcalist-lawyers-strike.png'),
+        pdf: asset('articles/calcalist-lawyers-strike.pdf'),
       },
     ] as TipArticle[],
   },

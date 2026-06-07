@@ -64,6 +64,12 @@ body {
   text-overflow: ellipsis;
 }
 
+.page-menu {
+  position: relative;
+  direction: rtl;
+  display: flex;
+}
+
 .page-status {
   direction: ltr;
   font-weight: 700;
@@ -71,6 +77,112 @@ body {
   padding: 5px 10px;
   border-radius: 4px;
   font-size: 13px;
+}
+
+.hamburger {
+  position: relative;
+}
+
+.hamburger-lines {
+  display: block;
+  width: 18px;
+  height: 14px;
+  position: relative;
+}
+
+.hamburger-lines span {
+  position: absolute;
+  inset-inline: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.hamburger-lines span:nth-child(1) {
+  top: 0;
+}
+
+.hamburger-lines span:nth-child(2) {
+  top: 6px;
+}
+
+.hamburger-lines span:nth-child(3) {
+  top: 12px;
+}
+
+.hamburger.is-open .hamburger-lines span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.hamburger.is-open .hamburger-lines span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.is-open .hamburger-lines span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+.page-menu-list {
+  position: absolute;
+  inset-inline-start: 0;
+  top: calc(100% + 8px);
+  min-width: 220px;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 14px 36px rgba(6, 38, 66, 0.28);
+  z-index: 40;
+  max-height: min(70vh, 460px);
+  overflow-y: auto;
+}
+
+.page-menu-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: 7px;
+  background: transparent;
+  text-align: start;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e2a36;
+  appearance: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.page-menu-item:hover,
+.page-menu-item:focus-visible {
+  background: rgba(199, 162, 74, 0.16);
+}
+
+.page-menu-item.active {
+  background: rgba(199, 162, 74, 0.22);
+}
+
+.page-menu-num {
+  flex: 0 0 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--bar);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.page-menu-item.active .page-menu-num {
+  background: var(--gold);
+}
+
+.page-menu-text {
+  flex: 1;
 }
 
 .spacer {
@@ -1027,6 +1139,7 @@ body {
   gap: 6px;
   text-align: center;
   color: inherit;
+  text-decoration: none;
 }
 
 .showcase .article-thumb {
@@ -1074,6 +1187,14 @@ body {
   font-weight: 700;
   color: var(--text);
   line-height: 1.4;
+}
+
+.showcase .article-source {
+  margin-top: -2px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  opacity: 0.85;
 }
 
 @media (max-width: 720px) {

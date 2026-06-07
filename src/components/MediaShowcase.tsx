@@ -205,21 +205,41 @@ export default function MediaShowcase({
         <h3>{articles.heading}</h3>
         {articles.items.length > 0 ? (
           <div className="article-grid">
-            {articles.items.map((article) => (
-              <button
-                className="article-card"
-                key={article.title}
-                onClick={() => setActive({ kind: 'image', images: article.images, alt: article.title })}
-              >
-                <span className="article-thumb">
-                  <img src={article.thumbnail} alt={article.title} loading="lazy" />
-                  <span className="article-zoom" aria-hidden="true">
-                    ⤢
+            {articles.items.map((article) =>
+              article.pdf ? (
+                <a
+                  className="article-card"
+                  key={article.title}
+                  href={article.pdf}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span className="article-thumb">
+                    <img src={article.thumbnail} alt={article.title} loading="lazy" />
+                    <span className="article-zoom" aria-hidden="true">
+                      ⤢
+                    </span>
                   </span>
-                </span>
-                <span className="article-title">{article.title}</span>
-              </button>
-            ))}
+                  <span className="article-title">{article.title}</span>
+                  {article.source && <span className="article-source">{article.source}</span>}
+                </a>
+              ) : (
+                <button
+                  className="article-card"
+                  key={article.title}
+                  onClick={() => setActive({ kind: 'image', images: article.images ?? [], alt: article.title })}
+                >
+                  <span className="article-thumb">
+                    <img src={article.thumbnail} alt={article.title} loading="lazy" />
+                    <span className="article-zoom" aria-hidden="true">
+                      ⤢
+                    </span>
+                  </span>
+                  <span className="article-title">{article.title}</span>
+                  {article.source && <span className="article-source">{article.source}</span>}
+                </button>
+              ),
+            )}
           </div>
         ) : (
           articles.empty && <p className="showcase-empty">{articles.empty}</p>
