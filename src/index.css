@@ -1417,7 +1417,9 @@ body {
     width: 100%;
     height: 100%;
     justify-content: space-between;
-    padding: 14px 16px;
+    /* Reserve room at the bottom for the absolutely-pinned legal links so the
+       packed cover content never overlaps or clips them. */
+    padding: 14px 16px 42px;
   }
   .cover-face::after {
     inset: 10px;
@@ -1459,7 +1461,11 @@ body {
     font-size: clamp(10px, 3vw, 13px);
   }
   .legal-links--cover {
-    margin-top: 4px;
+    position: absolute;
+    inset-inline: 14px;
+    bottom: 12px;
+    margin: 0;
+    z-index: 3;
     font-size: clamp(9px, 2.6vw, 12px);
   }
   .side-arrow {
