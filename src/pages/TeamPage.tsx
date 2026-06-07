@@ -1,10 +1,10 @@
 import { forwardRef } from 'react'
 import Page from '../components/Page'
-import { team } from '../content/pages'
-
-const { lior, iris } = team
+import { useLocale } from '../content/locale'
 
 const TeamPage = forwardRef<HTMLDivElement>(function TeamPage(_props, ref) {
+  const { team } = useLocale().t
+  const { lior, iris } = team
   return (
     <Page ref={ref} pageClass="team-page" showHeader title={team.title}>
       <div className="profile-row">

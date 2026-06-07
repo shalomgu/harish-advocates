@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
 import Page from '../components/Page'
-import { backCover, cover } from '../content/pages'
+import { useLocale } from '../content/locale'
 
 const socialIcons: Record<string, JSX.Element> = {
   instagram: (
@@ -18,6 +18,7 @@ const socialIcons: Record<string, JSX.Element> = {
 }
 
 const BackCoverPage = forwardRef<HTMLDivElement>(function BackCoverPage(_props, ref) {
+  const { backCover, cover } = useLocale().t
   return (
     <Page 
     ref={ref} 

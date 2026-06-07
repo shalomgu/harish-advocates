@@ -1,8 +1,9 @@
 import { forwardRef } from 'react'
 import Page from '../components/Page'
-import { contact } from '../content/pages'
+import { useLocale } from '../content/locale'
 
 const ContactPage = forwardRef<HTMLDivElement>(function ContactPage(_props, ref) {
+  const { contact } = useLocale().t
   return (
     <Page
       ref={ref}

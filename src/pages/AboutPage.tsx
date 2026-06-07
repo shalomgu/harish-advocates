@@ -1,8 +1,9 @@
 import { forwardRef } from 'react'
 import Page from '../components/Page'
-import { about } from '../content/pages'
+import { useLocale } from '../content/locale'
 
 const AboutPage = forwardRef<HTMLDivElement>(function AboutPage(_props, ref) {
+  const { about } = useLocale().t
   return (
     <Page ref={ref} pageClass="about-page" showHeader title={about.title} badge={about.badge}>
       {about.paragraphs.map((text, i) => (

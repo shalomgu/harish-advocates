@@ -1,8 +1,9 @@
 import { forwardRef, Fragment } from 'react'
 import Page from '../components/Page'
-import { cover } from '../content/pages'
+import { useLocale } from '../content/locale'
 
 const CoverPage = forwardRef<HTMLDivElement>(function CoverPage(_props, ref) {
+  const { cover } = useLocale().t
   return (
     <Page ref={ref} variant="cover">
       <div className="cover-scene">

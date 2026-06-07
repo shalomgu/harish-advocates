@@ -1,8 +1,9 @@
 import { forwardRef } from 'react'
 import Page from '../components/Page'
-import { practice } from '../content/pages'
+import { useLocale } from '../content/locale'
 
 const PracticePage = forwardRef<HTMLDivElement>(function PracticePage(_props, ref) {
+  const { practice } = useLocale().t
   return (
     <Page ref={ref} pageClass="practice-page" showHeader title={practice.title}>
       {practice.blocks.map((block) => (

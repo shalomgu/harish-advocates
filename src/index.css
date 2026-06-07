@@ -134,6 +134,37 @@ body {
   border-color: var(--gold);
 }
 
+/* ---------------- Language switch ---------------- */
+.lang-switch {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.lang-btn {
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--bar-text);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 9px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.lang-btn:hover,
+.lang-btn:focus-visible {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.lang-btn.active {
+  background: var(--gold);
+  color: #1a1a1a;
+  border-color: var(--gold);
+}
+
 /* ---------------- Stage / book ---------------- */
 .stage {
   position: relative;
@@ -1388,4 +1419,36 @@ body {
   .side-arrow {
     font-size: 34px;
   }
+}
+
+/* ---------------- LTR (English) overrides ----------------
+   Defaults above target the Hebrew RTL layout. When the document switches to
+   dir="ltr", flip the direction-dependent chrome and page copy. The book's
+   `.book--mirror` transform is class-gated, so English (native flip) never gets
+   mirrored. */
+[dir='ltr'] .topbar,
+[dir='ltr'] .stage,
+[dir='ltr'] .toolbar {
+  direction: ltr;
+}
+
+[dir='ltr'] .placeholder-page {
+  direction: ltr;
+  text-align: left;
+}
+
+[dir='ltr'] .team-page .subtitle {
+  direction: ltr;
+  text-align: left;
+}
+
+/* Side flip zones: in LTR, "forward" (next) sits on the right. */
+[dir='ltr'] .side-arrow.forward {
+  left: auto;
+  right: 0;
+}
+
+[dir='ltr'] .side-arrow.back {
+  right: auto;
+  left: 0;
 }

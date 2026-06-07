@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState, type CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import type { TipArticle, TipVideo } from '../content/pages'
+import { useLocale } from '../content/locale'
 
 type LightboxItem =
   | { kind: 'video'; src: string; poster?: string; alt: string }
@@ -9,6 +10,7 @@ type LightboxItem =
 const MAX_VISIBILITY = 3
 
 function Lightbox({ item, onClose }: { item: LightboxItem; onClose: () => void }) {
+  const { lightbox } = useLocale().chrome
   const count = item.kind === 'image' ? item.images.length : 0
   const [active, setActive] = useState(0)
 
@@ -45,7 +47,7 @@ function Lightbox({ item, onClose }: { item: LightboxItem; onClose: () => void }
 
   return createPortal(
     <div className="media-lightbox" onClick={onClose}>
-      <button className="media-lightbox-close" onClick={(e) => { stop(e); onClose() }} aria-label="סגירה">
+      <button className="media-lightbox-close" onClick={(e) => { stop(e); onClose() }} aria-label={lightbox.close}>
         ×
       </button>
 
@@ -86,7 +88,7 @@ function Lightbox({ item, onClose }: { item: LightboxItem; onClose: () => void }
             className="carousel-nav carousel-nav--left"
             onClick={(e) => { stop(e); go(1) }}
             disabled={active === count - 1}
-            aria-label="הבא"
+            aria-label={lightbox.next}
           >
             ‹
           </button>
@@ -94,7 +96,7 @@ function Lightbox({ item, onClose }: { item: LightboxItem; onClose: () => void }
             className="carousel-nav carousel-nav--right"
             onClick={(e) => { stop(e); go(-1) }}
             disabled={active === 0}
-            aria-label="הקודם"
+            aria-label={lightbox.prev}
           >
             ›
           </button>
@@ -105,7 +107,7 @@ function Lightbox({ item, onClose }: { item: LightboxItem; onClose: () => void }
                 key={src}
                 className={`carousel-dot${i === active ? ' active' : ''}`}
                 onClick={() => setActive(i)}
-                aria-label={`שקופית ${i + 1}`}
+                aria-label={lightbox.slide(i + 1)}
               />
             ))}
           </div>

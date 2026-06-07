@@ -1,18 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import Book, { type BookHandle, type RtlMode } from './components/Book'
-import { shared } from './content/shared'
+import Book, { type BookHandle } from './components/Book'
+import { useLocale } from './content/locale'
+import { localeMeta, locales } from './content/shared'
 import { pageTitles } from './content/pages'
-
-function readInitialMode(): RtlMode {
-  const param = new URLSearchParams(window.location.search).get('rtl')
-  return param === 'native' ? 'native' : 'mirror'
-}
 
 export default function App() {
   const bookRef = useRef<BookHandle>(null)
-  const [mode] = useState<RtlMode>(readInitialMode)
+  const { locale, setLocale, chrome } = useLocale()
+  const mode = localeMeta[locale].mode
+  const titles = pageTitles[locale]
   const [current, setCurrent] = useState(0)
-  const [total, setTotal] = useState(pageTitles.length)
+  const [total, setTotal] = useState(titles.length)
   const [thumbsOpen, setThumbsOpen] = useState(false)
 
   const onState = useCallback((cur: number, tot: number) => {
@@ -36,33 +34,52 @@ export default function App() {
   const atFirst = current <= 0
   const atLast = current >= total - 1
 
+  // Chevron direction follows reading direction: in RTL "previous" points right.
+  const isRtl = localeMeta[locale].dir === 'rtl'
+  const prevGlyph = isRtl ? '›' : '‹'
+  const nextGlyph = isRtl ? '‹' : '›'
+
   return (
     <div className="app">
       <header className="topbar">
-        <div className="title">{shared.topbarTitle}</div>
-        <div className="page-status">{shared.pageStatus(current + 1, total)}</div>
+        <div className="title">{chrome.topbarTitle}</div>
+        <div className="page-status">{chrome.pageStatus(current + 1, total)}</div>
         <div className="spacer" />
+
+        <div className="lang-switch" role="group" aria-label={chrome.language.label}>
+          {locales.map((code) => (
+            <button
+              key={code}
+              className={`lang-btn${code === locale ? ' active' : ''}`}
+              aria-pressed={code === locale}
+              onClick={() => setLocale(code)}
+              title={localeMeta[code].label}
+            >
+              {code.toUpperCase()}
+            </button>
+          ))}
+        </div>
 
         <button
           className="icon-btn"
           aria-pressed={thumbsOpen}
           onClick={() => setThumbsOpen((v) => !v)}
-          title={shared.nav.thumbnails}
-          aria-label={shared.nav.thumbnails}
+          title={chrome.nav.thumbnails}
+          aria-label={chrome.nav.thumbnails}
         >
           ▦
         </button>
-        <button className="icon-btn" onClick={toggleFullscreen} title={shared.nav.fullscreen} aria-label={shared.nav.fullscreen}>
+        <button className="icon-btn" onClick={toggleFullscreen} title={chrome.nav.fullscreen} aria-label={chrome.nav.fullscreen}>
           ⛶
         </button>
       </header>
 
       <main className="stage">
-        <Book ref={bookRef} mode={mode} onState={onState} />
+        <Book ref={bookRef} locale={locale} mode={mode} onState={onState} />
       </main>
 
-      <div className={`thumbs${thumbsOpen ? ' open' : ''}`} aria-label={shared.nav.thumbnails}>
-        {pageTitles.map((label, i) => (
+      <div className={`thumbs${thumbsOpen ? ' open' : ''}`} aria-label={chrome.nav.thumbnails}>
+        {titles.map((label, i) => (
           <button
             key={label}
             className={`thumb-btn${i === current ? ' active' : ''}`}
@@ -80,17 +97,17 @@ export default function App() {
       </div>
 
       <footer className="toolbar">
-        <button className="nav-btn" onClick={() => bookRef.current?.first()} disabled={atFirst} title={shared.nav.first} aria-label={shared.nav.first}>
+        <button className="nav-btn" onClick={() => bookRef.current?.first()} disabled={atFirst} title={chrome.nav.first} aria-label={chrome.nav.first}>
           ⏮
         </button>
-        <button className="nav-btn" onClick={() => bookRef.current?.prev()} disabled={atFirst} title={shared.nav.prev} aria-label={shared.nav.prev}>
-          ›
+        <button className="nav-btn" onClick={() => bookRef.current?.prev()} disabled={atFirst} title={chrome.nav.prev} aria-label={chrome.nav.prev}>
+          {prevGlyph}
         </button>
         <div className="divider" />
-        <button className="nav-btn" onClick={() => bookRef.current?.next()} disabled={atLast} title={shared.nav.next} aria-label={shared.nav.next}>
-          ‹
+        <button className="nav-btn" onClick={() => bookRef.current?.next()} disabled={atLast} title={chrome.nav.next} aria-label={chrome.nav.next}>
+          {nextGlyph}
         </button>
-        <button className="nav-btn" onClick={() => bookRef.current?.last()} disabled={atLast} title={shared.nav.last} aria-label={shared.nav.last}>
+        <button className="nav-btn" onClick={() => bookRef.current?.last()} disabled={atLast} title={chrome.nav.last} aria-label={chrome.nav.last}>
           ⏭
         </button>
       </footer>

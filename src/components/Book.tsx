@@ -18,9 +18,10 @@ import TipsPage from '../pages/TipsPage'
 import MediaPage from '../pages/MediaPage'
 import ContactPage from '../pages/ContactPage'
 import BackCoverPage from '../pages/BackCoverPage'
-import { shared } from '../content/shared'
+import { localeMeta, type Locale, type RtlMode } from '../content/shared'
+import { useLocale } from '../content/locale'
 
-export type RtlMode = 'mirror' | 'native'
+export type { RtlMode }
 
 export interface BookHandle {
   next: () => void
@@ -44,6 +45,7 @@ interface FlipInstance {
 }
 
 interface BookProps {
+  locale: Locale
   mode: RtlMode
   onState: (current: number, total: number) => void
 }
@@ -56,7 +58,9 @@ const DESIGN_RATIO = 460 / 650
 // more vertical space instead of leaving large top/bottom margins.
 const MIN_RATIO = 0.56
 
-const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, ref) {
+const Book = forwardRef<BookHandle, BookProps>(function Book({ locale, mode, onState }, ref) {
+  const { chrome } = useLocale()
+  const isRtl = localeMeta[locale].dir === 'rtl'
   const flipRef = useRef<FlipInstance | null>(null)
   const wrapRef = useRef<HTMLDivElement>(null)
   const [current, setCurrent] = useState(0)
@@ -178,15 +182,18 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, 
     else prev()
   }
 
-  // Keyboard arrows: in RTL the LEFT key advances.
+  // Keyboard arrows follow reading direction: in RTL the LEFT key advances,
+  // in LTR the RIGHT key advances.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft') next()
-      else if (e.key === 'ArrowRight') prev()
+      const advance = isRtl ? 'ArrowLeft' : 'ArrowRight'
+      const back = isRtl ? 'ArrowRight' : 'ArrowLeft'
+      if (e.key === advance) next()
+      else if (e.key === back) prev()
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [next, prev])
+  }, [next, prev, isRtl])
 
   const total = 8
   const atFirst = current <= 0
@@ -237,9 +244,9 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, 
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
-        {/* key forces a clean re-init when strategy or computed size changes */}
+        {/* key forces a clean re-init when locale, strategy or computed size changes */}
         <HTMLFlipBook
-          key={`${mode}-${dims.spread ? 'L' : 'P'}-${dims.pageW}x${dims.pageH}`}
+          key={`${locale}-${mode}-${dims.spread ? 'L' : 'P'}-${dims.pageW}x${dims.pageH}`}
           ref={flipRef}
           {...settings}
           onInit={handleInit}
@@ -260,19 +267,19 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, 
         className="side-arrow forward"
         onClick={next}
         disabled={atLast}
-        aria-label={shared.nav.next}
-        title={shared.nav.next}
+        aria-label={chrome.nav.next}
+        title={chrome.nav.next}
       >
-        ‹
+        {isRtl ? '‹' : '›'}
       </button>
       <button
         className="side-arrow back"
         onClick={prev}
         disabled={atFirst}
-        aria-label={shared.nav.prev}
-        title={shared.nav.prev}
+        aria-label={chrome.nav.prev}
+        title={chrome.nav.prev}
       >
-        ›
+        {isRtl ? '›' : '‹'}
       </button>
     </>
   )
