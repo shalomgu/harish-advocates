@@ -2,6 +2,16 @@
 // Edit text here; page components only handle layout.
 import { asset } from './shared'
 
+const base = import.meta.env.BASE_URL
+
+// Bottom-of-page legal/utility links shown on the cover and back-cover.
+// Each opens its standalone page inside an in-app popup (see LegalLinks).
+export const legalLinks = [
+  { label: 'תנאי שימוש', href: `${base}terms.html` },
+  { label: 'מדיניות פרטיות', href: `${base}privacy.html` },
+  { label: 'הצהרת נגישות', href: `${base}accessibility.html` },
+] as const
+
 export const cover = {
   logo: asset('logo.svg'),
   logoAlt: 'חריש עורכי דין – Harish Advocates',

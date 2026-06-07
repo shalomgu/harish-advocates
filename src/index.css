@@ -453,6 +453,79 @@ body {
   text-align: center;
 }
 
+/* ---------------- Legal / utility links ---------------- */
+.legal-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px 6px;
+  width: 100%;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.legal-links-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.legal-links-btn {
+  appearance: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+  color: var(--gold);
+  font-weight: 700;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.legal-links-btn:hover,
+.legal-links-btn:focus-visible {
+  color: #e6c878;
+  border-bottom-color: currentColor;
+}
+
+.legal-links-sep {
+  color: rgba(199, 162, 74, 0.55);
+}
+
+/* ---- Legal popup (iframe overlay, reuses .media-lightbox backdrop) ---- */
+.legal-stage {
+  position: relative;
+  width: min(860px, 94vw);
+  height: min(88vh, 900px);
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+
+.legal-frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* On the cover: sit at the very bottom of the card, just below the footer. */
+.legal-links--cover {
+  margin-top: clamp(8px, 1.4vh, 12px);
+  font-size: clamp(10px, 2.2vw, 13px);
+}
+
+/* On the back cover: render inside the page footer area, above the copyright. */
+.legal-links--backcover {
+  margin: 0 auto 6px;
+  font-size: clamp(10px, 2vw, 12px);
+}
+
 /* ---------------- About ---------------- */
 .about-page .intro,
 .about-page .values,
@@ -1384,6 +1457,10 @@ body {
     margin: 0;
     padding-top: 8px;
     font-size: clamp(10px, 3vw, 13px);
+  }
+  .legal-links--cover {
+    margin-top: 4px;
+    font-size: clamp(9px, 2.6vw, 12px);
   }
   .side-arrow {
     font-size: 34px;

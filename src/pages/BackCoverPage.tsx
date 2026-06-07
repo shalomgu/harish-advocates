@@ -1,5 +1,6 @@
 import { forwardRef } from 'react'
 import Page from '../components/Page'
+import LegalLinks from '../components/LegalLinks'
 import { backCover, cover } from '../content/pages'
 
 const socialIcons: Record<string, JSX.Element> = {
@@ -23,7 +24,12 @@ const BackCoverPage = forwardRef<HTMLDivElement>(function BackCoverPage(_props, 
     ref={ref} 
     variant="backcover"
     showFooter
-    footer={<p className="cover-footer back-cover-footer">{backCover.footer}</p>}
+    footer={
+      <>
+        <LegalLinks className="legal-links--backcover" />
+        <p className="cover-footer back-cover-footer">{backCover.footer}</p>
+      </>
+    }
     >
       <div className="back-cover-logo-wrap">
       <img src={cover.logo} alt={cover.logoAlt} className="cover-logo" />

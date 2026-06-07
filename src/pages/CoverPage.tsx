@@ -1,5 +1,6 @@
 import { forwardRef, Fragment } from 'react'
 import Page from '../components/Page'
+import LegalLinks from '../components/LegalLinks'
 import { cover } from '../content/pages'
 
 const CoverPage = forwardRef<HTMLDivElement>(function CoverPage(_props, ref) {
@@ -29,6 +30,7 @@ const CoverPage = forwardRef<HTMLDivElement>(function CoverPage(_props, ref) {
               <p className="cover-footer">{cover.footer}</p>
             </>
           )}
+          <LegalLinks className="legal-links--cover" />
         </article>
       </div>
     </Page>
