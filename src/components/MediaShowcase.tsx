@@ -5,6 +5,7 @@ import type { TipArticle, TipVideo } from '../content/pages'
 type LightboxItem =
   | { kind: 'video'; src: string; poster?: string; alt: string }
   | { kind: 'image'; images: string[]; alt: string }
+  | { kind: 'pdf'; src: string; alt: string }
 
 const MAX_VISIBILITY = 3
 
@@ -49,7 +50,14 @@ function Lightbox({ item, onClose }: { item: LightboxItem; onClose: () => void }
         ×
       </button>
 
-      {item.kind === 'video' ? (
+      {item.kind === 'pdf' ? (
+        <div className="media-stage media-stage--pdf" onClick={stop}>
+          <iframe src={item.src} title={item.alt} />
+          <a className="media-pdf-open" href={item.src} target="_blank" rel="noopener noreferrer">
+            פתיחה בכרטיסייה חדשה ↗
+          </a>
+        </div>
+      ) : item.kind === 'video' ? (
         <div className="media-stage" onClick={stop}>
           <video src={item.src} poster={item.poster} controls autoPlay playsInline onEnded={onClose} />
         </div>
@@ -205,41 +213,28 @@ export default function MediaShowcase({
         <h3>{articles.heading}</h3>
         {articles.items.length > 0 ? (
           <div className="article-grid">
-            {articles.items.map((article) =>
-              article.pdf ? (
-                <a
-                  className="article-card"
-                  key={article.title}
-                  href={article.pdf}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <span className="article-thumb">
-                    <img src={article.thumbnail} alt={article.title} loading="lazy" />
-                    <span className="article-zoom" aria-hidden="true">
-                      ⤢
-                    </span>
+            {articles.items.map((article) => (
+              <button
+                className="article-card"
+                key={article.title}
+                onClick={() =>
+                  setActive(
+                    article.pdf
+                      ? { kind: 'pdf', src: article.pdf, alt: article.title }
+                      : { kind: 'image', images: article.images ?? [], alt: article.title },
+                  )
+                }
+              >
+                <span className="article-thumb">
+                  <img src={article.thumbnail} alt={article.title} loading="lazy" />
+                  <span className="article-zoom" aria-hidden="true">
+                    ⤢
                   </span>
-                  <span className="article-title">{article.title}</span>
-                  {article.source && <span className="article-source">{article.source}</span>}
-                </a>
-              ) : (
-                <button
-                  className="article-card"
-                  key={article.title}
-                  onClick={() => setActive({ kind: 'image', images: article.images ?? [], alt: article.title })}
-                >
-                  <span className="article-thumb">
-                    <img src={article.thumbnail} alt={article.title} loading="lazy" />
-                    <span className="article-zoom" aria-hidden="true">
-                      ⤢
-                    </span>
-                  </span>
-                  <span className="article-title">{article.title}</span>
-                  {article.source && <span className="article-source">{article.source}</span>}
-                </button>
-              ),
-            )}
+                </span>
+                <span className="article-title">{article.title}</span>
+                {article.source && <span className="article-source">{article.source}</span>}
+              </button>
+            ))}
           </div>
         ) : (
           articles.empty && <p className="showcase-empty">{articles.empty}</p>
