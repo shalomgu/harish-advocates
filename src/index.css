@@ -856,11 +856,17 @@ body {
 .showcase .video-grid,
 .showcase .article-grid {
   display: flex;
+  flex-wrap: nowrap;
   gap: 12px;
   overflow-x: auto;
+  overflow-y: hidden;
   scroll-snap-type: x mandatory;
   padding-bottom: 8px;
   -webkit-overflow-scrolling: touch;
+  /* The .content-page ancestor sets touch-action: pan-y, which blocks horizontal
+     swipe; re-enable horizontal panning so the carousel is draggable on mobile. */
+  touch-action: pan-x;
+  overscroll-behavior-x: contain;
   scrollbar-width: thin;
   scrollbar-color: var(--accent) transparent;
 }
