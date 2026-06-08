@@ -6,6 +6,7 @@ type LightboxItem =
   | { kind: 'video'; src: string; poster?: string; alt: string }
   | { kind: 'image'; images: string[]; alt: string }
   | { kind: 'pdf'; src: string; alt: string }
+  | { kind: 'web'; src: string; alt: string }
 
 const MAX_VISIBILITY = 3
 
@@ -50,9 +51,14 @@ function Lightbox({ item, onClose }: { item: LightboxItem; onClose: () => void }
         ×
       </button>
 
-      {item.kind === 'pdf' ? (
+      {item.kind === 'pdf' || item.kind === 'web' ? (
         <div className="media-stage media-stage--pdf" onClick={stop}>
-          <iframe src={item.src} title={item.alt} />
+          <iframe
+            src={item.src}
+            title={item.alt}
+            allow="autoplay; encrypted-media; picture-in-picture; web-share"
+            allowFullScreen
+          />
           <a className="media-pdf-open" href={item.src} target="_blank" rel="noopener noreferrer">
             פתיחה בכרטיסייה חדשה ↗
           </a>
@@ -181,6 +187,27 @@ export default function MediaShowcase({
                 </div>
                 <span className="video-label">{video.label}</span>
               </div>
+            ) : video.type === 'iframe' ? (
+              <button
+                className="video-tile video-tile--link"
+                key={video.url}
+                onClick={() => setActive({ kind: 'web', src: video.url, alt: video.label })}
+              >
+                <span className="video-media">
+                  {video.icon === 'radio' ? (
+                    <span className="video-play video-play--radio" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32">
+                        <path d="M15.5 3.2a1 1 0 0 1 .46 1.87L11.8 7h6.7A2.5 2.5 0 0 1 21 9.5v8a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5v-8A2.5 2.5 0 0 1 5.5 7h1.86l7.2-3.69a1 1 0 0 1 .94-.11zM7.5 11a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zm0 2a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zM17 12a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm0 3.5a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
+                      </svg>
+                    </span>
+                  ) : (
+                    <span className="video-play" aria-hidden="true">
+                      ▶
+                    </span>
+                  )}
+                </span>
+                <span className="video-label">{video.label}</span>
+              </button>
             ) : (
               <a
                 className="video-tile video-tile--link"

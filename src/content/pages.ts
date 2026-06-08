@@ -182,8 +182,9 @@ export const practice = {
 export interface TipVideo {
   // 'video' = self-hosted MP4, true inline playback (recommended);
   // 'embed' = Instagram iframe preview (plays once, then links out — IG's own behavior);
-  // 'link'  = poster tile that opens the post in a new tab.
-  type: 'embed' | 'link' | 'video'
+  // 'link'  = poster tile that opens the post in a new tab;
+  // 'iframe' = poster tile that opens the URL embedded inside the in-app popup.
+  type: 'embed' | 'link' | 'video' | 'iframe'
   url: string
   label: string
   poster?: string
@@ -293,7 +294,7 @@ export const media = {
     heading: 'רדיו וטלויזיה',
     items: [
       { type: 'video', url: asset('videos/binyamini-and-gueta.mp4'), label: 'בנימיני וגואטה' },
-      { type: 'link', url: 'https://103fm.maariv.co.il/programs/media.aspx?ZrqvnVq=EMFGKH&c41t4nzVQ=EF', label: 'ראיון ברדיו 103FM – הצעת חוק לעידוד יצור מזון לחולי צליאק', icon: 'radio' },
+      { type: 'iframe', url: 'https://103fm.maariv.co.il/programs/media.aspx?ZrqvnVq=EMFGKH&c41t4nzVQ=EF', label: 'ראיון ברדיו 103FM – הצעת חוק לעידוד יצור מזון לחולי צליאק', icon: 'radio' },
     ] as TipVideo[],
   },
   articles: {
