@@ -852,11 +852,33 @@ body {
   color: var(--accent);
 }
 
+/* Videos and articles render as a single-line horizontal carousel. */
 .showcase .video-grid,
 .showcase .article-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
   gap: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 8px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) transparent;
+}
+
+.showcase .video-grid::-webkit-scrollbar,
+.showcase .article-grid::-webkit-scrollbar {
+  height: 8px;
+}
+
+.showcase .video-grid::-webkit-scrollbar-thumb,
+.showcase .article-grid::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 999px;
+}
+
+.showcase .video-grid::-webkit-scrollbar-track,
+.showcase .article-grid::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 .showcase .video-tile {
@@ -865,6 +887,18 @@ body {
   gap: 6px;
   text-decoration: none;
   color: inherit;
+}
+
+.showcase .video-grid .video-tile,
+.showcase .article-grid .article-card {
+  flex: 0 0 auto;
+  width: clamp(150px, 22vw, 220px);
+  scroll-snap-align: start;
+}
+
+/* Keep video thumbnails compact so the articles carousel below peeks into view. */
+.showcase .video-grid .video-tile {
+  width: clamp(110px, 14vw, 150px);
 }
 
 .showcase .video-media {
@@ -1236,9 +1270,12 @@ body {
 }
 
 @media (max-width: 720px) {
-  .showcase .video-grid,
-  .showcase .article-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .showcase .article-grid .article-card {
+    width: clamp(140px, 60vw, 200px);
+  }
+
+  .showcase .video-grid .video-tile {
+    width: clamp(110px, 32vw, 150px);
   }
 }
 
