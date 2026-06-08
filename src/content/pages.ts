@@ -292,6 +292,7 @@ export const media = {
   videos: {
     heading: 'רדיו וטלויזיה',
     items: [
+      { type: 'video', url: asset('videos/binyamini-and-gueta.mp4'), label: 'בנימיני וגואטה' },
       { type: 'link', url: 'https://103fm.maariv.co.il/programs/media.aspx?ZrqvnVq=EMFGKH&c41t4nzVQ=EF', label: 'ראיון ברדיו 103FM – הצעת חוק לעידוד יצור מזון לחולי צליאק', icon: 'radio' },
     ] as TipVideo[],
   },
