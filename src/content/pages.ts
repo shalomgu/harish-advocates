@@ -209,12 +209,13 @@ export const tips = {
     heading: 'סרטוני מידע',
     // Reusing the מהתקשורת reels for now; more will be supplied later.
     items: [
-      { type: 'video', url: asset('monopol.mp4'), label: 'מונופול' },
-      { type: 'video', url: asset('lior-likes.mp4'), label: 'ליאור ממליץ' },
-      { type: 'video', url: asset('will.mp4'), label: 'צוואה' },
-      { type: 'video', url: asset('will-diy.mp4'), label: 'צוואה – לערוך לבד?' },
-      { type: 'video', url: asset('yipuy-koach-mitmashech.mp4'), label: 'ייפוי כוח מתמשך' },
-      { type: 'video', url: asset('copy-rights.mp4'), label: 'זכויות יוצרים' },
+      { type: 'video', url: asset('videos/monopol.mp4'), label: 'מונופול' },
+      { type: 'video', url: asset('videos/lior-likes.mp4'), label: 'ליאור ממליץ' },
+      { type: 'video', url: asset('videos/will.mp4'), label: 'צוואה' },
+      { type: 'video', url: asset('videos/will-diy.mp4'), label: 'צוואה – לערוך לבד?' },
+      { type: 'video', url: asset('videos/yipuy-koach-mitmashech.mp4'), label: 'ייפוי כוח מתמשך' },
+      { type: 'video', url: asset('videos/copy-rights.mp4'), label: 'זכויות יוצרים' },
+      { type: 'video', url: asset('videos/buying-home-in-a-bag.mp4'), label: 'קניית דירה' },
     ] as TipVideo[],
   },
   articles: {
@@ -263,6 +264,12 @@ export const tips = {
         source: 'דה מרקר',
         thumbnail: asset('articles/demarker-what-is-newspaper.png'),
         pdf: asset('articles/demarker-what-is-newspaper.pdf'),
+      },
+      {
+        title: 'חלית? הגעת לגבורות? חכה בתור',
+        source: 'דה מרקר',
+        thumbnail: asset('articles/wait-in-line.png'),
+        pdf: asset('articles/wait-in-line.pdf'),
       },
       {
         title: 'דרוש רובין הוד לשידורי ספורט',
