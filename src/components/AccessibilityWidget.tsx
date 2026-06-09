@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { LegalPopup } from './LegalLinks'
 import { shared } from '../content/shared'
 import {
   A11Y_MOTION_EVENT,
@@ -52,6 +53,7 @@ function ToggleRow({
 
 export default function AccessibilityWidget() {
   const [open, setOpen] = useState(false)
+  const [statementOpen, setStatementOpen] = useState(false)
   const [prefs, setPrefs] = useState<A11yPrefs>(loadPrefs)
   const panelRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
@@ -202,20 +204,33 @@ export default function AccessibilityWidget() {
                   <button type="button" className="a11y-reset" onClick={reset}>
                     {a11y.reset}
                   </button>
-                  <a
+                  <button
+                    type="button"
                     className="a11y-statement"
-                    href={statementHref}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    onClick={() => {
+                      setOpen(false)
+                      setStatementOpen(true)
+                    }}
                   >
-                    {a11y.statement} ↗
-                  </a>
+                    {a11y.statement}
+                  </button>
                 </div>
               </div>
             </div>
           </div>,
           document.body,
         )}
+
+      {statementOpen && (
+        <LegalPopup
+          title={a11y.statement}
+          src={statementHref}
+          onClose={() => {
+            setStatementOpen(false)
+            triggerRef.current?.focus()
+          }}
+        />
+      )}
     </>
   )
 }

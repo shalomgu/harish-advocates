@@ -8,7 +8,7 @@ interface LegalLinksProps {
   className?: string
 }
 
-function LegalPopup({ title, src, onClose }: { title: string; src: string; onClose: () => void }) {
+export function LegalPopup({ title, src, onClose }: { title: string; src: string; onClose: () => void }) {
   const dialogRef = useRef<HTMLDivElement>(null)
   useFocusTrap(true, dialogRef)
 
