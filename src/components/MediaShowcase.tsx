@@ -1,14 +1,61 @@
-import { useCallback, useEffect, useState, type CSSProperties } from 'react'
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import type { TipArticle, TipVideo } from '../content/pages'
 
 type LightboxItem =
-  | { kind: 'video'; src: string; poster?: string; alt: string }
+  | { kind: 'video'; src: string; poster?: string; alt: string; audio?: boolean }
   | { kind: 'image'; images: string[]; alt: string }
   | { kind: 'pdf'; src: string; alt: string }
   | { kind: 'web'; src: string; alt: string }
 
 const MAX_VISIBILITY = 3
+
+/**
+ * Audio recordings stored as MP4 (no meaningful picture): show the poster image
+ * on screen while the track plays; click the image to pause/resume.
+ */
+function AudioStage({
+  src,
+  poster,
+  alt,
+  onEnded,
+}: {
+  src: string
+  poster?: string
+  alt: string
+  onEnded: () => void
+}) {
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const [playing, setPlaying] = useState(true)
+
+  const toggle = () => {
+    const v = videoRef.current
+    if (!v) return
+    if (v.paused) void v.play()
+    else v.pause()
+  }
+
+  return (
+    <div className="media-stage media-stage--audio" onClick={(e) => e.stopPropagation()}>
+      <button className="audio-cover-btn" onClick={toggle} aria-label={playing ? 'השהיה' : 'נגינה'}>
+        {poster && <img className="audio-cover" src={poster} alt={alt} draggable={false} />}
+        <span className={`audio-glyph${playing ? ' is-playing' : ''}`} aria-hidden="true">
+          {playing ? '❚❚' : '▶'}
+        </span>
+      </button>
+      <video
+        ref={videoRef}
+        className="audio-track"
+        src={src}
+        autoPlay
+        playsInline
+        onPlay={() => setPlaying(true)}
+        onPause={() => setPlaying(false)}
+        onEnded={onEnded}
+      />
+    </div>
+  )
+}
 
 function Lightbox({ item, onClose }: { item: LightboxItem; onClose: () => void }) {
   const count = item.kind === 'image' ? item.images.length : 0
@@ -63,6 +110,8 @@ function Lightbox({ item, onClose }: { item: LightboxItem; onClose: () => void }
             פתיחה בכרטיסייה חדשה ↗
           </a>
         </div>
+      ) : item.kind === 'video' && item.audio ? (
+        <AudioStage src={item.src} poster={item.poster} alt={item.alt} onEnded={onClose} />
       ) : item.kind === 'video' ? (
         <div className="media-stage" onClick={stop}>
           <video src={item.src} poster={item.poster} controls autoPlay playsInline onEnded={onClose} />
@@ -164,7 +213,7 @@ export default function MediaShowcase({
               <button
                 className="video-tile video-tile--play"
                 key={video.url}
-                onClick={() => setActive({ kind: 'video', src: video.url, poster: video.poster, alt: video.label })}
+                onClick={() => setActive({ kind: 'video', src: video.url, poster: video.poster, alt: video.label, audio: video.audio })}
               >
                 <span className="video-media">
                   <video src={video.url} poster={video.poster} muted playsInline preload="metadata" tabIndex={-1} />
