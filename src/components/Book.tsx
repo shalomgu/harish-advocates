@@ -164,25 +164,26 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, 
   )
 
   // Lightweight horizontal swipe for mirror mode (native mode has its own).
-  const touchStart = useRef<{ x: number; y: number } | null>(null)
+  const touchStart = useRef<{ x: number; y: number; carousel: HTMLElement | null; scrollLeft: number } | null>(null)
   const onTouchStart = (e: React.TouchEvent) => {
     if (mode !== 'mirror') return
-    // Swipes that begin inside a horizontal carousel should scroll the carousel,
-    // not flip the page. Skip paging when the touch starts within one.
-    if ((e.target as HTMLElement | null)?.closest('.video-grid, .article-grid')) {
-      touchStart.current = null
-      return
-    }
     const t = e.touches[0]
-    touchStart.current = { x: t.clientX, y: t.clientY }
+    // If the swipe begins inside a horizontal carousel, remember it and its scroll
+    // position so we can let the carousel scroll first and only page at its edge.
+    const carousel = (e.target as HTMLElement | null)?.closest<HTMLElement>('.video-grid, .article-grid') ?? null
+    touchStart.current = { x: t.clientX, y: t.clientY, carousel, scrollLeft: carousel?.scrollLeft ?? 0 }
   }
   const onTouchEnd = (e: React.TouchEvent) => {
     if (mode !== 'mirror' || !touchStart.current) return
+    const { x, y, carousel, scrollLeft } = touchStart.current
     const t = e.changedTouches[0]
-    const dx = t.clientX - touchStart.current.x
-    const dy = t.clientY - touchStart.current.y
+    const dx = t.clientX - x
+    const dy = t.clientY - y
     touchStart.current = null
     if (Math.abs(dx) < SWIPE_THRESHOLD || Math.abs(dx) <= Math.abs(dy)) return
+    // The carousel scrolls 1:1 with the finger while it has room, so a changed
+    // scrollLeft means the gesture was a carousel scroll, not a page flip.
+    if (carousel && carousel.scrollLeft !== scrollLeft) return
     // RTL: swiping leftwards advances (next), rightwards goes back.
     if (dx < 0) next()
     else prev()
