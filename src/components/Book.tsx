@@ -167,6 +167,12 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, 
   const touchStart = useRef<{ x: number; y: number } | null>(null)
   const onTouchStart = (e: React.TouchEvent) => {
     if (mode !== 'mirror') return
+    // Swipes that begin inside a horizontal carousel should scroll the carousel,
+    // not flip the page. Skip paging when the touch starts within one.
+    if ((e.target as HTMLElement | null)?.closest('.video-grid, .article-grid')) {
+      touchStart.current = null
+      return
+    }
     const t = e.touches[0]
     touchStart.current = { x: t.clientX, y: t.clientY }
   }
