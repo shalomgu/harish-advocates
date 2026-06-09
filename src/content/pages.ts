@@ -297,7 +297,7 @@ export const media = {
     heading: 'רדיו וטלויזיה',
     items: [
       { type: 'video', url: asset('videos/binyamini-and-gueta.mp4'), label: 'בנימיני וגואטה' },
-      { type: 'video', url: asset('videos/radio-vaadat-huz.mp4'), poster: asset('videos/radio-vaadat-huz.jpeg'), label: 'ראיון ברדיו – ועדת חוץ', audio: true },
+      { type: 'video', url: asset('videos/radio-vaadat-huz.m4a'), poster: asset('videos/radio-vaadat-huz.jpeg'), label: 'ראיון ברדיו – ועדת חוץ', audio: true },
       { type: 'iframe', url: 'https://103fm.maariv.co.il/programs/media.aspx?ZrqvnVq=EMFGKH&c41t4nzVQ=EF', label: 'ראיון ברדיו 103FM – הצעת חוק לעידוד יצור מזון לחולי צליאק', icon: 'radio' },
     ] as TipVideo[],
   },
