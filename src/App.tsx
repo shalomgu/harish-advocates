@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Book, { type BookHandle, type RtlMode } from './components/Book'
+import AccessibilityWidget from './components/AccessibilityWidget'
 import { shared } from './content/shared'
 import { pageTitles } from './content/pages'
 
@@ -58,6 +59,9 @@ export default function App() {
 
   return (
     <div className="app">
+      <a className="skip-link" href="#main-content">
+        {shared.a11y.skipToContent}
+      </a>
       <header className="topbar">
         <div className="page-menu" ref={menuRef}>
           <button
@@ -112,7 +116,7 @@ export default function App() {
         </button>
       </header>
 
-      <main className="stage">
+      <main id="main-content" className="stage" aria-label={shared.topbarTitle} tabIndex={-1}>
         <Book ref={bookRef} mode={mode} onState={onState} />
       </main>
 
@@ -146,6 +150,8 @@ export default function App() {
           ⏭
         </button>
       </footer>
+
+      <AccessibilityWidget />
     </div>
   )
 }

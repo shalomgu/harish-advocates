@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import type { TipArticle, TipVideo } from '../content/pages'
+import { useFocusTrap } from '../lib/useFocusTrap'
 
 type LightboxItem =
   | { kind: 'video'; src: string; poster?: string; alt: string; audio?: boolean }
@@ -60,6 +61,8 @@ function AudioStage({
 function Lightbox({ item, onClose }: { item: LightboxItem; onClose: () => void }) {
   const count = item.kind === 'image' ? item.images.length : 0
   const [active, setActive] = useState(0)
+  const dialogRef = useRef<HTMLDivElement>(null)
+  useFocusTrap(true, dialogRef)
 
   const go = useCallback(
     (delta: number) => {
@@ -93,7 +96,14 @@ function Lightbox({ item, onClose }: { item: LightboxItem; onClose: () => void }
   const stop = (e: React.MouseEvent) => e.stopPropagation()
 
   return createPortal(
-    <div className="media-lightbox" onClick={onClose}>
+    <div
+      ref={dialogRef}
+      className="media-lightbox"
+      role="dialog"
+      aria-modal="true"
+      aria-label={item.alt}
+      onClick={onClose}
+    >
       <button className="media-lightbox-close" onClick={(e) => { stop(e); onClose() }} aria-label="סגירה">
         ×
       </button>
@@ -216,7 +226,7 @@ export default function MediaShowcase({
                 onClick={() => setActive({ kind: 'video', src: video.url, poster: video.poster, alt: video.label, audio: video.audio })}
               >
                 <span className="video-media">
-                  <video src={video.url} poster={video.poster} muted playsInline preload="metadata" tabIndex={-1} />
+                  <video src={video.url} poster={video.poster} muted playsInline preload="metadata" tabIndex={-1} aria-hidden="true" />
                   <span className="video-play" aria-hidden="true">
                     ▶
                   </span>

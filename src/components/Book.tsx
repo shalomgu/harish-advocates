@@ -10,6 +10,7 @@ import {
 } from 'react'
 import HTMLFlipBook from 'react-pageflip'
 
+import { A11Y_MOTION_EVENT, motionDisabled } from '../lib/a11y'
 import CoverPage from '../pages/CoverPage'
 import AboutPage from '../pages/AboutPage'
 import TeamPage from '../pages/TeamPage'
@@ -63,6 +64,20 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, 
   const [current, setCurrent] = useState(0)
   const startPageRef = useRef(0)
   const [dims, setDims] = useState({ pageW: 420, pageH: 594, spread: false })
+  const [reduceMotion, setReduceMotion] = useState(motionDisabled)
+
+  // Track motion preference from both the OS setting and the accessibility
+  // widget so the flip animation can be effectively disabled.
+  useEffect(() => {
+    const sync = () => setReduceMotion(motionDisabled())
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    mq.addEventListener?.('change', sync)
+    window.addEventListener(A11Y_MOTION_EVENT, sync)
+    return () => {
+      mq.removeEventListener?.('change', sync)
+      window.removeEventListener(A11Y_MOTION_EVENT, sync)
+    }
+  }, [])
 
   // Size the book to fit the available stage area (minus margins) so it stays
   // clear of the top bar and bottom toolbar. stretch mode derives height from the
@@ -212,7 +227,8 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, 
     minHeight: 160,
     maxHeight: 2000,
     drawShadow: true,
-    flippingTime: 650,
+    // Near-instant turn when motion is reduced (0 can wedge the engine).
+    flippingTime: reduceMotion ? 1 : 650,
     // Force landscape for the spread; allow portrait only for single-page sizing.
     usePortrait: !dims.spread,
     startZIndex: 1,
@@ -250,7 +266,7 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, 
       >
         {/* key forces a clean re-init when strategy or computed size changes */}
         <HTMLFlipBook
-          key={`${mode}-${dims.spread ? 'L' : 'P'}-${dims.pageW}x${dims.pageH}`}
+          key={`${mode}-${dims.spread ? 'L' : 'P'}-${dims.pageW}x${dims.pageH}-${reduceMotion ? 'rm' : 'm'}`}
           ref={flipRef}
           {...settings}
           onInit={handleInit}

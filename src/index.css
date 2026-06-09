@@ -1745,3 +1745,324 @@ body {
     font-size: 34px;
   }
 }
+
+/* ================= Accessibility ================= */
+
+/* Skip-to-content link: hidden until focused, then pinned to the top. */
+.skip-link {
+  position: fixed;
+  left: 50%;
+  top: -60px;
+  transform: translateX(-50%);
+  z-index: 200;
+  padding: 10px 18px;
+  border-radius: 0 0 10px 10px;
+  background: var(--gold);
+  color: #1a1a1a;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+  transition: top 0.15s ease;
+}
+
+.skip-link:focus-visible,
+.skip-link:focus {
+  top: 0;
+  outline: 3px solid var(--ink);
+  outline-offset: 2px;
+}
+
+/* Floating trigger button (bottom-start, clear of the bottom-end nav). */
+.a11y-trigger {
+  position: fixed;
+  inset-inline-start: 16px;
+  bottom: 64px;
+  z-index: 90;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  color: #fff;
+  background: linear-gradient(180deg, #0b3154, var(--ink));
+  box-shadow: 0 8px 22px rgba(3, 23, 41, 0.4);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.a11y-trigger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(3, 23, 41, 0.5);
+}
+
+.a11y-trigger:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}
+
+/* Modal overlay + panel (rendered via portal on document.body). */
+.a11y-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 18px;
+  background: rgba(6, 16, 28, 0.55);
+  backdrop-filter: blur(2px);
+  animation: lightbox-fade 0.15s ease;
+}
+
+.a11y-panel {
+  direction: rtl;
+  width: min(340px, calc(100vw - 36px));
+  max-height: min(80vh, 620px);
+  overflow-y: auto;
+  border-radius: 16px;
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 24px 60px rgba(3, 23, 41, 0.45);
+}
+
+.a11y-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 18px;
+  background: linear-gradient(180deg, #0b3154, var(--ink));
+  color: #fff;
+  border-bottom: 3px solid var(--gold);
+  border-radius: 16px 16px 0 0;
+}
+
+.a11y-panel-head h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.a11y-close {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.a11y-close:hover,
+.a11y-close:focus-visible {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.a11y-panel-body {
+  padding: 16px 18px 18px;
+}
+
+.a11y-font {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+  border-radius: 12px;
+  background: rgba(199, 162, 74, 0.12);
+}
+
+.a11y-font-label {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.a11y-font-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.a11y-font-btn {
+  min-width: 40px;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid rgba(6, 38, 66, 0.2);
+  border-radius: 9px;
+  background: #fff;
+  color: var(--ink);
+  font-weight: 800;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.a11y-font-btn:hover:not(:disabled),
+.a11y-font-btn:focus-visible {
+  background: var(--gold);
+  border-color: var(--gold);
+}
+
+.a11y-font-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.a11y-font-value {
+  min-width: 44px;
+  text-align: center;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.a11y-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.a11y-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 8px;
+  border: 1px solid rgba(6, 38, 66, 0.16);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.12s ease, background-color 0.12s ease;
+}
+
+.a11y-option-icon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.a11y-option-label {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.a11y-option:hover,
+.a11y-option:focus-visible {
+  border-color: var(--gold);
+}
+
+.a11y-option.is-active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #fff;
+}
+
+.a11y-panel-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(6, 38, 66, 0.12);
+}
+
+.a11y-reset {
+  padding: 9px 14px;
+  border: 1px solid rgba(6, 38, 66, 0.2);
+  border-radius: 9px;
+  background: #fff;
+  color: var(--ink);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.a11y-reset:hover,
+.a11y-reset:focus-visible {
+  background: rgba(6, 38, 66, 0.06);
+}
+
+.a11y-statement {
+  color: var(--accent);
+  font-weight: 800;
+  text-decoration: none;
+  border-bottom: 2px solid var(--gold);
+  padding-bottom: 2px;
+}
+
+.a11y-statement:hover,
+.a11y-statement:focus-visible {
+  color: var(--ink);
+}
+
+/* ---- Global preference effects (toggled on <html>) ---- */
+
+/* Font scaling. Note: the flipbook pages use fixed pixel sizing, so this
+   mainly affects rem-based chrome and the legal/statement popups. */
+html {
+  font-size: calc(100% * var(--a11y-font-scale, 1));
+}
+
+/* Filters are applied to .app so portal overlays (panel/lightbox) stay crisp
+   and so the two filters can be combined without overriding each other. */
+html.a11y-grayscale .app {
+  filter: grayscale(1);
+}
+
+html.a11y-contrast .app {
+  filter: contrast(1.35);
+}
+
+html.a11y-grayscale.a11y-contrast .app {
+  filter: grayscale(1) contrast(1.35);
+}
+
+html.a11y-links a,
+html.a11y-links button:not(.a11y-close):not(.a11y-trigger) {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+html.a11y-links a {
+  outline: 1px dashed currentColor;
+  outline-offset: 2px;
+}
+
+html.a11y-readable *:not(svg):not(path) {
+  font-family: Arial, 'Helvetica Neue', Tahoma, sans-serif !important;
+  letter-spacing: 0.01em;
+}
+
+html.a11y-big-cursor,
+html.a11y-big-cursor * {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath d='M6 2L6 38L15 29L21 43L27 40L21 27L34 27Z' fill='black' stroke='white' stroke-width='2'/%3E%3C/svg%3E")
+      4 2,
+    auto;
+}
+
+/* Stop animations: via the widget toggle or the OS reduced-motion setting. */
+html.a11y-no-motion *,
+html.a11y-no-motion *::before,
+html.a11y-no-motion *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

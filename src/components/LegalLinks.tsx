@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { legalLinks } from '../content/pages'
+import { useFocusTrap } from '../lib/useFocusTrap'
 
 interface LegalLinksProps {
   /** Extra modifier class for context-specific spacing/colors. */
@@ -8,6 +9,9 @@ interface LegalLinksProps {
 }
 
 function LegalPopup({ title, src, onClose }: { title: string; src: string; onClose: () => void }) {
+  const dialogRef = useRef<HTMLDivElement>(null)
+  useFocusTrap(true, dialogRef)
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
@@ -25,7 +29,14 @@ function LegalPopup({ title, src, onClose }: { title: string; src: string; onClo
   }, [onClose])
 
   return createPortal(
-    <div className="media-lightbox" onClick={onClose}>
+    <div
+      ref={dialogRef}
+      className="media-lightbox"
+      role="dialog"
+      aria-modal="true"
+      aria-label={title}
+      onClick={onClose}
+    >
       <button
         className="media-lightbox-close"
         onClick={(e) => {
