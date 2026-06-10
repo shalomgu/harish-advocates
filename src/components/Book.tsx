@@ -199,8 +199,8 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, 
     // The carousel scrolls 1:1 with the finger while it has room, so a changed
     // scrollLeft means the gesture was a carousel scroll, not a page flip.
     if (carousel && carousel.scrollLeft !== scrollLeft) return
-    // RTL: swiping leftwards advances (next), rightwards goes back.
-    if (dx < 0) next()
+    // Swiping left-to-right advances (next), right-to-left goes back.
+    if (dx > 0) next()
     else prev()
   }
 
