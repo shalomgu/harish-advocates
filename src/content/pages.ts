@@ -13,7 +13,7 @@ export const legalLinks = [
 ] as const
 
 export const cover = {
-  logo: asset('logo.svg'),
+  logo: asset('logo-new.png'),
   logoAlt: 'חריש עורכי דין – Harish Advocates',
   title: 'חריש עורכי דין',
   taglineParts: ['יצירתיות', 'תגובתיות', 'אסטרטגיה'],

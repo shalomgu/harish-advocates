@@ -463,15 +463,13 @@ body {
 .cover-logo {
   position: relative;
   z-index: 2;
-  width: min(156px, 34vw);
+  width: min(196px, 44vw);
   height: auto;
   margin: 0 auto clamp(12px, 1.8vh, 16px);
   display: block;
   object-fit: contain;
-  background: #fff;
-  padding: 8px 10px;
-  border-radius: 12px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.18);
+  background: transparent;
+  padding: 0;
 }
 
 .cover-title {
@@ -1697,9 +1695,9 @@ body {
     inset: 6px;
   }
   .cover-logo {
-    width: min(118px, 30vw);
+    width: min(150px, 38vw);
     margin-bottom: 0;
-    padding: 6px 8px;
+    padding: 0;
   }
   .cover-title {
     margin: 0;
