@@ -55,8 +55,9 @@ const SPREAD_GAP = 16
 // Printed-page proportions used for the two-page spread.
 const DESIGN_RATIO = 460 / 650
 // Tallest (narrowest) the single page is allowed to get on phones so it fills
-// more vertical space instead of leaving large top/bottom margins.
-const MIN_RATIO = 0.56
+// more vertical space instead of leaving large top/bottom margins. Kept low so
+// the page can stretch to (nearly) the full stage height on typical phones.
+const MIN_RATIO = 0.44
 
 const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, ref) {
   const flipRef = useRef<FlipInstance | null>(null)
@@ -87,7 +88,7 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, 
     const stage = wrapRef.current?.parentElement
     if (!stage) return
     const availW = Math.max(260, stage.clientWidth - 16)
-    const availH = Math.max(340, stage.clientHeight - 16)
+    const availH = Math.max(340, stage.clientHeight)
     const spread = availW >= 720
     let pageW: number
     let pageH: number
