@@ -54,10 +54,6 @@ const SWIPE_THRESHOLD = 50
 const SPREAD_GAP = 16
 // Printed-page proportions used for the two-page spread.
 const DESIGN_RATIO = 460 / 650
-// Tallest (narrowest) the single page is allowed to get on phones so it fills
-// more vertical space instead of leaving large top/bottom margins. Kept low so
-// the page can stretch to (nearly) the full stage height on typical phones.
-const MIN_RATIO = 0.44
 
 const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, ref) {
   const flipRef = useRef<FlipInstance | null>(null)
@@ -99,12 +95,10 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, 
       pageH = Math.floor(Math.min(availH, (availW - SPREAD_GAP) / 2 / DESIGN_RATIO))
       pageW = Math.floor(pageH * DESIGN_RATIO)
     } else {
-      // Single page (phones): width almost always limits a 0.71 page, leaving big
-      // top/bottom gaps on tall screens. Relax the aspect down to MIN_RATIO so the
-      // page grows taller and fills more of the available height.
-      const ratio = Math.min(DESIGN_RATIO, Math.max(MIN_RATIO, availW / availH))
-      pageH = Math.floor(Math.min(availH, availW / ratio))
-      pageW = Math.floor(pageH * ratio)
+      // Single page fills the entire stage (the band between the top bar and
+      // bottom toolbar) so there are no side or top/bottom gutters.
+      pageW = Math.floor(availW)
+      pageH = Math.floor(availH)
     }
     setDims((d) => (d.pageW === pageW && d.pageH === pageH && d.spread === spread ? d : { pageW, pageH, spread }))
   }, [])
