@@ -437,7 +437,7 @@ body {
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.14),
     inset 0 0 0 8px rgba(255, 255, 255, 0.035);
-  padding: clamp(28px, 5vh, 56px) clamp(20px, 4vw, 44px);
+  padding: clamp(16px, 2.6vh, 26px) clamp(20px, 4vw, 44px);
   overflow: hidden;
 }
 
@@ -463,9 +463,10 @@ body {
 .cover-logo {
   position: relative;
   z-index: 2;
-  width: min(196px, 44vw);
+  width: min(162px, 40vw);
   height: auto;
-  margin: 0 auto clamp(12px, 1.8vh, 16px);
+  max-height: clamp(64px, 12vh, 104px);
+  margin: 0 auto clamp(8px, 1.4vh, 14px);
   display: block;
   object-fit: contain;
   background: transparent;
@@ -473,9 +474,9 @@ body {
 }
 
 .cover-title {
-  margin: clamp(8px, 1.4vh, 14px) 0 clamp(8px, 1.2vh, 12px);
+  margin: clamp(6px, 1.2vh, 12px) 0 clamp(6px, 1vh, 10px);
   color: var(--white);
-  font-size: clamp(30px, 6.6vw, 50px);
+  font-size: clamp(28px, 6vw, 44px);
   line-height: 1.05;
   font-weight: 900;
   letter-spacing: 0.04em;
@@ -510,9 +511,9 @@ body {
 }
 
 .cover-portrait {
-  width: min(176px, 38vw);
-  height: min(176px, 38vw);
-  margin: 0 auto clamp(10px, 1.6vh, 14px);
+  width: min(146px, 32vw);
+  height: min(146px, 32vw);
+  margin: 0 auto clamp(8px, 1.4vh, 12px);
   border-radius: 50%;
   border: 3px solid var(--gold);
   padding: 5px;
