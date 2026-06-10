@@ -30,8 +30,8 @@ body {
   font-family: 'Heebo', Arial, Helvetica, sans-serif;
   color: var(--text);
   background:
-    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.9), transparent 34rem),
-    linear-gradient(135deg, #f6f8fb, var(--bg));
+    radial-gradient(circle at 50% -10%, #14406b, transparent 40rem),
+    linear-gradient(160deg, #0c2c4b, #06182b);
   overflow: hidden;
 }
 
@@ -290,8 +290,10 @@ body {
 }
 
 .page.page--cover {
-  background: #e7ecf3;
-  box-shadow: none;
+  background: radial-gradient(circle at 50% 0%, #174a78 0%, #0b3154 36%, #062642 68%, #031729 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 18px 40px rgba(0, 0, 0, 0.35);
 }
 
 .page-inner {
@@ -403,8 +405,8 @@ body {
 
 /* ---------------- Cover ---------------- */
 .cover-page {
-  padding: clamp(16px, 2.2vh, 24px);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.94));
+  padding: 0;
+  background: radial-gradient(circle at 50% 0%, #174a78 0%, #0b3154 36%, #062642 68%, #031729 100%);
   color: #f7f8fb;
   justify-content: center;
 }
@@ -421,28 +423,28 @@ body {
   --navy-dark: #031729;
   --white: #f7f8fb;
   position: relative;
-  width: min(88%, 470px);
-  height: min(96%, 660px);
-  max-width: 470px;
+  width: 100%;
+  height: 100%;
+  max-width: none;
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-radius: 18px;
+  justify-content: space-between;
+  border-radius: 0;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 28%),
     radial-gradient(circle at 50% 0%, #174a78 0%, #0b3154 36%, var(--navy) 68%, var(--navy-dark) 100%);
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.14),
-    inset 0 0 0 8px rgba(255, 255, 255, 0.035),
-    0 22px 44px rgba(6, 38, 66, 0.22);
-  padding: clamp(18px, 3vh, 30px) clamp(20px, 4vw, 38px);
+    inset 0 0 0 8px rgba(255, 255, 255, 0.035);
+  padding: clamp(28px, 5vh, 56px) clamp(20px, 4vw, 44px);
   overflow: hidden;
 }
 
 .cover-face::after {
   content: '';
   position: absolute;
-  inset: clamp(14px, 2vh, 20px);
+  inset: clamp(8px, 1.2vh, 12px);
   border: 1.5px solid rgba(199, 162, 74, 0.62);
   border-radius: 12px;
   pointer-events: none;
@@ -461,7 +463,7 @@ body {
 .cover-logo {
   position: relative;
   z-index: 2;
-  width: min(132px, 32vw);
+  width: min(156px, 34vw);
   height: auto;
   margin: 0 auto clamp(12px, 1.8vh, 16px);
   display: block;
@@ -475,7 +477,7 @@ body {
 .cover-title {
   margin: clamp(8px, 1.4vh, 14px) 0 clamp(8px, 1.2vh, 12px);
   color: var(--white);
-  font-size: clamp(27px, 5.8vw, 42px);
+  font-size: clamp(30px, 6.6vw, 50px);
   line-height: 1.05;
   font-weight: 900;
   letter-spacing: 0.04em;
@@ -498,7 +500,7 @@ body {
   border-block: 1px solid rgba(199, 162, 74, 0.35);
   background: rgba(255, 255, 255, 0.045);
   color: var(--white);
-  font-size: clamp(11px, 2.4vw, 16px);
+  font-size: clamp(13px, 2.8vw, 19px);
   font-weight: 600;
   line-height: 1.45;
   text-align: center;
@@ -510,8 +512,8 @@ body {
 }
 
 .cover-portrait {
-  width: min(138px, 32vw);
-  height: min(138px, 32vw);
+  width: min(176px, 38vw);
+  height: min(176px, 38vw);
   margin: 0 auto clamp(10px, 1.6vh, 14px);
   border-radius: 50%;
   border: 3px solid var(--gold);
@@ -534,7 +536,7 @@ body {
 .cover-author {
   margin: 2px 0 clamp(10px, 1.5vh, 14px);
   color: var(--gold);
-  font-size: clamp(13px, 2.6vw, 18px);
+  font-size: clamp(15px, 3vw, 21px);
   font-weight: 800;
   line-height: 1.3;
   text-align: center;
@@ -545,9 +547,9 @@ body {
   background: rgba(255, 255, 255, 0.07);
   border: 1px solid rgba(199, 162, 74, 0.25);
   border-radius: 999px;
-  padding: 8px 16px;
+  padding: 10px 20px;
   margin: 0 auto clamp(10px, 1.5vh, 14px);
-  font-size: clamp(12px, 2.8vw, 17px);
+  font-size: clamp(13px, 3vw, 19px);
   font-weight: 700;
   line-height: 1.4;
   text-align: center;
@@ -1578,8 +1580,8 @@ body {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  color: #555;
-  background: rgba(255, 255, 255, 0.3);
+  color: #dce6f2;
+  background: rgba(6, 24, 40, 0.55);
   direction: rtl;
   flex: 0 0 auto;
   z-index: 30;
@@ -1589,7 +1591,7 @@ body {
   min-width: 38px;
   height: 36px;
   border-radius: 9px;
-  color: #42464d;
+  color: #dce6f2;
   background: transparent;
   font-size: 18px;
   display: grid;
@@ -1598,7 +1600,7 @@ body {
 
 .nav-btn:hover,
 .nav-btn:focus-visible {
-  background: rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .nav-btn:disabled {
@@ -1610,7 +1612,7 @@ body {
 .divider {
   width: 1px;
   height: 26px;
-  background: rgba(0, 0, 0, 0.22);
+  background: rgba(255, 255, 255, 0.22);
   margin: 0 4px;
 }
 
@@ -1675,7 +1677,7 @@ body {
     font-size: 14px;
   }
   .stage {
-    padding: 10px 8px;
+    padding: 6px 4px;
   }
   .placeholder-page {
     padding: 28px;
@@ -1689,19 +1691,19 @@ body {
     justify-content: space-between;
     /* Reserve room at the bottom for the absolutely-pinned legal links so the
        packed cover content never overlaps or clips them. */
-    padding: 14px 16px 42px;
+    padding: 10px 10px 38px;
   }
   .cover-face::after {
-    inset: 10px;
+    inset: 6px;
   }
   .cover-logo {
-    width: min(96px, 26vw);
+    width: min(118px, 30vw);
     margin-bottom: 0;
     padding: 6px 8px;
   }
   .cover-title {
     margin: 0;
-    font-size: clamp(22px, 6.4vw, 30px);
+    font-size: clamp(24px, 7.2vw, 34px);
   }
   .cover-gold-line {
     margin-bottom: 0;
@@ -1712,8 +1714,8 @@ body {
     font-size: clamp(10px, 3vw, 13px);
   }
   .cover-portrait {
-    width: min(104px, 27vw);
-    height: min(104px, 27vw);
+    width: min(118px, 30vw);
+    height: min(118px, 30vw);
     margin-bottom: 0;
   }
   .cover-author {
@@ -1726,8 +1728,8 @@ body {
     font-size: clamp(11px, 3.2vw, 14px);
   }
   .cover-footer {
-    margin: 0;
-    padding-top: 8px;
+    margin: 6px 0 0;
+    padding-top: 10px;
     font-size: clamp(10px, 3vw, 13px);
   }
   .legal-links--cover {
