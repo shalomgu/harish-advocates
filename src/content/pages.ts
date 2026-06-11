@@ -335,7 +335,7 @@ export const media = {
         pdf: asset('articles/walla-regional-stations-galatz.pdf'),
       },
       {
-        title: 'ועדת הכלכלה אישרה: הרשות השנייה תוכל להאריך אוטומטית את הזכיונות של תחנות הרדיו האזורי; זליכה התנגד',
+        title: 'ועדת הכלכלה אישרה: הרשות השנייה תוכל להאריך אוטומטית את הזכיונות של תחנות הרדיו האזורי',
         source: 'הארץ',
         thumbnail: asset('articles/economy-committee-radio-licenses.png'),
         pdf: asset('articles/economy-committee-radio-licenses.pdf'),
