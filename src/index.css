@@ -1553,13 +1553,15 @@ body {
   align-items: center;
   justify-content: center;
   border: 0;
-  color: rgba(50, 55, 62, 0.5);
+  color: rgba(231, 238, 247, 0.78);
   background: transparent;
   font-size: clamp(30px, 4vw, 60px);
   line-height: 1;
   overflow: hidden;
   cursor: pointer;
   z-index: 20;
+  /* Keep the glyph legible whether it sits over the navy stage or a light page. */
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
   transition: background-color 0.15s ease, color 0.15s ease;
 }
 
@@ -1572,8 +1574,8 @@ body {
 }
 
 .side-arrow:hover {
-  color: rgba(30, 42, 54, 0.95);
-  background: rgba(6, 38, 66, 0.06);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .side-arrow:disabled {
