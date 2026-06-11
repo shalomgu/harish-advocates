@@ -18,7 +18,8 @@ import IrisPage from '../pages/IrisPage'
 import PracticePage from '../pages/PracticePage'
 import InfoVideosPage from '../pages/InfoVideosPage'
 import ArticlesPage from '../pages/ArticlesPage'
-import MediaPage from '../pages/MediaPage'
+import MediaRadioPage from '../pages/MediaRadioPage'
+import MediaPressPage from '../pages/MediaPressPage'
 import ContactPage from '../pages/ContactPage'
 import BackCoverPage from '../pages/BackCoverPage'
 import { shared } from '../content/shared'
@@ -211,7 +212,7 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, 
     return () => window.removeEventListener('keydown', onKey)
   }, [next, prev])
 
-  const total = 10
+  const total = 11
   const atFirst = current <= 0
   const atLast = current >= total - 1
 
@@ -276,7 +277,8 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, 
           <PracticePage />
           <InfoVideosPage />
           <ArticlesPage />
-          <MediaPage />
+          <MediaRadioPage />
+          <MediaPressPage />
           <ContactPage />
           <BackCoverPage />
         </HTMLFlipBook>

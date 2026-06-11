@@ -918,11 +918,14 @@ body {
   width: clamp(110px, 14vw, 150px);
 }
 
-/* Tips split pages (סרטוני מידע / מאמרים ומדריכים): lay the tiles out as a
-   wrapping grid that scrolls vertically with the page, instead of a single-line
-   horizontal carousel. (The Media page keeps its horizontal carousel.) */
+/* Split content pages (חשוב לדעת → סרטוני מידע / מאמרים ומדריכים, and
+   מהתקשורת → רדיו וטלויזיה / עיתונות כתובה): lay the tiles out as a wrapping
+   grid that scrolls vertically with the page, instead of a single-line
+   horizontal carousel. */
 .tips-page .showcase .video-grid,
-.tips-page .showcase .article-grid {
+.tips-page .showcase .article-grid,
+.media-page .showcase .video-grid,
+.media-page .showcase .article-grid {
   display: grid;
   gap: 14px;
   overflow: visible;
@@ -931,16 +934,20 @@ body {
   padding-bottom: 0;
 }
 
-.tips-page .showcase .video-grid {
+.tips-page .showcase .video-grid,
+.media-page .showcase .video-grid {
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
 }
 
-.tips-page .showcase .article-grid {
+.tips-page .showcase .article-grid,
+.media-page .showcase .article-grid {
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
 }
 
 .tips-page .showcase .video-grid .video-tile,
-.tips-page .showcase .article-grid .article-card {
+.tips-page .showcase .article-grid .article-card,
+.media-page .showcase .video-grid .video-tile,
+.media-page .showcase .article-grid .article-card {
   width: auto;
   scroll-snap-align: none;
 }
