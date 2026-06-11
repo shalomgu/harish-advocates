@@ -13,7 +13,8 @@ import HTMLFlipBook from 'react-pageflip'
 import { A11Y_MOTION_EVENT, motionDisabled } from '../lib/a11y'
 import CoverPage from '../pages/CoverPage'
 import AboutPage from '../pages/AboutPage'
-import TeamPage from '../pages/TeamPage'
+import LiorPage from '../pages/LiorPage'
+import IrisPage from '../pages/IrisPage'
 import PracticePage from '../pages/PracticePage'
 import TipsPage from '../pages/TipsPage'
 import MediaPage from '../pages/MediaPage'
@@ -209,7 +210,7 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, 
     return () => window.removeEventListener('keydown', onKey)
   }, [next, prev])
 
-  const total = 8
+  const total = 9
   const atFirst = current <= 0
   const atLast = current >= total - 1
 
@@ -269,7 +270,8 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, 
         >
           <CoverPage />
           <AboutPage />
-          <TeamPage />
+          <LiorPage />
+          <IrisPage />
           <PracticePage />
           <TipsPage />
           <MediaPage />
