@@ -16,7 +16,8 @@ import AboutPage from '../pages/AboutPage'
 import LiorPage from '../pages/LiorPage'
 import IrisPage from '../pages/IrisPage'
 import PracticePage from '../pages/PracticePage'
-import TipsPage from '../pages/TipsPage'
+import InfoVideosPage from '../pages/InfoVideosPage'
+import ArticlesPage from '../pages/ArticlesPage'
 import MediaPage from '../pages/MediaPage'
 import ContactPage from '../pages/ContactPage'
 import BackCoverPage from '../pages/BackCoverPage'
@@ -210,7 +211,7 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, 
     return () => window.removeEventListener('keydown', onKey)
   }, [next, prev])
 
-  const total = 9
+  const total = 10
   const atFirst = current <= 0
   const atLast = current >= total - 1
 
@@ -273,7 +274,8 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, 
           <LiorPage />
           <IrisPage />
           <PracticePage />
-          <TipsPage />
+          <InfoVideosPage />
+          <ArticlesPage />
           <MediaPage />
           <ContactPage />
           <BackCoverPage />

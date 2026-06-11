@@ -207,16 +207,19 @@ export interface ShowcaseArticles {
 export default function MediaShowcase({
   videos,
   articles,
+  showHeadings = true,
 }: {
-  videos: ShowcaseVideos
-  articles: ShowcaseArticles
+  videos?: ShowcaseVideos
+  articles?: ShowcaseArticles
+  showHeadings?: boolean
 }) {
   const [active, setActive] = useState<LightboxItem | null>(null)
 
   return (
     <div className="showcase">
+      {videos && (
       <section className="showcase-section">
-        <h3>{videos.heading}</h3>
+        {showHeadings && <h3>{videos.heading}</h3>}
         <div className="video-grid">
           {videos.items.map((video) =>
             video.type === 'video' ? (
@@ -294,9 +297,11 @@ export default function MediaShowcase({
           )}
         </div>
       </section>
+      )}
 
+      {articles && (
       <section className="showcase-section">
-        <h3>{articles.heading}</h3>
+        {showHeadings && <h3>{articles.heading}</h3>}
         {articles.items.length > 0 ? (
           <div className="article-grid">
             {articles.items.map((article) => (
@@ -326,6 +331,7 @@ export default function MediaShowcase({
           articles.empty && <p className="showcase-empty">{articles.empty}</p>
         )}
       </section>
+      )}
 
       {active && <Lightbox item={active} onClose={() => setActive(null)} />}
     </div>
