@@ -253,7 +253,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 16px;
+  padding: 0;
   direction: rtl;
   min-height: 0;
   overflow: hidden;
@@ -266,6 +266,16 @@ body {
 
 .flip-root {
   direction: ltr;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* react-pageflip injects its wrapper rule under a misspelled selector
+   (.sft__wrapper), so the real .stf__wrapper element gets no height and
+   collapses. Force the flip chain to fill the book so the rendered page
+   reaches the full stage height with no top/bottom gap. */
+.flip-root .stf__wrapper,
+.flip-root .stf__block {
   width: 100% !important;
   height: 100% !important;
 }
@@ -415,7 +425,7 @@ body {
   width: 100%;
   height: 100%;
   display: grid;
-  place-items: center;
+  place-items: stretch;
 }
 
 .cover-face {
@@ -444,7 +454,7 @@ body {
 .cover-face::after {
   content: '';
   position: absolute;
-  inset: clamp(10px, 1.4vh, 16px);
+  inset: 7px;
   border: 1.5px solid rgba(199, 162, 74, 0.62);
   border-radius: 12px;
   pointer-events: none;
@@ -1676,10 +1686,16 @@ body {
     font-size: 14px;
   }
   .stage {
-    padding: 0 4px;
+    padding: 0;
   }
   .placeholder-page {
     padding: 28px;
+  }
+  /* The cover and back-cover are full-bleed: the generic mobile placeholder
+     padding above must not inset them, or it pushes the gold frame inward. */
+  .cover-page,
+  .back-cover-page {
+    padding: 0;
   }
   /* On phones the flip page is much shorter than the viewport, so vh-based
      spacing overflows the card and clips the footer. Pin sizes to the card and
@@ -1693,7 +1709,7 @@ body {
     padding: 14px 14px 40px;
   }
   .cover-face::after {
-    inset: 8px;
+    inset: 6px;
   }
   .cover-logo {
     width: min(150px, 38vw);
@@ -2008,6 +2024,10 @@ body {
 
 /* ---- Global preference effects (toggled on <html>) ---- */
 
+#main-content {
+  margin: 0;
+  padding: 0;
+}
 /* Font scaling. Note: the flipbook pages use fixed pixel sizing, so this
    mainly affects rem-based chrome and the legal/statement popups. */
 html {

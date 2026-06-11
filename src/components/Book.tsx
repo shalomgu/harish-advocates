@@ -83,7 +83,7 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, 
   const measure = useCallback(() => {
     const stage = wrapRef.current?.parentElement
     if (!stage) return
-    const availW = Math.max(260, stage.clientWidth - 16)
+    const availW = Math.max(260, stage.clientWidth)
     const availH = Math.max(340, stage.clientHeight)
     const spread = availW >= 720
     let pageW: number
