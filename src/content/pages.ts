@@ -303,7 +303,80 @@ export const media = {
   },
   articles: {
     heading: 'עיתונות כתובה',
-    items: [] as TipArticle[],
+    items: [
+      {
+        title: '“The trial of Bill Burn” – myth and facts',
+        source: 'A-LAW',
+        thumbnail: asset('articles/bill-burn-trial.png'),
+        pdf: asset('articles/bill-burn-trial.pdf'),
+      },
+      {
+        title: 'אדוני, אז מה אם צפוף',
+        source: 'ynet',
+        thumbnail: asset('articles/so-what-if-crowded.png'),
+        pdf: asset('articles/so-what-if-crowded.pdf'),
+      },
+      {
+        title: 'תחנות הרדיו האיזורי תובעות מהמדינה פיצוי בשל הנזקים מהתחנות הפירטיות',
+        source: 'גלובס',
+        thumbnail: asset('articles/globes-regional-radio-pirate-damages.png'),
+        pdf: asset('articles/globes-regional-radio-pirate-damages.pdf'),
+      },
+      {
+        title: 'בעלי חיים ברשויות המקומיות',
+        source: 'מעריב',
+        thumbnail: asset('articles/maariv-animals-municipalities.png'),
+        pdf: asset('articles/maariv-animals-municipalities.pdf'),
+      },
+      {
+        title: 'התחנות האיזוריות למפקד גלי צה״ל: חידלו משידור חסויות',
+        source: 'וואלה ברנז׳ה',
+        thumbnail: asset('articles/walla-regional-stations-galatz.png'),
+        pdf: asset('articles/walla-regional-stations-galatz.pdf'),
+      },
+      {
+        title: 'ועדת הכלכלה אישרה: הרשות השנייה תוכל להאריך אוטומטית את הזכיונות של תחנות הרדיו האזורי; זליכה התנגד',
+        source: 'הארץ',
+        thumbnail: asset('articles/economy-committee-radio-licenses.png'),
+        pdf: asset('articles/economy-committee-radio-licenses.pdf'),
+      },
+      {
+        title: 'בכנסת יוחלט על הזכיונות של הרדיו האזורי',
+        source: 'ערוץ 7',
+        thumbnail: asset('articles/channel7-knesset-radio-licenses.png'),
+        pdf: asset('articles/channel7-knesset-radio-licenses.pdf'),
+      },
+      {
+        title: 'יותר מגוון לחולי הצליאק: סימון הגלוטן ישתנה',
+        source: 'ynet',
+        thumbnail: asset('articles/celiac-gluten-labeling-variety.png'),
+        pdf: asset('articles/celiac-gluten-labeling-variety.pdf'),
+      },
+      {
+        title: 'בדיון על המשלוחים החיים בכנסת: עבירות פליליות שעונשן מאסר',
+        source: 'המקום הכי חם בגיהנום',
+        thumbnail: asset('articles/live-shipments-knesset-criminal.png'),
+        pdf: asset('articles/live-shipments-knesset-criminal.pdf'),
+      },
+      {
+        title: 'לראשונה: קרקעות חקלאיות יהפכו למרחבי ריפוי ושיקום',
+        source: 'ynet',
+        thumbnail: asset('articles/agricultural-land-healing-spaces.png'),
+        pdf: asset('articles/agricultural-land-healing-spaces.pdf'),
+      },
+      {
+        title: 'בשורה לחולי צליאק: סימון הגלוטן במוצרי מזון ישתנה',
+        source: 'נגישות ישראל',
+        thumbnail: asset('articles/celiac-gluten-labeling-news.png'),
+        pdf: asset('articles/celiac-gluten-labeling-news.pdf'),
+      },
+      {
+        title: 'הרדיו האזורי: החמרה בכללי הפרסום תדון אותנו לכליה',
+        source: 'גלובס',
+        thumbnail: asset('articles/globes-regional-radio-advertising.png'),
+        pdf: asset('articles/globes-regional-radio-advertising.pdf'),
+      },
+    ] as TipArticle[],
     empty: 'פרסומים וכתבות — יתווספו בקרוב.',
   },
 }
