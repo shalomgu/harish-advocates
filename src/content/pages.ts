@@ -245,6 +245,12 @@ export const tips = {
         images: [asset('articles/puppies-are-dying.png')],
       },
       {
+        title: 'על ניצול כלכלי של קשישים',
+        source: 'דה מרקר',
+        thumbnail: asset('articles/nizul-kshihim.png'),
+        images: [asset('articles/nizul-kshihim.png')],
+      },
+      {
         title: 'כמה שווים מיליון לייקים',
         source: 'דה מרקר',
         thumbnail: asset('articles/million-likes.png'),
