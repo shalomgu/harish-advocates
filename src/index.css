@@ -1172,8 +1172,9 @@ body {
   height: 100%;
   object-fit: contain;
   border-radius: 14px;
-  background: #fff;
-  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+  /* Transparent so slides with an alpha background (e.g. the cover poster) blend
+     into the dark lightbox backdrop instead of showing a white box. */
+  background: transparent;
   user-select: none;
 }
 
