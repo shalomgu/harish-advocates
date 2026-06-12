@@ -376,6 +376,12 @@ export const media = {
         thumbnail: asset('articles/globes-regional-radio-advertising.png'),
         pdf: asset('articles/globes-regional-radio-advertising.pdf'),
       },
+      {
+        title: 'יו״ר לשכת עורכי הדין: אישור תקציב 2012 נועד לפגוע בתפקוד הלשכה',
+        source: 'דה מרקר',
+        thumbnail: asset('articles/themarker-bar-budget-2012.png'),
+        pdf: asset('articles/themarker-bar-budget-2012.pdf'),
+      },
     ] as TipArticle[],
     empty: 'פרסומים וכתבות — יתווספו בקרוב.',
   },
