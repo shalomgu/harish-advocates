@@ -77,6 +77,15 @@ body {
   padding: 5px 10px;
   border-radius: 4px;
   font-size: 13px;
+  color: inherit;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s ease;
+}
+
+.page-status:hover {
+  background: rgba(255, 255, 255, 0.28);
 }
 
 .hamburger {

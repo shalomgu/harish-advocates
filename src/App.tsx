@@ -17,6 +17,7 @@ export default function App() {
   const [thumbsOpen, setThumbsOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
+  const statusRef = useRef<HTMLButtonElement>(null)
 
   const onState = useCallback((cur: number, tot: number) => {
     setCurrent(cur)
@@ -43,7 +44,10 @@ export default function App() {
   useEffect(() => {
     if (!menuOpen) return
     const onPointerDown = (e: PointerEvent) => {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) setMenuOpen(false)
+      const target = e.target as Node
+      const insideMenu = menuRef.current?.contains(target)
+      const onStatus = statusRef.current?.contains(target)
+      if (!insideMenu && !onStatus) setMenuOpen(false)
     }
     window.addEventListener('pointerdown', onPointerDown)
     return () => window.removeEventListener('pointerdown', onPointerDown)
@@ -99,7 +103,17 @@ export default function App() {
         </div>
 
         <div className="title">{shared.topbarTitle}</div>
-        <div className="page-status">{shared.pageStatus(current + 1, total)}</div>
+        <button
+          type="button"
+          ref={statusRef}
+          className="page-status"
+          aria-haspopup="listbox"
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((v) => !v)}
+          title={shared.nav.goTo}
+        >
+          {shared.pageStatus(current + 1, total)}
+        </button>
         <div className="spacer" />
 
         <button
