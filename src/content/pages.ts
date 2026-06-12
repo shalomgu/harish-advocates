@@ -240,6 +240,11 @@ export const tips = {
         ],
       },
       {
+        title: 'גורים ואמהות גוססים ברחובות חיפה',
+        thumbnail: asset('articles/puppies-are-dying.png'),
+        images: [asset('articles/puppies-are-dying.png')],
+      },
+      {
         title: 'כמה שווים מיליון לייקים',
         source: 'דה מרקר',
         thumbnail: asset('articles/million-likes.png'),
