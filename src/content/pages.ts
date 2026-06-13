@@ -240,11 +240,6 @@ export const tips = {
         ],
       },
       {
-        title: 'גורים ואמהות גוססים ברחובות חיפה',
-        thumbnail: asset('articles/puppies-are-dying.png'),
-        images: [asset('articles/puppies-are-dying.png')],
-      },
-      {
         title: 'על ניצול כלכלי של קשישים',
         source: 'דה מרקר',
         thumbnail: asset('articles/nizul-kshihim.png'),
@@ -297,6 +292,12 @@ export const tips = {
         source: 'כלכליסט',
         thumbnail: asset('articles/calcalist-lawyers-strike.png'),
         pdf: asset('articles/calcalist-lawyers-strike.pdf'),
+      },
+      {
+        title: 'על חזירי הבר בחיפה',
+        source: 'דה מרקר',
+        thumbnail: asset('articles/puppies-are-dying.png'),
+        images: [asset('articles/puppies-are-dying.png')],
       },
     ] as TipArticle[],
   },
