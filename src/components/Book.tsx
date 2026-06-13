@@ -284,15 +284,16 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, 
         </HTMLFlipBook>
       </div>
 
-      <button
-        className="side-arrow forward"
-        onClick={next}
-        disabled={atLast}
-        aria-label={shared.nav.next}
-        title={shared.nav.next}
-      >
-        ‹
-      </button>
+      {!atLast && (
+        <button
+          className="side-arrow forward"
+          onClick={next}
+          aria-label={shared.nav.next}
+          title={shared.nav.next}
+        >
+          ›
+        </button>
+      )}
       <button
         className="side-arrow back"
         onClick={prev}
@@ -300,7 +301,7 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, 
         aria-label={shared.nav.prev}
         title={shared.nav.prev}
       >
-        ›
+        ‹
       </button>
     </>
   )

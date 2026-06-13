@@ -154,11 +154,11 @@ export default function App() {
           ⏮
         </button>
         <button className="nav-btn" onClick={() => bookRef.current?.prev()} disabled={atFirst} title={shared.nav.prev} aria-label={shared.nav.prev}>
-          ›
+          ‹
         </button>
         <div className="divider" />
         <button className="nav-btn" onClick={() => bookRef.current?.next()} disabled={atLast} title={shared.nav.next} aria-label={shared.nav.next}>
-          ‹
+          ›
         </button>
         <button className="nav-btn" onClick={() => bookRef.current?.last()} disabled={atLast} title={shared.nav.last} aria-label={shared.nav.last}>
           ⏭
