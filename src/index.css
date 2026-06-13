@@ -978,7 +978,17 @@ body {
 .media-page .showcase .video-grid .video-tile,
 .media-page .showcase .article-grid .article-card {
   width: auto;
-  scroll-snap-align: none;
+  scroll-snap-align: start;
+}
+
+/* Combo with the bottom fade: snap vertical scrolling to card rows so a scroll
+   rest never leaves a card chopped at the top edge. proximity keeps it gentle
+   (only snaps when already near a snap point, so the user can still free-scroll
+   and reach the very bottom). */
+.content-page.tips-page,
+.content-page.media-page {
+  scroll-snap-type: y proximity;
+  scroll-padding-top: clamp(8px, 1.5vh, 16px);
 }
 
 .showcase .video-media {
