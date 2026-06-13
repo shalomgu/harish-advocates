@@ -214,7 +214,10 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, 
 
   const total = 11
   const atFirst = current <= 0
-  const atLast = current >= total - 1
+  // In a two-page spread the back cover (last index) shares the final spread
+  // with the page before it, so the engine's current index tops out at total-2
+  // there; otherwise the back cover would never register as "last".
+  const atLast = current >= total - (dims.spread ? 2 : 1)
 
   const settings = {
     width: dims.pageW,
