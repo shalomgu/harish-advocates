@@ -294,15 +294,16 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, 
           ›
         </button>
       )}
-      <button
-        className="side-arrow back"
-        onClick={prev}
-        disabled={atFirst}
-        aria-label={shared.nav.prev}
-        title={shared.nav.prev}
-      >
-        ‹
-      </button>
+      {!atFirst && (
+        <button
+          className="side-arrow back"
+          onClick={prev}
+          aria-label={shared.nav.prev}
+          title={shared.nav.prev}
+        >
+          ‹
+        </button>
+      )}
     </>
   )
 })
