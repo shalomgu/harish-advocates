@@ -1202,7 +1202,9 @@ body {
   cursor: pointer;
   transform: rotateY(calc(var(--offset) * 50deg)) scaleY(calc(1 + var(--abs-offset) * -0.4))
     translateZ(calc(var(--abs-offset) * -30rem)) translateX(calc(var(--direction) * -5rem));
-  filter: blur(calc(var(--abs-offset) * 1rem));
+  /* Recede neighbours: more blur the further out, plus dimming so they read as
+     quiet background texture rather than competing white sheets. */
+  filter: blur(calc(var(--abs-offset) * 1.2rem)) brightness(calc(1 - var(--abs-offset) * 0.55));
   transition: all 0.3s ease-out;
 }
 

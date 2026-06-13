@@ -144,7 +144,9 @@ function Lightbox({ item, onClose }: { item: LightboxItem; onClose: () => void }
                       '--direction': Math.sign(i - active),
                       '--abs-offset': distance / 3,
                       pointerEvents: visible ? 'auto' : 'none',
-                      opacity: distance >= MAX_VISIBILITY ? 0 : 1,
+                      // Fade neighbours out progressively so the active slide
+                      // dominates instead of competing with full-opacity cards.
+                      opacity: distance >= MAX_VISIBILITY ? 0 : 1 - distance * 0.4,
                       display: distance > MAX_VISIBILITY ? 'none' : 'block',
                     } as CSSProperties
                   }
