@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { LegalPopup } from './LegalLinks'
-import { shared } from '../content/shared'
+import { useLocale } from '../content/locale'
 import {
   A11Y_MOTION_EVENT,
   DEFAULT_PREFS,
@@ -14,7 +14,6 @@ import {
   type A11yPrefs,
 } from '../lib/a11y'
 
-const { a11y } = shared
 const statementHref = `${import.meta.env.BASE_URL}accessibility.html`
 
 const FOCUSABLE =
@@ -52,6 +51,7 @@ function ToggleRow({
 }
 
 export default function AccessibilityWidget() {
+  const { a11y } = useLocale().chrome
   const [open, setOpen] = useState(false)
   const [statementOpen, setStatementOpen] = useState(false)
   const [prefs, setPrefs] = useState<A11yPrefs>(loadPrefs)

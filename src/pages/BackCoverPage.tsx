@@ -1,7 +1,7 @@
 import { forwardRef } from 'react'
 import Page from '../components/Page'
 import LegalLinks from '../components/LegalLinks'
-import { backCover, cover } from '../content/pages'
+import { useLocale } from '../content/locale'
 
 const socialIcons: Record<string, JSX.Element> = {
   instagram: (

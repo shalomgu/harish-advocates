@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import type { TipArticle, TipVideo } from '../content/pages'
+import { useLocale } from '../content/locale'
 import { useFocusTrap } from '../lib/useFocusTrap'
 
 type LightboxItem =
@@ -26,6 +27,7 @@ function AudioStage({
   alt: string
   onEnded: () => void
 }) {
+  const { lightbox } = useLocale().chrome
   const videoRef = useRef<HTMLVideoElement>(null)
   const [playing, setPlaying] = useState(true)
 
@@ -38,7 +40,7 @@ function AudioStage({
 
   return (
     <div className="media-stage media-stage--audio" onClick={(e) => e.stopPropagation()}>
-      <button className="audio-cover-btn" onClick={toggle} aria-label={playing ? 'השהיה' : 'נגינה'}>
+      <button className="audio-cover-btn" onClick={toggle} aria-label={playing ? lightbox.audioPause : lightbox.audioPlay}>
         {poster && <img className="audio-cover" src={poster} alt={alt} draggable={false} />}
         <span className={`audio-glyph${playing ? ' is-playing' : ''}`} aria-hidden="true">
           {playing ? '❚❚' : '▶'}
@@ -105,7 +107,7 @@ function Lightbox({ item, onClose }: { item: LightboxItem; onClose: () => void }
       aria-label={item.alt}
       onClick={onClose}
     >
-      <button className="media-lightbox-close" onClick={(e) => { stop(e); onClose() }} aria-label="סגירה">
+      <button className="media-lightbox-close" onClick={(e) => { stop(e); onClose() }} aria-label={lightbox.close}>
         ×
       </button>
 
@@ -118,7 +120,7 @@ function Lightbox({ item, onClose }: { item: LightboxItem; onClose: () => void }
             allowFullScreen
           />
           <a className="media-pdf-open" href={item.src} target="_blank" rel="noopener noreferrer">
-            פתיחה בכרטיסייה חדשה ↗
+            {lightbox.openNewTab}
           </a>
         </div>
       ) : item.kind === 'video' && item.audio ? (

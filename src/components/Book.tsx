@@ -298,20 +298,20 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ locale, mode, onS
         <button
           className="side-arrow forward"
           onClick={next}
-          aria-label={shared.nav.next}
-          title={shared.nav.next}
+          aria-label={chrome.nav.next}
+          title={chrome.nav.next}
         >
-          ›
+          {isRtl ? '‹' : '›'}
         </button>
       )}
       {!atFirst && (
         <button
           className="side-arrow back"
           onClick={prev}
-          aria-label={shared.nav.prev}
-          title={shared.nav.prev}
+          aria-label={chrome.nav.prev}
+          title={chrome.nav.prev}
         >
-          ‹
+          {isRtl ? '›' : '‹'}
         </button>
       )}
     </>

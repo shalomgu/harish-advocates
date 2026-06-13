@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { legalLinks } from '../content/pages'
+import { useLocale } from '../content/locale'
 import { useFocusTrap } from '../lib/useFocusTrap'
 
 interface LegalLinksProps {
@@ -9,6 +9,7 @@ interface LegalLinksProps {
 }
 
 export function LegalPopup({ title, src, onClose }: { title: string; src: string; onClose: () => void }) {
+  const { lightbox } = useLocale().chrome
   const dialogRef = useRef<HTMLDivElement>(null)
   useFocusTrap(true, dialogRef)
 
@@ -43,7 +44,7 @@ export function LegalPopup({ title, src, onClose }: { title: string; src: string
           e.stopPropagation()
           onClose()
         }}
-        aria-label="סגירה"
+        aria-label={lightbox.close}
       >
         ×
       </button>
@@ -57,11 +58,13 @@ export function LegalPopup({ title, src, onClose }: { title: string; src: string
 
 /** Compact row of legal/utility links that open in an in-app popup. */
 export default function LegalLinks({ className = '' }: LegalLinksProps) {
+  const { legalLinks } = useLocale().t
+  const { legalLinksLabel } = useLocale().chrome
   const [active, setActive] = useState<{ label: string; href: string } | null>(null)
 
   return (
     <>
-      <nav className={`legal-links${className ? ` ${className}` : ''}`} aria-label="קישורים משפטיים">
+      <nav className={`legal-links${className ? ` ${className}` : ''}`} aria-label={legalLinksLabel}>
         {legalLinks.map((link, i) => (
           <span key={link.href} className="legal-links-item">
             <button type="button" className="legal-links-btn" onClick={() => setActive(link)}>

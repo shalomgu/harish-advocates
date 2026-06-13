@@ -1,7 +1,7 @@
 import { forwardRef, Fragment } from 'react'
 import Page from '../components/Page'
 import LegalLinks from '../components/LegalLinks'
-import { cover } from '../content/pages'
+import { useLocale } from '../content/locale'
 
 const CoverPage = forwardRef<HTMLDivElement>(function CoverPage(_props, ref) {
   const { cover } = useLocale().t

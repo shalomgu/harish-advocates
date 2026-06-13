@@ -2200,3 +2200,35 @@ html.a11y-no-motion *::after {
     scroll-behavior: auto !important;
   }
 }
+
+/* ---------------- LTR (English) overrides ----------------
+   Defaults above target the Hebrew RTL layout. When the document switches to
+   dir="ltr", flip the direction-dependent chrome and page copy. The book's
+   `.book--mirror` transform is class-gated, so English (native flip) never gets
+   mirrored. */
+[dir='ltr'] .topbar,
+[dir='ltr'] .stage,
+[dir='ltr'] .toolbar {
+  direction: ltr;
+}
+
+[dir='ltr'] .placeholder-page {
+  direction: ltr;
+  text-align: left;
+}
+
+[dir='ltr'] .team-page .subtitle {
+  direction: ltr;
+  text-align: left;
+}
+
+/* Side flip zones: in LTR, "forward" (next) sits on the right. */
+[dir='ltr'] .side-arrow.forward {
+  left: auto;
+  right: 0;
+}
+
+[dir='ltr'] .side-arrow.back {
+  right: auto;
+  left: 0;
+}

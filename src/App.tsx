@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import Book, { type BookHandle, type RtlMode } from './components/Book'
+import Book, { type BookHandle } from './components/Book'
 import AccessibilityWidget from './components/AccessibilityWidget'
-import { shared } from './content/shared'
+import { useLocale } from './content/locale'
+import { localeMeta, locales } from './content/shared'
 import { pageTitles } from './content/pages'
 
 export default function App() {
@@ -66,7 +67,7 @@ export default function App() {
   return (
     <div className="app">
       <a className="skip-link" href="#main-content">
-        {shared.a11y.skipToContent}
+        {chrome.a11y.skipToContent}
       </a>
       <header className="topbar">
         <div className="page-menu" ref={menuRef}>
@@ -76,8 +77,8 @@ export default function App() {
             aria-haspopup="listbox"
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((v) => !v)}
-            title={shared.nav.goTo}
-            aria-label={shared.nav.goTo}
+            title={chrome.nav.goTo}
+            aria-label={chrome.nav.goTo}
           >
             <span className="hamburger-lines" aria-hidden="true">
               <span />
@@ -87,8 +88,8 @@ export default function App() {
           </button>
 
           {menuOpen && (
-            <ul className="page-menu-list" role="listbox" aria-label={shared.nav.goTo}>
-              {pageTitles.map((label, i) => (
+            <ul className="page-menu-list" role="listbox" aria-label={chrome.nav.goTo}>
+              {titles.map((label, i) => (
                 <li key={label} role="option" aria-selected={i === current}>
                   <button
                     type="button"
@@ -104,7 +105,7 @@ export default function App() {
           )}
         </div>
 
-        <div className="title">{shared.topbarTitle}</div>
+        <div className="title">{chrome.topbarTitle}</div>
         <button
           type="button"
           ref={statusRef}
@@ -112,9 +113,9 @@ export default function App() {
           aria-haspopup="listbox"
           aria-expanded={menuOpen}
           onClick={() => setMenuOpen((v) => !v)}
-          title={shared.nav.goTo}
+          title={chrome.nav.goTo}
         >
-          {shared.pageStatus(current + 1, total)}
+          {chrome.pageStatus(current + 1, total)}
         </button>
         <div className="spacer" />
 
@@ -146,8 +147,8 @@ export default function App() {
         </button>
       </header>
 
-      <main id="main-content" className="stage" aria-label={shared.topbarTitle} tabIndex={-1}>
-        <Book ref={bookRef} mode={mode} onState={onState} />
+      <main id="main-content" className="stage" aria-label={chrome.topbarTitle} tabIndex={-1}>
+        <Book ref={bookRef} locale={locale} mode={mode} onState={onState} />
       </main>
 
       <div className={`thumbs${thumbsOpen ? ' open' : ''}`} aria-label={chrome.nav.thumbnails}>
@@ -169,12 +170,12 @@ export default function App() {
         <button className="nav-btn" onClick={() => bookRef.current?.first()} disabled={atFirst} title={chrome.nav.first} aria-label={chrome.nav.first}>
           ⏮
         </button>
-        <button className="nav-btn" onClick={() => bookRef.current?.prev()} disabled={atFirst} title={shared.nav.prev} aria-label={shared.nav.prev}>
-          ‹
+        <button className="nav-btn" onClick={() => bookRef.current?.prev()} disabled={atFirst} title={chrome.nav.prev} aria-label={chrome.nav.prev}>
+          {prevGlyph}
         </button>
         <div className="divider" />
-        <button className="nav-btn" onClick={() => bookRef.current?.next()} disabled={atLast} title={shared.nav.next} aria-label={shared.nav.next}>
-          ›
+        <button className="nav-btn" onClick={() => bookRef.current?.next()} disabled={atLast} title={chrome.nav.next} aria-label={chrome.nav.next}>
+          {nextGlyph}
         </button>
         <button className="nav-btn" onClick={() => bookRef.current?.last()} disabled={atLast} title={chrome.nav.last} aria-label={chrome.nav.last}>
           ⏭
