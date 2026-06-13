@@ -112,8 +112,6 @@ export const practice = {
     {
       title: 'מקרקעין ונדל"ן',
       tagline: 'רכישה, מכירה, שכירות וליווי עסקאות',
-      intro:
-        'עסקת נדל"ן היא לרוב ההשקעה הגדולה ביותר בחיים. עו״ד חריש מעניק ליווי מלא ומקצועי מתחילת העסקה ועד סיומה — כולל בדיקות נאותות, משא ומתן ורישום.',
       items: [
         'רכישת ומכירת דירות ובתים',
         'חוזי שכירות',
@@ -213,13 +211,13 @@ export const tips = {
     heading: 'סרטוני מידע',
     // Reusing the מהתקשורת reels for now; more will be supplied later.
     items: [
-      { type: 'video', url: asset('videos/monopol.mp4'), label: 'מונופול' },
-      { type: 'video', url: asset('videos/lior-likes.mp4'), label: 'ליאור ממליץ' },
-      { type: 'video', url: asset('videos/will.mp4'), label: 'צוואה' },
+      { type: 'video', url: asset('videos/monopol.mp4'), label: 'מכירה וקנית דירה- מה קודם?' },
+      { type: 'video', url: asset('videos/lior-likes.mp4'), label: 'עושים לייק? - תיזהרו' },
+      { type: 'video', url: asset('videos/will.mp4'), label: 'על החשיבות בעריכת צוואה' },
       { type: 'video', url: asset('videos/will-diy.mp4'), label: 'צוואה – לערוך לבד?' },
       { type: 'video', url: asset('videos/yipuy-koach-mitmashech.mp4'), label: 'ייפוי כוח מתמשך' },
-      { type: 'video', url: asset('videos/copy-rights.mp4'), label: 'זכויות יוצרים' },
-      { type: 'video', url: asset('videos/buying-home-in-a-bag.mp4'), label: 'קניית דירה' },
+      { type: 'video', url: asset('videos/copy-rights.mp4'), label: 'זכויות יוצרים על רעיון' },
+      { type: 'video', url: asset('videos/buying-home-in-a-bag.mp4'), label: 'טיפים לרכישת דירה מקבלן' },
     ] as TipVideo[],
   },
   articles: {
