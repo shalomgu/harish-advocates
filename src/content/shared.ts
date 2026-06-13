@@ -15,46 +15,13 @@ export interface ChromeStrings {
   topbarTitle: string
   pageStatus: (current: number, total: number) => string
   nav: {
-    first: string
-    prev: string
-    next: string
-    last: string
-    thumbnails: string
-    fullscreen: string
-  }
-  language: {
-    label: string
-  }
-  lightbox: {
-    close: string
-    next: string
-    prev: string
-    slide: (index: number) => string
-  }
-}
-
-export const shared: Record<Locale, ChromeStrings> = {
-  he: {
-    firmName: 'חריש עורכי דין',
-    topbarTitle: 'חריש עורכי דין',
-    pageStatus: (current, total) => `עמוד ${current} מתוך ${total}`,
-    nav: {
-      first: 'לעמוד הראשון',
-      prev: 'העמוד הקודם',
-      next: 'העמוד הבא',
-      last: 'לעמוד האחרון',
-      thumbnails: 'תצוגה מקדימה',
-      fullscreen: 'מסך מלא',
-    },
-    language: {
-      label: 'שפה',
-    },
-    lightbox: {
-      close: 'סגירה',
-      next: 'הבא',
-      prev: 'הקודם',
-      slide: (index) => `שקופית ${index}`,
-    },
+    first: 'לעמוד הראשון',
+    prev: 'העמוד הקודם',
+    next: 'העמוד הבא',
+    last: 'לעמוד האחרון',
+    thumbnails: 'תצוגה מקדימה',
+    fullscreen: 'מסך מלא',
+    goTo: 'מעבר לעמוד',
   },
   en: {
     firmName: 'Harish Advocates',
@@ -78,18 +45,21 @@ export const shared: Record<Locale, ChromeStrings> = {
       slide: (index) => `Slide ${index}`,
     },
   },
-}
-
-export interface LocaleMeta {
-  dir: 'rtl' | 'ltr'
-  mode: RtlMode
-  // Short label shown on the language switch button.
-  label: string
-}
-
-export const localeMeta: Record<Locale, LocaleMeta> = {
-  he: { dir: 'rtl', mode: 'mirror', label: 'עברית' },
-  en: { dir: 'ltr', mode: 'native', label: 'English' },
-}
-
-export const locales: Locale[] = ['he', 'en']
+  a11y: {
+    open: 'תפריט נגישות',
+    title: 'התאמות נגישות',
+    fontSize: 'גודל טקסט',
+    increase: 'הגדלת טקסט',
+    decrease: 'הקטנת טקסט',
+    contrast: 'ניגודיות גבוהה',
+    grayscale: 'גווני אפור',
+    links: 'הדגשת קישורים',
+    readable: 'גופן קריא',
+    bigCursor: 'סמן גדול',
+    noMotion: 'עצירת אנימציות',
+    reset: 'איפוס הגדרות',
+    statement: 'הצהרת נגישות',
+    close: 'סגירת תפריט הנגישות',
+    skipToContent: 'דלג לתוכן הראשי',
+  },
+} as const

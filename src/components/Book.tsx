@@ -10,12 +10,16 @@ import {
 } from 'react'
 import HTMLFlipBook from 'react-pageflip'
 
+import { A11Y_MOTION_EVENT, motionDisabled } from '../lib/a11y'
 import CoverPage from '../pages/CoverPage'
 import AboutPage from '../pages/AboutPage'
-import TeamPage from '../pages/TeamPage'
+import LiorPage from '../pages/LiorPage'
+import IrisPage from '../pages/IrisPage'
 import PracticePage from '../pages/PracticePage'
-import TipsPage from '../pages/TipsPage'
-import MediaPage from '../pages/MediaPage'
+import InfoVideosPage from '../pages/InfoVideosPage'
+import ArticlesPage from '../pages/ArticlesPage'
+import MediaRadioPage from '../pages/MediaRadioPage'
+import MediaPressPage from '../pages/MediaPressPage'
 import ContactPage from '../pages/ContactPage'
 import BackCoverPage from '../pages/BackCoverPage'
 import { localeMeta, type Locale, type RtlMode } from '../content/shared'
@@ -35,6 +39,7 @@ interface PageFlipApi {
   flipNext: (corner?: 'top' | 'bottom') => void
   flipPrev: (corner?: 'top' | 'bottom') => void
   flip: (page: number, corner?: 'top' | 'bottom') => void
+  turnToPage: (page: number) => void
   getCurrentPageIndex: () => number
   getPageCount: () => number
   getSettings: () => { disableFlipByClick: boolean }
@@ -54,9 +59,6 @@ const SWIPE_THRESHOLD = 50
 const SPREAD_GAP = 16
 // Printed-page proportions used for the two-page spread.
 const DESIGN_RATIO = 460 / 650
-// Tallest (narrowest) the single page is allowed to get on phones so it fills
-// more vertical space instead of leaving large top/bottom margins.
-const MIN_RATIO = 0.56
 
 const Book = forwardRef<BookHandle, BookProps>(function Book({ locale, mode, onState }, ref) {
   const { chrome } = useLocale()
@@ -66,6 +68,20 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ locale, mode, onS
   const [current, setCurrent] = useState(0)
   const startPageRef = useRef(0)
   const [dims, setDims] = useState({ pageW: 420, pageH: 594, spread: false })
+  const [reduceMotion, setReduceMotion] = useState(motionDisabled)
+
+  // Track motion preference from both the OS setting and the accessibility
+  // widget so the flip animation can be effectively disabled.
+  useEffect(() => {
+    const sync = () => setReduceMotion(motionDisabled())
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    mq.addEventListener?.('change', sync)
+    window.addEventListener(A11Y_MOTION_EVENT, sync)
+    return () => {
+      mq.removeEventListener?.('change', sync)
+      window.removeEventListener(A11Y_MOTION_EVENT, sync)
+    }
+  }, [])
 
   // Size the book to fit the available stage area (minus margins) so it stays
   // clear of the top bar and bottom toolbar. stretch mode derives height from the
@@ -74,8 +90,8 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ locale, mode, onS
   const measure = useCallback(() => {
     const stage = wrapRef.current?.parentElement
     if (!stage) return
-    const availW = Math.max(260, stage.clientWidth - 40)
-    const availH = Math.max(340, stage.clientHeight - 28)
+    const availW = Math.max(260, stage.clientWidth)
+    const availH = Math.max(340, stage.clientHeight)
     const spread = availW >= 720
     let pageW: number
     let pageH: number
@@ -86,12 +102,10 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ locale, mode, onS
       pageH = Math.floor(Math.min(availH, (availW - SPREAD_GAP) / 2 / DESIGN_RATIO))
       pageW = Math.floor(pageH * DESIGN_RATIO)
     } else {
-      // Single page (phones): width almost always limits a 0.71 page, leaving big
-      // top/bottom gaps on tall screens. Relax the aspect down to MIN_RATIO so the
-      // page grows taller and fills more of the available height.
-      const ratio = Math.min(DESIGN_RATIO, Math.max(MIN_RATIO, availW / availH))
-      pageH = Math.floor(Math.min(availH, availW / ratio))
-      pageW = Math.floor(pageH * ratio)
+      // Single page fills the entire stage (the band between the top bar and
+      // bottom toolbar) so there are no side or top/bottom gutters.
+      pageW = Math.floor(availW)
+      pageH = Math.floor(availH)
     }
     setDims((d) => (d.pageW === pageW && d.pageH === pageH && d.spread === spread ? d : { pageW, pageH, spread }))
   }, [])
@@ -137,9 +151,12 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ locale, mode, onS
     })
   }, [runFlip])
 
-  const first = useCallback(() => runFlip((flip) => flip.flip(0)), [runFlip])
-  const last = useCallback(() => runFlip((flip) => flip.flip(flip.getPageCount() - 1)), [runFlip])
-  const flipTo = useCallback((index: number) => runFlip((flip) => flip.flip(index)), [runFlip])
+  // Direct jumps (first/last/menu) use turnToPage: the animated flip() can
+  // silently no-op or land mid-flight when the target is not adjacent — most
+  // visibly in mirror mode — so an instant, reliable turn is used instead.
+  const first = useCallback(() => runFlip((flip) => flip.turnToPage(0)), [runFlip])
+  const last = useCallback(() => runFlip((flip) => flip.turnToPage(flip.getPageCount() - 1)), [runFlip])
+  const flipTo = useCallback((index: number) => runFlip((flip) => flip.turnToPage(index)), [runFlip])
 
   useImperativeHandle(ref, () => ({ next, prev, first, last, flip: flipTo }), [next, prev, first, last, flipTo])
 
@@ -164,21 +181,28 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ locale, mode, onS
   )
 
   // Lightweight horizontal swipe for mirror mode (native mode has its own).
-  const touchStart = useRef<{ x: number; y: number } | null>(null)
+  const touchStart = useRef<{ x: number; y: number; carousel: HTMLElement | null; scrollLeft: number } | null>(null)
   const onTouchStart = (e: React.TouchEvent) => {
     if (mode !== 'mirror') return
     const t = e.touches[0]
-    touchStart.current = { x: t.clientX, y: t.clientY }
+    // If the swipe begins inside a horizontal carousel, remember it and its scroll
+    // position so we can let the carousel scroll first and only page at its edge.
+    const carousel = (e.target as HTMLElement | null)?.closest<HTMLElement>('.video-grid, .article-grid') ?? null
+    touchStart.current = { x: t.clientX, y: t.clientY, carousel, scrollLeft: carousel?.scrollLeft ?? 0 }
   }
   const onTouchEnd = (e: React.TouchEvent) => {
     if (mode !== 'mirror' || !touchStart.current) return
+    const { x, y, carousel, scrollLeft } = touchStart.current
     const t = e.changedTouches[0]
-    const dx = t.clientX - touchStart.current.x
-    const dy = t.clientY - touchStart.current.y
+    const dx = t.clientX - x
+    const dy = t.clientY - y
     touchStart.current = null
     if (Math.abs(dx) < SWIPE_THRESHOLD || Math.abs(dx) <= Math.abs(dy)) return
-    // RTL: swiping leftwards advances (next), rightwards goes back.
-    if (dx < 0) next()
+    // The carousel scrolls 1:1 with the finger while it has room, so a changed
+    // scrollLeft means the gesture was a carousel scroll, not a page flip.
+    if (carousel && carousel.scrollLeft !== scrollLeft) return
+    // Swiping left-to-right advances (next), right-to-left goes back.
+    if (dx > 0) next()
     else prev()
   }
 
@@ -195,9 +219,12 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ locale, mode, onS
     return () => window.removeEventListener('keydown', onKey)
   }, [next, prev, isRtl])
 
-  const total = 8
+  const total = 11
   const atFirst = current <= 0
-  const atLast = current >= total - 1
+  // In a two-page spread the back cover (last index) shares the final spread
+  // with the page before it, so the engine's current index tops out at total-2
+  // there; otherwise the back cover would never register as "last".
+  const atLast = current >= total - (dims.spread ? 2 : 1)
 
   const settings = {
     width: dims.pageW,
@@ -208,7 +235,8 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ locale, mode, onS
     minHeight: 160,
     maxHeight: 2000,
     drawShadow: true,
-    flippingTime: 650,
+    // Near-instant turn when motion is reduced (0 can wedge the engine).
+    flippingTime: reduceMotion ? 1 : 650,
     // Force landscape for the spread; allow portrait only for single-page sizing.
     usePortrait: !dims.spread,
     startZIndex: 1,
@@ -246,7 +274,7 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ locale, mode, onS
       >
         {/* key forces a clean re-init when locale, strategy or computed size changes */}
         <HTMLFlipBook
-          key={`${locale}-${mode}-${dims.spread ? 'L' : 'P'}-${dims.pageW}x${dims.pageH}`}
+          key={`${mode}-${dims.spread ? 'L' : 'P'}-${dims.pageW}x${dims.pageH}-${reduceMotion ? 'rm' : 'm'}`}
           ref={flipRef}
           {...settings}
           onInit={handleInit}
@@ -254,33 +282,38 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ locale, mode, onS
         >
           <CoverPage />
           <AboutPage />
-          <TeamPage />
+          <LiorPage />
+          <IrisPage />
           <PracticePage />
-          <TipsPage />
-          <MediaPage />
+          <InfoVideosPage />
+          <ArticlesPage />
+          <MediaRadioPage />
+          <MediaPressPage />
           <ContactPage />
           <BackCoverPage />
         </HTMLFlipBook>
       </div>
 
-      <button
-        className="side-arrow forward"
-        onClick={next}
-        disabled={atLast}
-        aria-label={chrome.nav.next}
-        title={chrome.nav.next}
-      >
-        {isRtl ? '‹' : '›'}
-      </button>
-      <button
-        className="side-arrow back"
-        onClick={prev}
-        disabled={atFirst}
-        aria-label={chrome.nav.prev}
-        title={chrome.nav.prev}
-      >
-        {isRtl ? '›' : '‹'}
-      </button>
+      {!atLast && (
+        <button
+          className="side-arrow forward"
+          onClick={next}
+          aria-label={shared.nav.next}
+          title={shared.nav.next}
+        >
+          ›
+        </button>
+      )}
+      {!atFirst && (
+        <button
+          className="side-arrow back"
+          onClick={prev}
+          aria-label={shared.nav.prev}
+          title={shared.nav.prev}
+        >
+          ‹
+        </button>
+      )}
     </>
   )
 })

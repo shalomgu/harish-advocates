@@ -30,8 +30,8 @@ body {
   font-family: 'Heebo', Arial, Helvetica, sans-serif;
   color: var(--text);
   background:
-    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.9), transparent 34rem),
-    linear-gradient(135deg, #f6f8fb, var(--bg));
+    radial-gradient(circle at 50% -10%, #14406b, transparent 40rem),
+    linear-gradient(160deg, #0c2c4b, #06182b);
   overflow: hidden;
 }
 
@@ -64,6 +64,12 @@ body {
   text-overflow: ellipsis;
 }
 
+.page-menu {
+  position: relative;
+  direction: rtl;
+  display: flex;
+}
+
 .page-status {
   direction: ltr;
   font-weight: 700;
@@ -71,6 +77,121 @@ body {
   padding: 5px 10px;
   border-radius: 4px;
   font-size: 13px;
+  color: inherit;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s ease;
+}
+
+.page-status:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.hamburger {
+  position: relative;
+}
+
+.hamburger-lines {
+  display: block;
+  width: 18px;
+  height: 14px;
+  position: relative;
+}
+
+.hamburger-lines span {
+  position: absolute;
+  inset-inline: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.hamburger-lines span:nth-child(1) {
+  top: 0;
+}
+
+.hamburger-lines span:nth-child(2) {
+  top: 6px;
+}
+
+.hamburger-lines span:nth-child(3) {
+  top: 12px;
+}
+
+.hamburger.is-open .hamburger-lines span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.hamburger.is-open .hamburger-lines span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.is-open .hamburger-lines span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+.page-menu-list {
+  position: absolute;
+  inset-inline-start: 0;
+  top: calc(100% + 8px);
+  min-width: 220px;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 14px 36px rgba(6, 38, 66, 0.28);
+  z-index: 40;
+  max-height: min(70vh, 460px);
+  overflow-y: auto;
+}
+
+.page-menu-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: 7px;
+  background: transparent;
+  text-align: start;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e2a36;
+  appearance: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.page-menu-item:hover,
+.page-menu-item:focus-visible {
+  background: rgba(199, 162, 74, 0.16);
+}
+
+.page-menu-item.active {
+  background: rgba(199, 162, 74, 0.22);
+}
+
+.page-menu-num {
+  flex: 0 0 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--bar);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.page-menu-item.active .page-menu-num {
+  background: var(--gold);
+}
+
+.page-menu-text {
+  flex: 1;
 }
 
 .spacer {
@@ -172,7 +293,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 14px 16px;
+  padding: 0;
   direction: rtl;
   min-height: 0;
   overflow: hidden;
@@ -185,6 +306,16 @@ body {
 
 .flip-root {
   direction: ltr;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* react-pageflip injects its wrapper rule under a misspelled selector
+   (.sft__wrapper), so the real .stf__wrapper element gets no height and
+   collapses. Force the flip chain to fill the book so the rendered page
+   reaches the full stage height with no top/bottom gap. */
+.flip-root .stf__wrapper,
+.flip-root .stf__block {
   width: 100% !important;
   height: 100% !important;
 }
@@ -209,17 +340,39 @@ body {
 }
 
 .page.page--cover {
-  background: #e7ecf3;
-  box-shadow: none;
+  background: radial-gradient(circle at 50% 0%, #174a78 0%, #0b3154 36%, #062642 68%, #031729 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 18px 40px rgba(0, 0, 0, 0.35);
 }
 
 .page-inner {
+  position: relative;
   width: 100%;
   height: 100%;
   min-height: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+}
+
+/* Soft scroll affordance: fade overflowing content at the bottom edge so text
+   is not hard-cut. Toggled by Page.tsx only while the page overflows and is not
+   scrolled to the end, so the final line is never masked. */
+.page-inner::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: clamp(28px, 6vh, 52px);
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(238, 243, 249, 0), #eef3f9);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.page-inner.show-fade::after {
+  opacity: 1;
 }
 
 /* ---------------- Page base ---------------- */
@@ -322,8 +475,8 @@ body {
 
 /* ---------------- Cover ---------------- */
 .cover-page {
-  padding: clamp(16px, 2.2vh, 24px);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.94));
+  padding: 0;
+  background: radial-gradient(circle at 50% 0%, #174a78 0%, #0b3154 36%, #062642 68%, #031729 100%);
   color: #f7f8fb;
   justify-content: center;
 }
@@ -332,7 +485,7 @@ body {
   width: 100%;
   height: 100%;
   display: grid;
-  place-items: center;
+  place-items: stretch;
 }
 
 .cover-face {
@@ -340,28 +493,28 @@ body {
   --navy-dark: #031729;
   --white: #f7f8fb;
   position: relative;
-  width: min(88%, 470px);
-  height: min(96%, 660px);
-  max-width: 470px;
+  width: 100%;
+  height: 100%;
+  max-width: none;
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-radius: 18px;
+  justify-content: space-between;
+  border-radius: 0;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 28%),
     radial-gradient(circle at 50% 0%, #174a78 0%, #0b3154 36%, var(--navy) 68%, var(--navy-dark) 100%);
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.14),
-    inset 0 0 0 8px rgba(255, 255, 255, 0.035),
-    0 22px 44px rgba(6, 38, 66, 0.22);
-  padding: clamp(18px, 3vh, 30px) clamp(20px, 4vw, 38px);
+    inset 0 0 0 8px rgba(255, 255, 255, 0.035);
+  padding: clamp(20px, 3vh, 32px) clamp(22px, 4.5vw, 46px);
   overflow: hidden;
 }
 
 .cover-face::after {
   content: '';
   position: absolute;
-  inset: clamp(14px, 2vh, 20px);
+  inset: 7px;
   border: 1.5px solid rgba(199, 162, 74, 0.62);
   border-radius: 12px;
   pointer-events: none;
@@ -380,21 +533,20 @@ body {
 .cover-logo {
   position: relative;
   z-index: 2;
-  width: min(132px, 32vw);
+  width: min(162px, 40vw);
   height: auto;
-  margin: 0 auto clamp(12px, 1.8vh, 16px);
+  max-height: clamp(64px, 12vh, 104px);
+  margin: 0 auto clamp(8px, 1.4vh, 14px);
   display: block;
   object-fit: contain;
-  background: #fff;
-  padding: 8px 10px;
-  border-radius: 12px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.18);
+  background: transparent;
+  padding: 0;
 }
 
 .cover-title {
-  margin: clamp(8px, 1.4vh, 14px) 0 clamp(8px, 1.2vh, 12px);
+  margin: clamp(6px, 1.2vh, 12px) 0 clamp(6px, 1vh, 10px);
   color: var(--white);
-  font-size: clamp(27px, 5.8vw, 42px);
+  font-size: clamp(28px, 6vw, 44px);
   line-height: 1.05;
   font-weight: 900;
   letter-spacing: 0.04em;
@@ -417,7 +569,7 @@ body {
   border-block: 1px solid rgba(199, 162, 74, 0.35);
   background: rgba(255, 255, 255, 0.045);
   color: var(--white);
-  font-size: clamp(11px, 2.4vw, 16px);
+  font-size: clamp(13px, 2.8vw, 19px);
   font-weight: 600;
   line-height: 1.45;
   text-align: center;
@@ -429,9 +581,9 @@ body {
 }
 
 .cover-portrait {
-  width: min(138px, 32vw);
-  height: min(138px, 32vw);
-  margin: 0 auto clamp(10px, 1.6vh, 14px);
+  width: min(146px, 32vw);
+  height: min(146px, 32vw);
+  margin: 0 auto clamp(8px, 1.4vh, 12px);
   border-radius: 50%;
   border: 3px solid var(--gold);
   padding: 5px;
@@ -453,7 +605,7 @@ body {
 .cover-author {
   margin: 2px 0 clamp(10px, 1.5vh, 14px);
   color: var(--gold);
-  font-size: clamp(13px, 2.6vw, 18px);
+  font-size: clamp(15px, 3vw, 21px);
   font-weight: 800;
   line-height: 1.3;
   text-align: center;
@@ -464,9 +616,9 @@ body {
   background: rgba(255, 255, 255, 0.07);
   border: 1px solid rgba(199, 162, 74, 0.25);
   border-radius: 999px;
-  padding: 8px 16px;
+  padding: 10px 20px;
   margin: 0 auto clamp(10px, 1.5vh, 14px);
-  font-size: clamp(12px, 2.8vw, 17px);
+  font-size: clamp(13px, 3vw, 19px);
   font-weight: 700;
   line-height: 1.4;
   text-align: center;
@@ -482,6 +634,79 @@ body {
   font-weight: 700;
   letter-spacing: 0.04em;
   text-align: center;
+}
+
+/* ---------------- Legal / utility links ---------------- */
+.legal-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px 6px;
+  width: 100%;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.legal-links-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.legal-links-btn {
+  appearance: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+  color: var(--gold);
+  font-weight: 700;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.legal-links-btn:hover,
+.legal-links-btn:focus-visible {
+  color: #e6c878;
+  border-bottom-color: currentColor;
+}
+
+.legal-links-sep {
+  color: rgba(199, 162, 74, 0.55);
+}
+
+/* ---- Legal popup (iframe overlay, reuses .media-lightbox backdrop) ---- */
+.legal-stage {
+  position: relative;
+  width: min(860px, 94vw);
+  height: min(88vh, 900px);
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+
+.legal-frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* On the cover: sit at the very bottom of the card, just below the footer. */
+.legal-links--cover {
+  margin-top: clamp(8px, 1.4vh, 12px);
+  font-size: clamp(10px, 2.2vw, 13px);
+}
+
+/* On the back cover: render inside the page footer area, above the copyright. */
+.legal-links--backcover {
+  margin: 0 auto 6px;
+  font-size: clamp(10px, 2vw, 12px);
 }
 
 /* ---------------- About ---------------- */
@@ -698,11 +923,39 @@ body {
   color: var(--accent);
 }
 
+/* Videos and articles render as a single-line horizontal carousel. */
 .showcase .video-grid,
 .showcase .article-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-wrap: nowrap;
   gap: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 8px;
+  -webkit-overflow-scrolling: touch;
+  /* The .content-page ancestor sets touch-action: pan-y, which blocks horizontal
+     swipe; re-enable horizontal panning so the carousel is draggable on mobile. */
+  touch-action: pan-x;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) transparent;
+}
+
+.showcase .video-grid::-webkit-scrollbar,
+.showcase .article-grid::-webkit-scrollbar {
+  height: 8px;
+}
+
+.showcase .video-grid::-webkit-scrollbar-thumb,
+.showcase .article-grid::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 999px;
+}
+
+.showcase .video-grid::-webkit-scrollbar-track,
+.showcase .article-grid::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 .showcase .video-tile {
@@ -711,6 +964,62 @@ body {
   gap: 6px;
   text-decoration: none;
   color: inherit;
+}
+
+.showcase .video-grid .video-tile,
+.showcase .article-grid .article-card {
+  flex: 0 0 auto;
+  width: clamp(150px, 22vw, 220px);
+  scroll-snap-align: start;
+}
+
+/* Keep video thumbnails compact so the articles carousel below peeks into view. */
+.showcase .video-grid .video-tile {
+  width: clamp(110px, 14vw, 150px);
+}
+
+/* Split content pages (חשוב לדעת → סרטוני מידע / מאמרים ומדריכים, and
+   מהתקשורת → רדיו וטלויזיה / עיתונות כתובה): lay the tiles out as a wrapping
+   grid that scrolls vertically with the page, instead of a single-line
+   horizontal carousel. */
+.tips-page .showcase .video-grid,
+.tips-page .showcase .article-grid,
+.media-page .showcase .video-grid,
+.media-page .showcase .article-grid {
+  display: grid;
+  gap: 14px;
+  overflow: visible;
+  scroll-snap-type: none;
+  touch-action: pan-y;
+  padding-bottom: 0;
+}
+
+.tips-page .showcase .video-grid,
+.media-page .showcase .video-grid {
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+}
+
+.tips-page .showcase .article-grid,
+.media-page .showcase .article-grid {
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+}
+
+.tips-page .showcase .video-grid .video-tile,
+.tips-page .showcase .article-grid .article-card,
+.media-page .showcase .video-grid .video-tile,
+.media-page .showcase .article-grid .article-card {
+  width: auto;
+  scroll-snap-align: start;
+}
+
+/* Combo with the bottom fade: snap vertical scrolling to card rows so a scroll
+   rest never leaves a card chopped at the top edge. proximity keeps it gentle
+   (only snaps when already near a snap point, so the user can still free-scroll
+   and reach the very bottom). */
+.content-page.tips-page,
+.content-page.media-page {
+  scroll-snap-type: y proximity;
+  scroll-padding-top: clamp(8px, 1.5vh, 16px);
 }
 
 .showcase .video-media {
@@ -793,6 +1102,44 @@ body {
   max-width: min(760px, 94vw);
 }
 
+.media-stage--pdf {
+  width: min(860px, 94vw);
+  height: min(88vh, 1000px);
+  max-width: none;
+  max-height: none;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+
+.media-stage--pdf iframe {
+  display: block;
+  flex: 1;
+  width: 100%;
+  border: 0;
+  background: #fff;
+}
+
+.media-pdf-open {
+  flex: 0 0 auto;
+  display: block;
+  padding: 10px 14px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  background: #f3f5f8;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  text-decoration: none;
+}
+
+.media-pdf-open:hover {
+  background: #e9edf2;
+}
+
 .media-stage video {
   display: block;
   width: 100%;
@@ -800,6 +1147,65 @@ body {
   border-radius: 14px;
   background: #000;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+
+/* Audio recording: the poster image is the visual; the <video> is audio-only. */
+.media-stage--audio {
+  width: min(440px, 92vw);
+}
+
+.audio-cover-btn {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: #000;
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+
+.audio-cover {
+  display: block;
+  width: 100%;
+  max-height: 88vh;
+  object-fit: contain;
+}
+
+.audio-glyph {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 40px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.28);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+/* While playing, fade the pause glyph out; reveal it on hover/focus. */
+.audio-glyph.is-playing {
+  opacity: 0;
+  background: rgba(0, 0, 0, 0);
+}
+
+.audio-cover-btn:hover .audio-glyph,
+.audio-cover-btn:focus-visible .audio-glyph {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.28);
+}
+
+/* Keep the audio element in the DOM (so it plays) but visually hidden. */
+.audio-track {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .media-lightbox-image {
@@ -827,7 +1233,9 @@ body {
   cursor: pointer;
   transform: rotateY(calc(var(--offset) * 50deg)) scaleY(calc(1 + var(--abs-offset) * -0.4))
     translateZ(calc(var(--abs-offset) * -30rem)) translateX(calc(var(--direction) * -5rem));
-  filter: blur(calc(var(--abs-offset) * 1rem));
+  /* Recede neighbours: more blur the further out, plus dimming so they read as
+     quiet background texture rather than competing white sheets. */
+  filter: blur(calc(var(--abs-offset) * 1.2rem)) brightness(calc(1 - var(--abs-offset) * 0.55));
   transition: all 0.3s ease-out;
 }
 
@@ -836,8 +1244,9 @@ body {
   height: 100%;
   object-fit: contain;
   border-radius: 14px;
-  background: #fff;
-  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+  /* Transparent so slides with an alpha background (e.g. the cover poster) blend
+     into the dark lightbox backdrop instead of showing a white box. */
+  background: transparent;
   user-select: none;
 }
 
@@ -985,6 +1394,7 @@ body {
   gap: 6px;
   text-align: center;
   color: inherit;
+  text-decoration: none;
 }
 
 .showcase .article-thumb {
@@ -1034,10 +1444,21 @@ body {
   line-height: 1.4;
 }
 
+.showcase .article-source {
+  margin-top: -2px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  opacity: 0.85;
+}
+
 @media (max-width: 720px) {
-  .showcase .video-grid,
-  .showcase .article-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .showcase .article-grid .article-card {
+    width: clamp(140px, 60vw, 200px);
+  }
+
+  .showcase .video-grid .video-tile {
+    width: clamp(110px, 32vw, 150px);
   }
 }
 
@@ -1126,10 +1547,19 @@ body {
   padding: 10px 14px;
 }
 
+.back-cover-page .page-footer {
+  width: 100%;
+}
+
 .back-cover-page .back-cover-footer {
   color: #fff;
   font-size: clamp(10px, 2vw, 12px);
   padding-top: 8px;
+  /* Override the cover footer's 82% width + auto side margins so the text
+     centers within the back cover's centered column. */
+  width: 100%;
+  margin-inline: 0;
+  text-align: center;
 }
 
 .back-cover-page .back-cover-logo {
@@ -1230,13 +1660,15 @@ body {
   align-items: center;
   justify-content: center;
   border: 0;
-  color: rgba(50, 55, 62, 0.5);
+  color: rgba(231, 238, 247, 0.78);
   background: transparent;
   font-size: clamp(30px, 4vw, 60px);
   line-height: 1;
   overflow: hidden;
   cursor: pointer;
   z-index: 20;
+  /* Keep the glyph legible whether it sits over the navy stage or a light page. */
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
   transition: background-color 0.15s ease, color 0.15s ease;
 }
 
@@ -1249,8 +1681,8 @@ body {
 }
 
 .side-arrow:hover {
-  color: rgba(30, 42, 54, 0.95);
-  background: rgba(6, 38, 66, 0.06);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .side-arrow:disabled {
@@ -1266,8 +1698,8 @@ body {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  color: #555;
-  background: rgba(255, 255, 255, 0.3);
+  color: #dce6f2;
+  background: rgba(6, 24, 40, 0.55);
   direction: rtl;
   flex: 0 0 auto;
   z-index: 30;
@@ -1277,7 +1709,7 @@ body {
   min-width: 38px;
   height: 36px;
   border-radius: 9px;
-  color: #42464d;
+  color: #dce6f2;
   background: transparent;
   font-size: 18px;
   display: grid;
@@ -1286,7 +1718,7 @@ body {
 
 .nav-btn:hover,
 .nav-btn:focus-visible {
-  background: rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .nav-btn:disabled {
@@ -1298,7 +1730,7 @@ body {
 .divider {
   width: 1px;
   height: 26px;
-  background: rgba(0, 0, 0, 0.22);
+  background: rgba(255, 255, 255, 0.22);
   margin: 0 4px;
 }
 
@@ -1363,10 +1795,16 @@ body {
     font-size: 14px;
   }
   .stage {
-    padding: 10px 8px;
+    padding: 0;
   }
   .placeholder-page {
     padding: 28px;
+  }
+  /* The cover and back-cover are full-bleed: the generic mobile placeholder
+     padding above must not inset them, or it pushes the gold frame inward. */
+  .cover-page,
+  .back-cover-page {
+    padding: 0;
   }
   /* On phones the flip page is much shorter than the viewport, so vh-based
      spacing overflows the card and clips the footer. Pin sizes to the card and
@@ -1375,19 +1813,21 @@ body {
     width: 100%;
     height: 100%;
     justify-content: space-between;
-    padding: 14px 16px;
+    /* Reserve room at the bottom for the absolutely-pinned legal links so the
+       packed cover content never overlaps or clips them. */
+    padding: 14px 14px 40px;
   }
   .cover-face::after {
-    inset: 10px;
+    inset: 6px;
   }
   .cover-logo {
-    width: min(96px, 26vw);
+    width: min(150px, 38vw);
     margin-bottom: 0;
-    padding: 6px 8px;
+    padding: 0;
   }
   .cover-title {
     margin: 0;
-    font-size: clamp(22px, 6.4vw, 30px);
+    font-size: clamp(24px, 7.2vw, 34px);
   }
   .cover-gold-line {
     margin-bottom: 0;
@@ -1398,8 +1838,8 @@ body {
     font-size: clamp(10px, 3vw, 13px);
   }
   .cover-portrait {
-    width: min(104px, 27vw);
-    height: min(104px, 27vw);
+    width: min(118px, 30vw);
+    height: min(118px, 30vw);
     margin-bottom: 0;
   }
   .cover-author {
@@ -1412,43 +1852,351 @@ body {
     font-size: clamp(11px, 3.2vw, 14px);
   }
   .cover-footer {
-    margin: 0;
-    padding-top: 8px;
+    margin: 6px 0 0;
+    padding-top: 10px;
     font-size: clamp(10px, 3vw, 13px);
+  }
+  .legal-links--cover {
+    position: absolute;
+    inset-inline: 14px;
+    bottom: 12px;
+    /* Let the two-sided inset define the width; the inherited width:100%
+       would override one side and push the row off-center. */
+    width: auto;
+    margin: 0;
+    z-index: 3;
+    font-size: clamp(9px, 2.6vw, 12px);
   }
   .side-arrow {
     font-size: 34px;
   }
 }
 
-/* ---------------- LTR (English) overrides ----------------
-   Defaults above target the Hebrew RTL layout. When the document switches to
-   dir="ltr", flip the direction-dependent chrome and page copy. The book's
-   `.book--mirror` transform is class-gated, so English (native flip) never gets
-   mirrored. */
-[dir='ltr'] .topbar,
-[dir='ltr'] .stage,
-[dir='ltr'] .toolbar {
-  direction: ltr;
+/* ================= Accessibility ================= */
+
+/* Skip-to-content link: hidden until focused, then pinned to the top. */
+.skip-link {
+  position: fixed;
+  left: 50%;
+  top: -60px;
+  transform: translateX(-50%);
+  z-index: 200;
+  padding: 10px 18px;
+  border-radius: 0 0 10px 10px;
+  background: var(--gold);
+  color: #1a1a1a;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+  transition: top 0.15s ease;
 }
 
-[dir='ltr'] .placeholder-page {
-  direction: ltr;
-  text-align: left;
+.skip-link:focus-visible,
+.skip-link:focus {
+  top: 0;
+  outline: 3px solid var(--ink);
+  outline-offset: 2px;
 }
 
-[dir='ltr'] .team-page .subtitle {
-  direction: ltr;
-  text-align: left;
+/* Floating trigger button (bottom-start, clear of the bottom-end nav). */
+.a11y-trigger {
+  position: fixed;
+  inset-inline-start: 16px;
+  bottom: 64px;
+  z-index: 90;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  color: #fff;
+  background: linear-gradient(180deg, #0b3154, var(--ink));
+  box-shadow: 0 8px 22px rgba(3, 23, 41, 0.4);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-/* Side flip zones: in LTR, "forward" (next) sits on the right. */
-[dir='ltr'] .side-arrow.forward {
-  left: auto;
-  right: 0;
+.a11y-trigger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(3, 23, 41, 0.5);
 }
 
-[dir='ltr'] .side-arrow.back {
-  right: auto;
-  left: 0;
+.a11y-trigger:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}
+
+/* Modal overlay + panel (rendered via portal on document.body). */
+.a11y-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 18px;
+  background: rgba(6, 16, 28, 0.55);
+  backdrop-filter: blur(2px);
+  animation: lightbox-fade 0.15s ease;
+}
+
+.a11y-panel {
+  direction: rtl;
+  width: min(340px, calc(100vw - 36px));
+  max-height: min(80vh, 620px);
+  overflow-y: auto;
+  border-radius: 16px;
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 24px 60px rgba(3, 23, 41, 0.45);
+}
+
+.a11y-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 18px;
+  background: linear-gradient(180deg, #0b3154, var(--ink));
+  color: #fff;
+  border-bottom: 3px solid var(--gold);
+  border-radius: 16px 16px 0 0;
+}
+
+.a11y-panel-head h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.a11y-close {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.a11y-close:hover,
+.a11y-close:focus-visible {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.a11y-panel-body {
+  padding: 16px 18px 18px;
+}
+
+.a11y-font {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+  border-radius: 12px;
+  background: rgba(199, 162, 74, 0.12);
+}
+
+.a11y-font-label {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.a11y-font-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.a11y-font-btn {
+  min-width: 40px;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid rgba(6, 38, 66, 0.2);
+  border-radius: 9px;
+  background: #fff;
+  color: var(--ink);
+  font-weight: 800;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.a11y-font-btn:hover:not(:disabled),
+.a11y-font-btn:focus-visible {
+  background: var(--gold);
+  border-color: var(--gold);
+}
+
+.a11y-font-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.a11y-font-value {
+  min-width: 44px;
+  text-align: center;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.a11y-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.a11y-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 8px;
+  border: 1px solid rgba(6, 38, 66, 0.16);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.12s ease, background-color 0.12s ease;
+}
+
+.a11y-option-icon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.a11y-option-label {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.a11y-option:hover,
+.a11y-option:focus-visible {
+  border-color: var(--gold);
+}
+
+.a11y-option.is-active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #fff;
+}
+
+.a11y-panel-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(6, 38, 66, 0.12);
+}
+
+.a11y-reset {
+  padding: 9px 14px;
+  border: 1px solid rgba(6, 38, 66, 0.2);
+  border-radius: 9px;
+  background: #fff;
+  color: var(--ink);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.a11y-reset:hover,
+.a11y-reset:focus-visible {
+  background: rgba(6, 38, 66, 0.06);
+}
+
+.a11y-statement {
+  padding: 0 0 2px;
+  border: 0;
+  border-bottom: 2px solid var(--gold);
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.a11y-statement:hover,
+.a11y-statement:focus-visible {
+  color: var(--ink);
+}
+
+/* ---- Global preference effects (toggled on <html>) ---- */
+
+#main-content {
+  margin: 0;
+  padding: 0;
+}
+/* Font scaling. Note: the flipbook pages use fixed pixel sizing, so this
+   mainly affects rem-based chrome and the legal/statement popups. */
+html {
+  font-size: calc(100% * var(--a11y-font-scale, 1));
+}
+
+/* Filters are applied to .app so portal overlays (panel/lightbox) stay crisp
+   and so the two filters can be combined without overriding each other. */
+html.a11y-grayscale .app {
+  filter: grayscale(1);
+}
+
+html.a11y-contrast .app {
+  filter: contrast(1.35);
+}
+
+html.a11y-grayscale.a11y-contrast .app {
+  filter: grayscale(1) contrast(1.35);
+}
+
+html.a11y-links a,
+html.a11y-links button:not(.a11y-close):not(.a11y-trigger) {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+html.a11y-links a {
+  outline: 1px dashed currentColor;
+  outline-offset: 2px;
+}
+
+html.a11y-readable *:not(svg):not(path) {
+  font-family: Arial, 'Helvetica Neue', Tahoma, sans-serif !important;
+  letter-spacing: 0.01em;
+}
+
+html.a11y-big-cursor,
+html.a11y-big-cursor * {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath d='M6 2L6 38L15 29L21 43L27 40L21 27L34 27Z' fill='black' stroke='white' stroke-width='2'/%3E%3C/svg%3E")
+      4 2,
+    auto;
+}
+
+/* Stop animations: via the widget toggle or the OS reduced-motion setting. */
+html.a11y-no-motion *,
+html.a11y-no-motion *::before,
+html.a11y-no-motion *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }

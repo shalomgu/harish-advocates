@@ -1,10 +1,10 @@
 import { forwardRef } from 'react'
 import Page from '../components/Page'
-import { useLocale } from '../content/locale'
+import { team } from '../content/pages'
 
-const TeamPage = forwardRef<HTMLDivElement>(function TeamPage(_props, ref) {
-  const { team } = useLocale().t
-  const { lior, iris } = team
+const { lior } = team
+
+const LiorPage = forwardRef<HTMLDivElement>(function LiorPage(_props, ref) {
   return (
     <Page ref={ref} pageClass="team-page" showHeader title={team.title}>
       <div className="profile-row">
@@ -40,28 +40,8 @@ const TeamPage = forwardRef<HTMLDivElement>(function TeamPage(_props, ref) {
           ))}
         </ul>
       </section>
-
-      <footer className="team-footer">
-        <div className="profile-row">
-          <img src={iris.photo} alt={iris.name} className="profile-photo" />
-          <p className="subtitle">{iris.name}</p>
-        </div>
-
-        <div className="member-bio">
-          {iris.bio.map((text, i) => (
-            <p key={i}>{text}</p>
-          ))}
-
-          <h3>{iris.experienceHeading}</h3>
-          <ul>
-            {iris.experience.map((item, i) => (
-              <li key={i}>{item}</li>
-            ))}
-          </ul>
-        </div>
-      </footer>
     </Page>
   )
 })
 
-export default TeamPage
+export default LiorPage

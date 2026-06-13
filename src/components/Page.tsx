@@ -1,4 +1,4 @@
-import { forwardRef, type ReactNode } from 'react'
+import { forwardRef, useEffect, useRef, useState, type ReactNode } from 'react'
 
 type Variant = 'cover' | 'content' | 'backcover'
 
@@ -30,10 +30,31 @@ const Page = forwardRef<HTMLDivElement, PageProps>(function Page(
       ? `placeholder-page content-page ${pageClass}`.trim()
       : `placeholder-page ${variant === 'cover' ? 'cover-page' : 'back-cover-page'} ${pageClass}`.trim()
 
+  const scrollRef = useRef<HTMLElement>(null)
+  const [showFade, setShowFade] = useState(false)
+
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el) return
+    const update = () => {
+      const overflow = el.scrollHeight - el.clientHeight > 2
+      const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 2
+      setShowFade(overflow && !atBottom)
+    }
+    update()
+    el.addEventListener('scroll', update, { passive: true })
+    const ro = new ResizeObserver(update)
+    ro.observe(el)
+    return () => {
+      el.removeEventListener('scroll', update)
+      ro.disconnect()
+    }
+  }, [])
+
   return (
     <div className={`page${isCover ? ' page--cover' : ''}`} ref={ref}>
-      <div className="page-inner">
-        <section className={sectionClass}>
+      <div className={`page-inner${showFade ? ' show-fade' : ''}`}>
+        <section ref={scrollRef} className={sectionClass}>
           {showHeader && (
             <header className="page-header">
               {title && <h2>{title}</h2>}
