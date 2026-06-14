@@ -39,4 +39,9 @@ export const shared = {
     close: 'סגירת תפריט הנגישות',
     skipToContent: 'דלג לתוכן הראשי',
   },
+  intro: {
+    replay: 'צפייה בסרטון הפתיחה',
+    close: 'סגירת הסרטון',
+    unmute: 'הפעלת קול',
+  },
 } as const

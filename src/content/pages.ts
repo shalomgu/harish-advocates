@@ -22,6 +22,8 @@ export const cover = {
   author: 'עו״ד ליאור חריש – מייסד',
   promise: 'מקצועיות. אמינות. ניסיון.',
   footer: '',
+  // Intro clip that morphs out of the cover portrait on first visit.
+  introVideo: asset('videos/intro.mp4'),
 }
 
 export const about = {

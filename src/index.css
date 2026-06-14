@@ -2169,3 +2169,104 @@ html.a11y-no-motion *::after {
     scroll-behavior: auto !important;
   }
 }
+
+/* ---------------- Intro video (morphs out of the cover portrait) ---------------- */
+/* The portrait doubles as the trigger that opens the intro clip. */
+.cover-portrait-btn {
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cover-portrait-btn:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 4px;
+}
+
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(3, 12, 24, 0);
+  transition: background-color 0.42s ease;
+}
+
+.intro-overlay.is-open {
+  background: rgba(3, 12, 24, 0.82);
+}
+
+.intro-stage {
+  position: fixed;
+  overflow: hidden;
+  background: #000;
+  box-shadow:
+    0 26px 64px rgba(0, 0, 0, 0.55),
+    0 0 0 3px rgba(199, 162, 74, 0.55);
+  transition:
+    left 0.52s cubic-bezier(0.22, 0.61, 0.36, 1),
+    top 0.52s cubic-bezier(0.22, 0.61, 0.36, 1),
+    width 0.52s cubic-bezier(0.22, 0.61, 0.36, 1),
+    height 0.52s cubic-bezier(0.22, 0.61, 0.36, 1),
+    border-radius 0.52s ease;
+  will-change: left, top, width, height;
+}
+
+.intro-stage video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #000;
+}
+
+.intro-close {
+  position: absolute;
+  top: 8px;
+  inset-inline-end: 8px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.intro-close:hover {
+  background: rgba(0, 0, 0, 0.82);
+}
+
+.intro-unmute {
+  position: absolute;
+  bottom: 12px;
+  inset-inline-start: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(199, 162, 74, 0.94);
+  color: #03101f;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.intro-unmute:hover {
+  background: var(--gold);
+}
