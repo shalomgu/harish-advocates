@@ -2200,7 +2200,7 @@ html.a11y-no-motion *::after {
 }
 
 .intro-overlay.is-open {
-  background: rgba(3, 12, 24, 0.82);
+  background: rgba(3, 12, 24, 0.62);
 }
 
 .intro-stage {

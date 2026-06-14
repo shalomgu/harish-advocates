@@ -27,10 +27,11 @@ interface Rect {
 }
 
 /**
- * Final resting box for the clip. Desktop opens it to the right of the cover;
+ * Final resting box for the clip. Desktop opens it right next to the cover's
+ * golden frame at the same height, so it reads like the facing brochure page;
  * mobile centres it. A 9:16 box keeps the portrait video un-cropped.
  */
-function computeTargetRect(): Rect {
+function computeTargetRect(originEl: HTMLElement | null): Rect {
   const vw = window.innerWidth
   const vh = window.innerHeight
   const mobile = vw <= MOBILE_MAX
@@ -46,7 +47,25 @@ function computeTargetRect(): Rect {
     return { x: (vw - w) / 2, y: (vh - h) / 2, w, h }
   }
 
-  const marginX = Math.max(28, vw * 0.035)
+  // Match the cover card and sit just to its right, like a second page.
+  const card = originEl?.closest('.cover-face')?.getBoundingClientRect()
+  const GAP = 16
+  const margin = 16
+  if (card) {
+    let h = card.height
+    let w = h * VIDEO_RATIO
+    const x = card.right + GAP
+    // If it would run off the right edge, shrink to fit while keeping aspect.
+    const maxRight = vw - margin
+    if (x + w > maxRight) {
+      w = Math.max(120, maxRight - x)
+      h = w / VIDEO_RATIO
+    }
+    const y = card.top + (card.height - h) / 2
+    return { x, y, w, h }
+  }
+
+  // Fallback: right-aligned tall panel.
   const marginY = 40
   let h = vh - marginY * 2
   let w = h * VIDEO_RATIO
@@ -55,8 +74,7 @@ function computeTargetRect(): Rect {
     w = maxW
     h = w / VIDEO_RATIO
   }
-  // Right-aligned: the clip slides out to the right of the centred cover.
-  return { x: vw - marginX - w, y: (vh - h) / 2, w, h }
+  return { x: vw - 28 - w, y: (vh - h) / 2, w, h }
 }
 
 export default function IntroVideo({
@@ -71,7 +89,7 @@ export default function IntroVideo({
   const intro = shared.intro
   const reduce = motionDisabled()
   const videoRef = useRef<HTMLVideoElement>(null)
-  const [target] = useState(computeTargetRect)
+  const [target] = useState(() => computeTargetRect(originRef.current))
   const [phase, setPhase] = useState<Phase>(reduce ? 'open' : 'opening')
   const [muted, setMuted] = useState(false)
   const doneRef = useRef(false)
