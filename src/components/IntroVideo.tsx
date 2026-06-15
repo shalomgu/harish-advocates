@@ -14,8 +14,8 @@ import { motionDisabled } from '../lib/a11y'
 // above it the clip opens toward the right of the cover.
 const MOBILE_MAX = 720
 const MORPH_MS = 520
-// Portrait clip: width / height.
-const VIDEO_RATIO = 9 / 16
+// Portrait clip: width / height (matches the 576×816 source).
+const VIDEO_RATIO = 576 / 816
 
 type Phase = 'opening' | 'open' | 'closing'
 
