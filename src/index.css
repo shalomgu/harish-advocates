@@ -2278,3 +2278,120 @@ html.a11y-no-motion *::after {
 .intro-unmute:hover {
   background: var(--gold);
 }
+
+.cookie-consent-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 18px;
+  background: rgba(3, 12, 24, 0.32);
+}
+
+/* While the privacy policy popup is open, sit behind it so its close button works. */
+.cookie-consent-overlay.is-behind {
+  z-index: 90;
+  pointer-events: none;
+}
+
+.cookie-consent {
+  width: min(680px, 100%);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 18px;
+  padding: 18px 22px;
+  border-radius: 16px;
+  border: 2px solid var(--gold);
+  background: linear-gradient(180deg, #0b3154, var(--ink));
+  box-shadow: 0 20px 56px rgba(0, 0, 0, 0.5);
+  animation: cookie-rise 0.32s ease;
+}
+
+@keyframes cookie-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cookie-consent-text {
+  flex: 1 1 320px;
+  margin: 0;
+  color: #f3f6fb;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.cookie-consent-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--gold);
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.cookie-consent-link:hover,
+.cookie-consent-link:focus-visible {
+  color: #e3c477;
+}
+
+.cookie-consent-accept {
+  flex: 0 0 auto;
+  padding: 11px 30px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--gold);
+  color: #03101f;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background-color 0.18s ease, transform 0.18s ease;
+}
+
+.cookie-consent-accept:hover {
+  background: #e3c477;
+}
+
+.cookie-consent-accept:active {
+  transform: translateY(1px);
+}
+
+.cookie-consent-link:focus-visible,
+.cookie-consent-accept:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+}
+
+@media (max-width: 720px) {
+  .cookie-consent {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  /* In a column layout flex-basis maps to height, so reset it to hug content. */
+  .cookie-consent-text {
+    flex: 0 0 auto;
+  }
+
+  .cookie-consent-accept {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cookie-consent {
+    animation: none;
+  }
+}

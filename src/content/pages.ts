@@ -12,6 +12,18 @@ export const legalLinks = [
   { label: 'הצהרת נגישות', href: `${base}accessibility.html` },
 ] as const
 
+// First-visit cookie notice shown on the cover right after the intro clip closes.
+// The privacy link opens the standalone policy in the same in-app popup as the
+// legal links above.
+export const cookieConsent = {
+  before: 'לידיעתך האתר עושה שימוש בעוגיות (COOKIES) לצורך תפעולו ושיפור השימוש בו כמפורט ב',
+  policyLabel: 'מדיניות הפרטיות',
+  policyHref: `${base}privacy.html`,
+  after: '. ניתן לשנות את העדפות השימוש בהגדרות הדפדפן.',
+  accept: 'הבנתי',
+  ariaLabel: 'הודעה על שימוש בעוגיות',
+} as const
+
 export const cover = {
   logo: asset('logo-new.png'),
   logoAlt: 'חריש עורכי דין – Harish Advocates',
