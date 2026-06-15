@@ -991,6 +991,14 @@ body {
   scroll-padding-top: clamp(8px, 1.5vh, 16px);
 }
 
+/* Make the top of the page (the header/title) a valid snap point too, so the
+   container doesn't snap straight to the first card on load and scroll the
+   title out of view. */
+.content-page.tips-page .page-header,
+.content-page.media-page .page-header {
+  scroll-snap-align: start;
+}
+
 .showcase .video-media {
   position: relative;
   aspect-ratio: 9 / 16;
