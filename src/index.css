@@ -2297,13 +2297,13 @@ html.a11y-no-motion *::after {
 }
 
 .cookie-consent {
-  width: min(680px, 100%);
+  width: min(620px, 100%);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 14px 18px;
-  padding: 18px 22px;
-  border-radius: 16px;
+  gap: 6px 16px;
+  padding: 12px 18px;
+  border-radius: 14px;
   border: 2px solid var(--gold);
   background: linear-gradient(180deg, #0b3154, var(--ink));
   box-shadow: 0 20px 56px rgba(0, 0, 0, 0.5);
@@ -2324,47 +2324,35 @@ html.a11y-no-motion *::after {
 .cookie-consent-text {
   flex: 1 1 320px;
   margin: 0;
-  color: #f3f6fb;
-  font-size: 15px;
-  line-height: 1.6;
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.45;
 }
 
-.cookie-consent-link {
+.cookie-consent-link,
+.cookie-consent-accept {
   padding: 0;
   border: 0;
   background: none;
   color: var(--gold);
   font: inherit;
-  font-weight: 700;
+  font-weight: 800;
   text-decoration: underline;
   text-underline-offset: 2px;
   cursor: pointer;
 }
 
-.cookie-consent-link:hover,
-.cookie-consent-link:focus-visible {
-  color: #e3c477;
-}
-
 .cookie-consent-accept {
   flex: 0 0 auto;
-  padding: 11px 30px;
-  border: 0;
-  border-radius: 999px;
-  background: var(--gold);
-  color: #03101f;
-  font-size: 15px;
-  font-weight: 800;
-  cursor: pointer;
-  transition: background-color 0.18s ease, transform 0.18s ease;
+  transition: color 0.18s ease;
 }
 
-.cookie-consent-accept:hover {
-  background: #e3c477;
-}
-
-.cookie-consent-accept:active {
-  transform: translateY(1px);
+.cookie-consent-link:hover,
+.cookie-consent-link:focus-visible,
+.cookie-consent-accept:hover,
+.cookie-consent-accept:focus-visible {
+  color: #e3c477;
 }
 
 .cookie-consent-link:focus-visible,
@@ -2376,17 +2364,13 @@ html.a11y-no-motion *::after {
 @media (max-width: 720px) {
   .cookie-consent {
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
     text-align: center;
   }
 
   /* In a column layout flex-basis maps to height, so reset it to hug content. */
   .cookie-consent-text {
     flex: 0 0 auto;
-  }
-
-  .cookie-consent-accept {
-    width: 100%;
   }
 }
 
