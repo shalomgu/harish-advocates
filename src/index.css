@@ -2355,10 +2355,13 @@ html.a11y-no-motion *::after {
   color: #e3c477;
 }
 
-.cookie-consent-link:focus-visible,
 .cookie-consent-accept:focus-visible {
   outline: 3px solid #fff;
   outline-offset: 2px;
+}
+
+.cookie-consent-link:focus-visible {
+  outline: none;
 }
 
 @media (max-width: 720px) {

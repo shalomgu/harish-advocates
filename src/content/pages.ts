@@ -29,7 +29,7 @@ export const cover = {
   logoAlt: 'חריש עורכי דין – Harish Advocates',
   title: 'חריש עורכי דין',
   taglineParts: ['יצירתיות', 'תגובתיות', 'אסטרטגיה'],
-  portrait: asset('lior-harish-nobg.png'),
+  portrait: asset('lior-harish-nobg-sm.png'),
   portraitAlt: 'עו״ד ליאור חריש',
   author: 'עו״ד ליאור חריש – מייסד',
   promise: 'מקצועיות. אמינות. ניסיון.',
