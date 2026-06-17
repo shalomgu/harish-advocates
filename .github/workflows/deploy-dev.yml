@@ -15,7 +15,7 @@ env:
   TARGET_REPO: shalomgu/harish-advocates-dev
   # Must match how the dev site is served. Served from a project subpath:
   # https://<user>.github.io/<dev-repo>/  -> base = "/<dev-repo>/"
-  # TODO: keep this in sync with the dev repo name.
+  # TODO: keep this in sync with the dev repo name. 
   DEV_BASE: /harish-advocates-dev/
 
 jobs:
