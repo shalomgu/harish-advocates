@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Book, { type BookHandle, type RtlMode } from './components/Book'
 import AccessibilityWidget from './components/AccessibilityWidget'
+import QuickContact from './components/QuickContact'
 import { shared } from './content/shared'
 import { pageTitles } from './content/pages'
 
@@ -166,6 +167,7 @@ export default function App() {
       </footer>
 
       <AccessibilityWidget />
+      <QuickContact />
     </div>
   )
 }
