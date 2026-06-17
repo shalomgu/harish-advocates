@@ -271,6 +271,7 @@ body {
 .book-wrap {
   flex: 0 0 auto;
   position: relative;
+  transition: transform 0.5s ease;
 }
 
 .flip-root {
