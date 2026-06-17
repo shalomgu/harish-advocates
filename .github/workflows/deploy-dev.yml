@@ -12,11 +12,11 @@ concurrency:
 
 env:
   # TODO: set to the target dev repository (e.g. shalomgu/harish-advocates-dev)
-  TARGET_REPO: your-user/my-site-dev
+  TARGET_REPO: shalomgu/harish-advocates-dev
   # Must match how the dev site is served. Served from a project subpath:
   # https://<user>.github.io/<dev-repo>/  -> base = "/<dev-repo>/"
   # TODO: keep this in sync with the dev repo name.
-  DEV_BASE: /my-site-dev/
+  DEV_BASE: /harish-advocates-dev/
 
 jobs:
   deploy:
