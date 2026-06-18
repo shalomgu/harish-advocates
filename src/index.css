@@ -1628,107 +1628,61 @@ body {
   text-align: center;
 }
 
-/* ---------------- Floating quick-contact bar ---------------- */
-/* Pinned to the inline-end edge on every page. The wrapper ignores pointer
-   events so only the icons are clickable and the rest of the flip zone stays
-   usable. */
-.quick-contact {
-  position: fixed;
-  inset-inline-end: 12px;
-  bottom: 72px;
-  z-index: 95;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  pointer-events: none;
-}
-
-.quick-contact-label {
-  pointer-events: none;
-  font-size: 11px;
-  font-weight: 700;
-  color: #fff;
-  background: rgba(6, 24, 40, 0.82);
-  border: 1px solid var(--gold);
-  padding: 5px 10px;
-  border-radius: 999px;
-  white-space: nowrap;
-  box-shadow: 0 4px 12px rgba(3, 23, 41, 0.3);
-}
-
-.quick-contact-list {
+/* ---------------- Cover social row ---------------- */
+/* Inline row of social links sitting between the cover promise and the legal
+   links. Reuses the same links/glyphs as the back cover. */
+.cover-social {
   list-style: none;
-  margin: 0;
+  margin: 4px 0 0;
   padding: 0;
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  pointer-events: auto;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
 }
 
-.quick-contact-link {
+.cover-social-link {
   display: grid;
   place-items: center;
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   color: #0b3154;
   background: #fff;
-  box-shadow: 0 6px 16px rgba(3, 23, 41, 0.28);
+  box-shadow: 0 4px 12px rgba(3, 23, 41, 0.28);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.quick-contact-link:hover,
-.quick-contact-link:focus-visible {
+.cover-social-link:hover,
+.cover-social-link:focus-visible {
   transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 10px 22px rgba(3, 23, 41, 0.4);
+  box-shadow: 0 8px 18px rgba(3, 23, 41, 0.4);
 }
 
-.quick-contact-link:focus-visible {
+.cover-social-link:focus-visible {
   outline: 3px solid var(--gold);
   outline-offset: 3px;
 }
 
-.quick-contact-link svg {
+.cover-social-link svg {
   display: block;
 }
 
-.quick-contact-link--facebook {
+.cover-social-link--facebook {
   color: #1877f2;
 }
 
-.quick-contact-link--whatsapp {
+.cover-social-link--whatsapp {
   color: #25d366;
 }
 
-.quick-contact-link--linkedin {
+.cover-social-link--linkedin {
   color: #0a66c2;
 }
 
-.quick-contact-link--instagram {
+.cover-social-link--instagram {
   color: #fff;
   background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285aeb 90%);
-}
-
-@media (max-width: 600px) {
-  .quick-contact {
-    inset-inline-end: 8px;
-    gap: 8px;
-  }
-
-  .quick-contact-label {
-    display: none;
-  }
-
-  .quick-contact-list {
-    gap: 8px;
-  }
-
-  .quick-contact-link {
-    width: 38px;
-    height: 38px;
-  }
 }
 
 /* ---------------- Side flip zones ---------------- */
