@@ -2363,7 +2363,7 @@ html.a11y-no-motion *::after {
 
 .intro-unmute {
   position: absolute;
-  bottom: 12px;
+  top: 12px;
   inset-inline-start: 12px;
   display: inline-flex;
   align-items: center;
