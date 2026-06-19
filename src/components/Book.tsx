@@ -251,9 +251,20 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, 
     style: {} as CSSProperties,
   }
 
+  // While resting on the standalone cover sheet in a two-page spread, the cover
+  // occupies only one half (left in mirror mode, right in native), leaving the
+  // other half showing the empty stage. Shift the wrap by half a page so the
+  // cover sits centered; it returns to 0 once you turn past the cover, so the
+  // spread visibly opens.
+  const coverOffset =
+    dims.spread && current === 0
+      ? (mode === 'mirror' ? 1 : -1) * (dims.pageW / 2)
+      : 0
+
   const wrapStyle: CSSProperties = {
     width: dims.spread ? dims.pageW * 2 + SPREAD_GAP : dims.pageW,
     height: dims.pageH,
+    transform: coverOffset ? `translateX(${coverOffset}px)` : undefined,
   }
 
   return (

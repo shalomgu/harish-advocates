@@ -271,6 +271,7 @@ body {
 .book-wrap {
   flex: 0 0 auto;
   position: relative;
+  transition: transform 0.5s ease;
 }
 
 .flip-root {
@@ -1627,6 +1628,63 @@ body {
   text-align: center;
 }
 
+/* ---------------- Cover social row ---------------- */
+/* Inline row of social links sitting between the cover promise and the legal
+   links. Reuses the same links/glyphs as the back cover. */
+.cover-social {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+.cover-social-link {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: #0b3154;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(3, 23, 41, 0.28);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.cover-social-link:hover,
+.cover-social-link:focus-visible {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 18px rgba(3, 23, 41, 0.4);
+}
+
+.cover-social-link:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.cover-social-link svg {
+  display: block;
+}
+
+.cover-social-link--facebook {
+  color: #1877f2;
+}
+
+.cover-social-link--whatsapp {
+  color: #25d366;
+}
+
+.cover-social-link--linkedin {
+  color: #0a66c2;
+}
+
+.cover-social-link--instagram {
+  color: #fff;
+  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285aeb 90%);
+}
+
 /* ---------------- Side flip zones ---------------- */
 .side-arrow {
   position: absolute;
@@ -2259,7 +2317,7 @@ html.a11y-no-motion *::after {
 
 .intro-unmute {
   position: absolute;
-  bottom: 12px;
+  top: 12px;
   inset-inline-start: 12px;
   display: inline-flex;
   align-items: center;

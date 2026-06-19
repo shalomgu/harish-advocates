@@ -1,0 +1,55 @@
+name: Deploy dev to external repo
+
+on:
+  push:
+    branches: [dev]
+  workflow_dispatch:
+
+# Prevent overlapping deploys to the dev repo.
+concurrency:
+  group: deploy-dev
+  cancel-in-progress: true
+
+env:
+  # TODO: set to the target dev repository (e.g. shalomgu/harish-advocates-dev)
+  TARGET_REPO: shalomgu/harish-advocates-dev
+  # Must match how the dev site is served. Served from a project subpath:
+  # https://<user>.github.io/<dev-repo>/  -> base = "/<dev-repo>/"
+  # TODO: keep this in sync with the dev repo name. 
+  DEV_BASE: /harish-advocates-dev/
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          VITE_BASE: ${{ env.DEV_BASE }}
+
+      # The prod CNAME (www.harish-adv.com) lives in public/ and is copied into
+      # dist/. Remove it so the dev repo's Pages doesn't try to claim that domain.
+      - name: Strip production CNAME
+        run: rm -f dist/CNAME
+
+      - name: Push build to dev repo
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          personal_token: ${{ secrets.DEPLOY_TOKEN }}
+          external_repository: ${{ env.TARGET_REPO }}
+          publish_branch: gh-pages
+          publish_dir: ./dist
+          # Optional: tidy commit metadata in the dev repo's gh-pages history.
+          user_name: github-actions[bot]
+          user_email: github-actions[bot]@users.noreply.github.com
+          commit_message: "deploy: ${{ github.sha }}"

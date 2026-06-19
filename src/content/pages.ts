@@ -323,6 +323,7 @@ export const media = {
       { type: 'video', url: asset('videos/binyamini-and-gueta.mp4'), label: 'ראיון בכאן 111 - 6.11.2023' },
       { type: 'video', url: asset('videos/radio-vaadat-huz.m4a'), poster: asset('videos/radio-vaadat-huz.jpeg'), label: 'ראיון כאן11-חוק כלבי שירות', audio: true },
       { type: 'iframe', url: 'https://103fm.maariv.co.il/programs/media.aspx?ZrqvnVq=EMFGKH&c41t4nzVQ=EF', label: 'ראיון ברדיו 103FM – הצעת חוק לעידוד יצור מזון לחולי צליאק', icon: 'radio' },
+      { type: 'video', url: asset('videos/podcast-with-aviv-ariel.mp4'), label: 'מתוך ארוח בפודקאסט של עו"ד אביב הראל - על ייצוג בתחום התקשורת' },
     ] as TipVideo[],
   },
   articles: {

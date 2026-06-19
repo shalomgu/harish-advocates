@@ -3,7 +3,8 @@ import Page from '../components/Page'
 import LegalLinks from '../components/LegalLinks'
 import IntroVideo from '../components/IntroVideo'
 import CookieConsent from '../components/CookieConsent'
-import { cover } from '../content/pages'
+import { socialIcons } from '../components/socialIcons'
+import { backCover, cover } from '../content/pages'
 import { shared } from '../content/shared'
 
 // One-time flag so the intro clip auto-plays only on a visitor's first arrival.
@@ -99,6 +100,24 @@ const CoverPage = forwardRef<HTMLDivElement>(function CoverPage(_props, ref) {
           </figure>
           <p className="cover-author">{cover.author}</p>
           <p className="cover-promise">{cover.promise}</p>
+          <ul className="cover-social" aria-label={shared.quickContact}>
+            {backCover.links.map((link) => (
+              <li key={link.href}>
+                <a
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`cover-social-link cover-social-link--${link.icon}`}
+                  aria-label={link.label}
+                  title={link.label}
+                >
+                  <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22" aria-hidden="true">
+                    {socialIcons[link.icon]}
+                  </svg>
+                </a>
+              </li>
+            ))}
+          </ul>
           {cover.footer && (
             <>
               <div className="cover-gold-line" aria-hidden="true" />

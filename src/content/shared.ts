@@ -7,6 +7,7 @@ export const asset = (name: string): string =>
 export const shared = {
   firmName: 'חריש עורכי דין',
   topbarTitle: 'חריש עורכי דין',
+  quickContact: 'צור קשר מהיר',
   pageStatus: (current: number, total: number) => `עמוד ${current} מתוך ${total}`,
   nav: {
     first: 'לעמוד הראשון',
