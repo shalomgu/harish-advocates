@@ -193,10 +193,12 @@ export const practice = {
 
 export interface TipVideo {
   // 'video' = self-hosted MP4, true inline playback (recommended);
+  // 'youtube' = poster tile that streams the YouTube video inside the in-app popup
+  //             (url may be a youtu.be/ or watch?v= link; thumbnail is auto-derived);
   // 'embed' = Instagram iframe preview (plays once, then links out — IG's own behavior);
   // 'link'  = poster tile that opens the post in a new tab;
   // 'iframe' = poster tile that opens the URL embedded inside the in-app popup.
-  type: 'embed' | 'link' | 'video' | 'iframe'
+  type: 'embed' | 'link' | 'video' | 'iframe' | 'youtube'
   url: string
   label: string
   poster?: string
@@ -323,7 +325,7 @@ export const media = {
       { type: 'video', url: asset('videos/binyamini-and-gueta.mp4'), label: 'ראיון בכאן 111 - 6.11.2023' },
       { type: 'video', url: asset('videos/radio-vaadat-huz.m4a'), poster: asset('videos/radio-vaadat-huz.jpeg'), label: 'ראיון כאן11-חוק כלבי שירות', audio: true },
       { type: 'iframe', url: 'https://103fm.maariv.co.il/programs/media.aspx?ZrqvnVq=EMFGKH&c41t4nzVQ=EF', label: 'ראיון ברדיו 103FM – הצעת חוק לעידוד יצור מזון לחולי צליאק', icon: 'radio' },
-      { type: 'video', url: asset('videos/podcast-with-aviv-ariel.mp4'), label: 'מתוך ארוח בפודקאסט של עו"ד אביב הראל - על ייצוג בתחום התקשורת' },
+      { type: 'youtube', url: 'https://youtu.be/3DAeOVLUeW4', label: 'מתוך הפודקאסט של עו"ד אביב הראל – על הלכת "אפרופים" שבוטלה' },
     ] as TipVideo[],
   },
   articles: {

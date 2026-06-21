@@ -1012,7 +1012,8 @@ body {
 }
 
 .showcase .video-media iframe,
-.showcase .video-media video {
+.showcase .video-media video,
+.showcase .video-media img {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -1020,7 +1021,8 @@ body {
   border: 0;
 }
 
-.showcase .video-media video {
+.showcase .video-media video,
+.showcase .video-media img {
   object-fit: cover;
   background: #000;
 }
@@ -1122,6 +1124,24 @@ body {
   display: block;
   width: 100%;
   max-height: 88vh;
+  border-radius: 14px;
+  background: #000;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+
+/* YouTube (and other landscape embeds): keep a 16:9 frame that fills the popup. */
+.media-stage--youtube {
+  width: min(960px, 94vw);
+  max-width: none;
+  aspect-ratio: 16 / 9;
+}
+
+.media-stage--youtube iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
   border-radius: 14px;
   background: #000;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
