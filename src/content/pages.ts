@@ -322,10 +322,17 @@ export const media = {
   videos: {
     heading: 'רדיו וטלויזיה',
     items: [
-      { type: 'video', url: asset('videos/binyamini-and-gueta.mp4'), label: 'ראיון בכאן 111 - 6.11.2023' },
+      { type: 'video', url: asset('videos/binyamini-and-gueta.mp4'), label: 'ראיון בכאן 11 - 6.11.2023' },
       { type: 'video', url: asset('videos/radio-vaadat-huz.m4a'), poster: asset('videos/radio-vaadat-huz.jpeg'), label: 'ראיון כאן11-חוק כלבי שירות', audio: true },
       { type: 'iframe', url: 'https://103fm.maariv.co.il/programs/media.aspx?ZrqvnVq=EMFGKH&c41t4nzVQ=EF', label: 'ראיון ברדיו 103FM – הצעת חוק לעידוד יצור מזון לחולי צליאק', icon: 'radio' },
-      { type: 'youtube', url: 'https://youtu.be/3DAeOVLUeW4', label: 'מתוך הפודקאסט של עו"ד אביב הראל – על הלכת "אפרופים" שבוטלה' },
+      { type: 'youtube', url: 'https://youtu.be/3DAeOVLUeW4', label: 'עו"ד ליאור חריש, על הלכת "אפרופים" שבוטלה - מתוך הפודקאסט של עו"ד אביב הראל' },
+      { type: 'youtube', url: 'https://youtu.be/3GqKLAAgYEU', label: 'עו"ד ליאור חריש, על המורכבות בעריכת דין בתחום התקשורת – מתוך הפודקאסט של עו"ד אביב הראל' },
+      { type: 'youtube', url: 'https://youtu.be/vMxSLiswrIE', label: 'עו"ד ליאור חריש, על ייצוג בעסקאות מקרקעין בעידן ה ai - מתוך הפודקאסט של עו"ד אביב הראל' },
+      { type: 'youtube', url: 'https://youtu.be/k6b29yT_eoA', label: 'עו"ד ליאור חריש, על המורכבות של ייצוג משפטי בתחום התקשורת והמדיה – מתוך הפודקאסט של עו"ד אביב הראל' },
+
+
+      
+      
     ] as TipVideo[],
   },
   articles: {
