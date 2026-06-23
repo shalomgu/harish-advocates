@@ -328,11 +328,7 @@ export const media = {
       { type: 'youtube', url: 'https://youtu.be/3DAeOVLUeW4', label: 'עו"ד ליאור חריש, על הלכת "אפרופים" שבוטלה - מתוך הפודקאסט של עו"ד אביב הראל' },
       { type: 'youtube', url: 'https://youtu.be/3GqKLAAgYEU', label: 'עו"ד ליאור חריש, על המורכבות בעריכת דין בתחום התקשורת – מתוך הפודקאסט של עו"ד אביב הראל' },
       { type: 'youtube', url: 'https://youtu.be/vMxSLiswrIE', label: 'עו"ד ליאור חריש, על ייצוג בעסקאות מקרקעין בעידן ה ai - מתוך הפודקאסט של עו"ד אביב הראל' },
-      { type: 'youtube', url: 'https://youtu.be/k6b29yT_eoA', label: 'עו"ד ליאור חריש, על המורכבות של ייצוג משפטי בתחום התקשורת והמדיה – מתוך הפודקאסט של עו"ד אביב הראל' },
-
-
-      
-      
+      { type: 'youtube', url: 'https://youtu.be/k6b29yT_eoA', label: 'עו"ד ליאור חריש, על המורכבות של ייצוג משפטי בתחום התקשורת והמדיה – מתוך הפודקאסט של עו"ד אביב הראל' }
     ] as TipVideo[],
   },
   articles: {
