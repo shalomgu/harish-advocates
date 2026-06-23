@@ -5,11 +5,26 @@ import { useFocusTrap } from '../lib/useFocusTrap'
 
 type LightboxItem =
   | { kind: 'video'; src: string; poster?: string; alt: string; audio?: boolean }
+  | { kind: 'youtube'; id: string; alt: string }
   | { kind: 'image'; images: string[]; alt: string }
   | { kind: 'pdf'; src: string; alt: string }
   | { kind: 'web'; src: string; alt: string }
 
 const MAX_VISIBILITY = 3
+
+/** Extract the 11-char video id from a youtu.be/, watch?v=, or /embed/ URL (or a bare id). */
+function youTubeId(url: string): string {
+  const match = url.match(/(?:youtu\.be\/|v=|\/embed\/)([\w-]{11})/)
+  return match ? match[1] : url
+}
+
+function youTubeThumb(id: string): string {
+  return `https://i.ytimg.com/vi/${id}/hqdefault.jpg`
+}
+
+function youTubeEmbed(id: string): string {
+  return `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1&playsinline=1`
+}
 
 /**
  * Audio recordings stored as MP4 (no meaningful picture): show the poster image
@@ -120,6 +135,15 @@ function Lightbox({ item, onClose }: { item: LightboxItem; onClose: () => void }
             פתיחה בכרטיסייה חדשה ↗
           </a>
         </div>
+      ) : item.kind === 'youtube' ? (
+        <div className="media-stage media-stage--youtube" onClick={stop}>
+          <iframe
+            src={youTubeEmbed(item.id)}
+            title={item.alt}
+            allow="autoplay; encrypted-media; picture-in-picture; web-share; fullscreen"
+            allowFullScreen
+          />
+        </div>
       ) : item.kind === 'video' && item.audio ? (
         <AudioStage src={item.src} poster={item.poster} alt={item.alt} onEnded={onClose} />
       ) : item.kind === 'video' ? (
@@ -224,7 +248,26 @@ export default function MediaShowcase({
         {showHeadings && <h3>{videos.heading}</h3>}
         <div className="video-grid">
           {videos.items.map((video) =>
-            video.type === 'video' ? (
+            video.type === 'youtube' ? (
+              <button
+                className="video-tile video-tile--play"
+                key={video.url}
+                onClick={() => setActive({ kind: 'youtube', id: youTubeId(video.url), alt: video.label })}
+              >
+                <span className="video-media">
+                  <img
+                    src={video.poster ?? youTubeThumb(youTubeId(video.url))}
+                    alt=""
+                    loading="lazy"
+                    aria-hidden="true"
+                  />
+                  <span className="video-play" aria-hidden="true">
+                    ▶
+                  </span>
+                </span>
+                <span className="video-label">{video.label}</span>
+              </button>
+            ) : video.type === 'video' ? (
               <button
                 className="video-tile video-tile--play"
                 key={video.url}
