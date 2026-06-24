@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import Book, { type BookHandle, type RtlMode } from './components/Book'
 import AccessibilityWidget from './components/AccessibilityWidget'
 import { shared } from './content/shared'
-import { pageTitles } from './content/pages'
+import { guideDeepLinks, pageTitles, readGuideSlug } from './content/pages'
 
 function readInitialMode(): RtlMode {
   const param = new URLSearchParams(window.location.search).get('rtl')
@@ -18,10 +18,23 @@ export default function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
   const statusRef = useRef<HTMLButtonElement>(null)
+  const deepLinkDone = useRef(false)
 
   const onState = useCallback((cur: number, tot: number) => {
     setCurrent(cur)
     if (tot) setTotal(tot)
+
+    // On the first state report (book just initialized), honor a ?guide=<slug>
+    // deep link by flipping straight to that article's page. MediaShowcase then
+    // auto-opens the matching carousel.
+    if (!deepLinkDone.current) {
+      deepLinkDone.current = true
+      const slug = readGuideSlug()
+      const target = slug ? guideDeepLinks[slug] : undefined
+      if (target) {
+        requestAnimationFrame(() => bookRef.current?.flip(target.page))
+      }
+    }
   }, [])
 
   const goTo = useCallback((index: number) => {

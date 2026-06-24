@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
-import type { TipArticle, TipVideo } from '../content/pages'
+import { readGuideSlug, type TipArticle, type TipVideo } from '../content/pages'
 import { useFocusTrap } from '../lib/useFocusTrap'
 
 type LightboxItem =
@@ -24,6 +24,13 @@ function youTubeThumb(id: string): string {
 
 function youTubeEmbed(id: string): string {
   return `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1&playsinline=1`
+}
+
+/** Build the lightbox item for an article card (PDF or image carousel). */
+function articleToItem(article: TipArticle): LightboxItem {
+  return article.pdf
+    ? { kind: 'pdf', src: article.pdf, alt: article.title }
+    : { kind: 'image', images: article.images ?? [], alt: article.title }
 }
 
 /**
@@ -241,6 +248,16 @@ export default function MediaShowcase({
 }) {
   const [active, setActive] = useState<LightboxItem | null>(null)
 
+  // Honor a ?guide=<slug> deep link: if one of this showcase's articles carries
+  // the requested slug, open its carousel automatically on first mount. Only the
+  // instance that owns the matching article responds, so it runs at most once.
+  useEffect(() => {
+    const slug = readGuideSlug()
+    if (!slug) return
+    const match = articles?.items.find((a) => a.slug === slug)
+    if (match) setActive(articleToItem(match))
+  }, [articles])
+
   return (
     <div className="showcase">
       {videos && (
@@ -353,13 +370,7 @@ export default function MediaShowcase({
               <button
                 className="article-card"
                 key={article.title}
-                onClick={() =>
-                  setActive(
-                    article.pdf
-                      ? { kind: 'pdf', src: article.pdf, alt: article.title }
-                      : { kind: 'image', images: article.images ?? [], alt: article.title },
-                  )
-                }
+                onClick={() => setActive(articleToItem(article))}
               >
                 <span className="article-thumb">
                   <img src={article.thumbnail} alt={article.title} loading="lazy" />
