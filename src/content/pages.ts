@@ -211,6 +211,9 @@ export interface TipVideo {
 
 export interface TipArticle {
   title: string
+  // Optional deep-link slug. When the site is opened with ?guide=<slug>, the
+  // book flips to this article's page and auto-opens its carousel/PDF.
+  slug?: string
   // Image shown on the card.
   thumbnail: string
   // Carousel slides shown in the enlarged view (image articles).
@@ -241,6 +244,7 @@ export const tips = {
     items: [
       {
         title: 'המדריך המשפטי למשכירי דירות',
+        slug: 'renters',
         thumbnail: asset('renters-guide.png'),
         images: [
           asset('renters-slide-1.png'),
@@ -460,3 +464,18 @@ export const pageTitles = [
   'צור קשר',
   'כריכה אחורית',
 ]
+
+// Shareable deep links: opening the site with ?guide=<slug> flips the book to
+// the given page index. The matching article (by its `slug`) then auto-opens
+// its carousel via MediaShowcase. Keep the page index in sync with the book
+// page order defined in components/Book.tsx.
+export const guideDeepLinks: Record<string, { page: number }> = {
+  // "מאמרים ומדריכים" page → המדריך המשפטי למשכירי דירות
+  renters: { page: 6 },
+}
+
+/** Read the requested guide slug from the current URL (?guide=<slug>). */
+export function readGuideSlug(): string | null {
+  if (typeof window === 'undefined') return null
+  return new URLSearchParams(window.location.search).get('guide')
+}
