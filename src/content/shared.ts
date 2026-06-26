@@ -1,12 +1,14 @@
 // Central string table for shared chrome text and asset helpers.
 // All user-facing copy lives in this folder so layout components stay clean.
 
+import { FIRM_NAME } from './site'
+
 export const asset = (name: string): string =>
   `${import.meta.env.BASE_URL}assets/${name}`
 
 export const shared = {
-  firmName: 'חריש עורכי דין',
-  topbarTitle: 'חריש עורכי דין',
+  firmName: FIRM_NAME,
+  topbarTitle: FIRM_NAME,
   quickContact: 'צור קשר מהיר',
   pageStatus: (current: number, total: number) => `עמוד ${current} מתוך ${total}`,
   nav: {

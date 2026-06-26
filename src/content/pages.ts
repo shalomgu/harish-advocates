@@ -1,6 +1,7 @@
 // String table: all page copy, links and asset references.
 // Edit text here; page components only handle layout.
 import { asset } from './shared'
+import { FIRM_NAME } from './site'
 
 const base = import.meta.env.BASE_URL
 
@@ -25,9 +26,9 @@ export const cookieConsent = {
 } as const
 
 export const cover = {
-  logo: asset('logo-new.png'),
-  logoAlt: 'חריש עורכי דין – Harish Advocates',
-  title: 'חריש עורכי דין',
+  logo: asset('cover-logo.png'),
+  logoAlt: `${FIRM_NAME} – Harish Advocates`,
+  title: FIRM_NAME,
   taglineParts: ['יצירתיות', 'תגובתיות', 'אסטרטגיה'],
   portrait: asset('lior-harish-nobg-sm.png'),
   portraitAlt: 'עו״ד ליאור חריש',
@@ -40,7 +41,7 @@ export const cover = {
 
 export const about = {
   title: '',
-  badge: 'חריש עורכי דין',
+  badge: FIRM_NAME,
   paragraphs: [
     'המשרד נוסד בסוף שנת 1996 על ידי עו״ד ליאור חריש, יוצא משרד הרצוג, פוקס, נאמן ושות׳.',
     'יחודו של המשרד בשירות המקצועי, היעיל והמהיר שהוא מעניק ללקוחותיו, בקשר האישי שהוא מקפיד לקיים עימם, ובמחויבותו למצוינות חסרת פשרות.',
@@ -424,17 +425,17 @@ export const media = {
 export const contact = {
   title: 'צור קשר',
   intro: 'מוכנים לדון בצרכים המשפטיים שלכם? פנו אלינו לייעוץ משפטי מקצועי.',
-  address: { title: '📍 כתובת', lines: ['חריש עורכי דין', ' דליה 7, גבעתיים'] },
+  address: { title: '📍 כתובת', lines: [FIRM_NAME, ' דליה 7, גבעתיים'] },
   phone: { title: '📞 טלפון', titleMobile: '📞 סלולרי', tel: '037528111', telDisplay: '03-7528111', mobile: '0522778848', mobileDisplay: '052-2778848'  },
   email: { title: '✉️ דוא"ל', address: 'harish-l@barak.net.il' },
   hours: { title: '🕐 שעות', lines: ['בתיאום מראש', 'ייעוץ מקצועי זמין'] },
 }
 
 export const backCover = {
-  logo: asset('harish-logo-contact.jpg'),
-  logoAlt: 'חריש עורכי דין – Harish Advocates',
+  logo: asset('contact-logo.jpg'),
+  logoAlt: `${FIRM_NAME} – Harish Advocates`,
   intro: 'ליצירת קשר מיידי, תיאום פגישה או קבלת מידע נוסף לחצו על אחת האפשרויות הבאות:',
-  footer: '© חריש עורכי דין - המידע באתר הינו כללי ואינו מהווה תחליף ליעוץ משפטי',
+  footer: `© ${FIRM_NAME} - המידע באתר הינו כללי ואינו מהווה תחליף ליעוץ משפטי`,
   links: [
     { label: 'אינסטגרם', href: 'https://www.instagram.com/liorharish_adv?igsh=MWNsc2FjcDVxanF0NQ==', icon: 'instagram' },
     { label: 'פייסבוק', href: 'https://www.facebook.com/share/1FsDPj9un9/', icon: 'facebook' },
