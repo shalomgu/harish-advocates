@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="1200" viewBox="0 0 1200 1200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0a5cb8"/>
+      <stop offset="1" stop-color="#053a78"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="22%" r="60%">
+      <stop offset="0" stop-color="#1f74d0" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#1f74d0" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="1200" fill="url(#bg)"/>
+
+  <!-- Design lives in the centered 1200x630 band (y offset 285) so the square
+       render crops cleanly to a 1200x630 social card. -->
+  <g transform="translate(0,285)">
+    <rect width="1200" height="630" fill="url(#glow)"/>
+    <rect x="30" y="30" width="1140" height="570" rx="20" fill="none" stroke="#d9b36b" stroke-width="2" opacity="0.65"/>
+
+    <!-- Scales of justice mark (same as the favicon), centered near the top -->
+    <g transform="translate(516.8,84.4) scale(2.6)" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="32" cy="14" r="1.5" fill="#ffffff" stroke="none"/>
+      <line x1="32" y1="15" x2="32" y2="45"/>
+      <line x1="15" y1="21" x2="49" y2="21"/>
+      <line x1="15" y1="21" x2="11" y2="30"/>
+      <line x1="15" y1="21" x2="19" y2="30"/>
+      <path d="M10 30 Q15 38 20 30"/>
+      <line x1="49" y1="21" x2="45" y2="30"/>
+      <line x1="49" y1="21" x2="53" y2="30"/>
+      <path d="M44 30 Q49 38 54 30"/>
+      <line x1="32" y1="45" x2="25" y2="48"/>
+      <line x1="32" y1="45" x2="39" y2="48"/>
+      <line x1="25" y1="48" x2="39" y2="48"/>
+    </g>
+
+    <!-- ???? ????? ??? -->
+    <text x="600" y="335" text-anchor="middle" direction="rtl"
+          font-family="'Arial Hebrew', Arial, sans-serif" font-size="96" font-weight="800"
+          fill="#ffffff">&#x5D7;&#x5E8;&#x5D9;&#x5E9; &#x5E2;&#x5D5;&#x5E8;&#x5DB;&#x5D9; &#x5D3;&#x5D9;&#x5DF;</text>
+
+    <text x="600" y="388" text-anchor="middle"
+          font-family="Arial, sans-serif" font-size="34" font-weight="700"
+          letter-spacing="9" fill="#e7c987">HARISH ADVOCATES</text>
+
+    <line x1="470" y1="424" x2="730" y2="424" stroke="#d9b36b" stroke-width="3"/>
+
+    <!-- ???? ????? ??? ???????? -->
+    <text x="600" y="487" text-anchor="middle" direction="rtl"
+          font-family="'Arial Hebrew', Arial, sans-serif" font-size="46" font-weight="600"
+          fill="#eaf2fb">&#x5DE;&#x5E9;&#x5E8;&#x5D3; &#x5E2;&#x5D5;&#x5E8;&#x5DB;&#x5D9; &#x5D3;&#x5D9;&#x5DF; &#x5D1;&#x5D2;&#x5D1;&#x5E2;&#x5EA;&#x5D9;&#x5D9;&#x5DD;</text>
+
+    <!-- ??????? ? ???? ????? ? ?????? ??????? ? ????? ? ?????? -->
+    <text x="600" y="545" text-anchor="middle" direction="rtl"
+          font-family="'Arial Hebrew', Arial, sans-serif" font-size="29"
+          fill="#bcd4ee">&#x5DE;&#x5E7;&#x5E8;&#x5E7;&#x5E2;&#x5D9;&#x5DF; &#xB7; &#x5D3;&#x5D9;&#x5E0;&#x5D9; &#x5E2;&#x5D1;&#x5D5;&#x5D3;&#x5D4; &#xB7; &#x5E6;&#x5D5;&#x5D5;&#x5D0;&#x5D5;&#x5EA; &#x5D5;&#x5D9;&#x5E8;&#x5D5;&#x5E9;&#x5D5;&#x5EA; &#xB7; &#x5DE;&#x5E1;&#x5D7;&#x5E8;&#x5D9; &#xB7; &#x5EA;&#x5E7;&#x5E9;&#x5D5;&#x5E8;&#x5EA;</text>
+
+    <text x="600" y="588" text-anchor="middle"
+          font-family="Arial, sans-serif" font-size="29" font-weight="700"
+          fill="#e7c987">03-7528111&#160;&#160;&#xB7;&#160;&#160;www.harish-adv.com</text>
+  </g>
+</svg>
