@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import Book, { type BookHandle, type RtlMode } from './components/Book'
 import AccessibilityWidget from './components/AccessibilityWidget'
 import { shared } from './content/shared'
+import { FIRM_NAME, FIRM_TITLE } from './content/site'
 import { guideDeepLinks, pageTitles, readGuideSlug } from './content/pages'
 
 function readInitialMode(): RtlMode {
@@ -44,9 +45,8 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    const base = 'חריש עורכי דין | משרד עורכי דין בגבעתיים'
     const label = pageTitles[current]
-    document.title = current <= 0 || !label ? base : `${label} – חריש עורכי דין`
+    document.title = current <= 0 || !label ? FIRM_TITLE : `${label} – ${FIRM_NAME}`
   }, [current])
 
   useEffect(() => {
