@@ -44,6 +44,12 @@ export default function App() {
   }, [])
 
   useEffect(() => {
+    const base = 'חריש עורכי דין | משרד עורכי דין בגבעתיים'
+    const label = pageTitles[current]
+    document.title = current <= 0 || !label ? base : `${label} – חריש עורכי דין`
+  }, [current])
+
+  useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setThumbsOpen(false)

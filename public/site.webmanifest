@@ -1,0 +1,25 @@
+{
+  "name": "חריש עורכי דין",
+  "short_name": "חריש עו״ד",
+  "description": "משרד עורכי דין בגבעתיים – מקרקעין, דיני עבודה, ירושה, מסחרי ותקשורת.",
+  "lang": "he",
+  "dir": "rtl",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#064a96",
+  "icons": [
+    {
+      "src": "/assets/logo-new.png",
+      "sizes": "any",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
