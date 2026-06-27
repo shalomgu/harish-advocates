@@ -3,7 +3,8 @@
 import { asset } from './shared'
 import { FIRM_NAME } from './site'
 
-const base = import.meta.env.BASE_URL
+// Undefined when imported from the Vite config (Node) context; see asset() note.
+const base = import.meta.env?.BASE_URL ?? '/'
 
 // Bottom-of-page legal/utility links shown on the cover and back-cover.
 // Each opens its standalone page inside an in-app popup (see LegalLinks).
@@ -479,4 +480,18 @@ export const guideDeepLinks: Record<string, { page: number }> = {
 export function readGuideSlug(): string | null {
   if (typeof window === 'undefined') return null
   return new URLSearchParams(window.location.search).get('guide')
+}
+
+/**
+ * Read a direct page index from the current URL (?page=<n>). Used by the static
+ * SEO landing pages (see src/content/seo.ts) to deep-link into the matching
+ * flipbook spread. Returns null when absent or out of range.
+ */
+export function readPageParam(): number | null {
+  if (typeof window === 'undefined') return null
+  const raw = new URLSearchParams(window.location.search).get('page')
+  if (raw == null) return null
+  const n = Number.parseInt(raw, 10)
+  if (!Number.isInteger(n) || n < 0 || n >= pageTitles.length) return null
+  return n
 }

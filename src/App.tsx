@@ -3,7 +3,7 @@ import Book, { type BookHandle, type RtlMode } from './components/Book'
 import AccessibilityWidget from './components/AccessibilityWidget'
 import { shared } from './content/shared'
 import { FIRM_NAME, FIRM_TITLE } from './content/site'
-import { guideDeepLinks, pageTitles, readGuideSlug } from './content/pages'
+import { guideDeepLinks, pageTitles, readGuideSlug, readPageParam } from './content/pages'
 
 function readInitialMode(): RtlMode {
   const param = new URLSearchParams(window.location.search).get('rtl')
@@ -25,15 +25,18 @@ export default function App() {
     setCurrent(cur)
     if (tot) setTotal(tot)
 
-    // On the first state report (book just initialized), honor a ?guide=<slug>
-    // deep link by flipping straight to that article's page. MediaShowcase then
-    // auto-opens the matching carousel.
+    // On the first state report (book just initialized), honor a deep link by
+    // flipping straight to the requested page. ?guide=<slug> targets an article
+    // (MediaShowcase then auto-opens its carousel); ?page=<n> (used by the static
+    // SEO landing pages) targets a spread directly. ?guide takes precedence.
     if (!deepLinkDone.current) {
       deepLinkDone.current = true
       const slug = readGuideSlug()
-      const target = slug ? guideDeepLinks[slug] : undefined
-      if (target) {
-        requestAnimationFrame(() => bookRef.current?.flip(target.page))
+      const guideTarget = slug ? guideDeepLinks[slug] : undefined
+      const pageTarget = readPageParam()
+      const targetPage = guideTarget?.page ?? pageTarget
+      if (targetPage != null) {
+        requestAnimationFrame(() => bookRef.current?.flip(targetPage))
       }
     }
   }, [])

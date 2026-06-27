@@ -1,7 +1,10 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": ["ES2023"],
+    // DOM + vite/client cover the guarded `window` / `import.meta.env` access in
+    // src/content (pages.ts, shared.ts), which vite.config.ts pulls in via
+    // src/content/seo.ts to generate the static SEO landing pages.
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
     "moduleResolution": "bundler",
@@ -9,7 +12,7 @@
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,
-    "types": ["node"],
+    "types": ["node", "vite/client"],
 
     "strict": true,
     "noUnusedLocals": true,
