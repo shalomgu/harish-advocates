@@ -160,36 +160,54 @@
     </script>
   </head>
   <body>
-    <div id="root"></div>
-
-    <!-- Crawlable content fallback for search engines / no-JS clients.
-         The React app renders the interactive flipbook into #root above. -->
-    <noscript>
-      <main lang="he" dir="rtl" style="max-width: 800px; margin: 0 auto; padding: 24px; font-family: Heebo, Arial, sans-serif; line-height: 1.7;">
+    <!-- Server-rendered, crawlable content lives INSIDE #root so it is part of
+         the initial HTML for every client: search engines (incl. those that do
+         not run JS), social scrapers, and as a graceful fallback if the React
+         bundle fails to load. On a normal visit React (createRoot) clears this
+         node and mounts the interactive flipbook in its place. -->
+    <div id="root">
+      <main
+        class="seo-fallback"
+        lang="he"
+        dir="rtl"
+        style="max-width: 820px; margin: 0 auto; padding: 32px 24px; font-family: Heebo, Arial, sans-serif; line-height: 1.7; color: #0b2545;"
+      >
         <h1>%FIRM_NAME% – %FIRM_TAGLINE%</h1>
         <p>
           %FIRM_NAME% הוא משרד עורכי דין ותיק בגבעתיים, שנוסד בשנת 1996 על ידי
           עו״ד ליאור חריש. המשרד מעניק שירות משפטי מקצועי, אישי ומהיר, מתוך מחויבות
-          למצוינות וחשיבה יצירתית „מחוץ לקופסא“.
+          למצוינות וחשיבה יצירתית „מחוץ לקופסא“. אנו מלווים לקוחות בגבעתיים, רמת גן,
+          תל אביב והמרכז.
         </p>
+
+        <nav aria-label="ניווט ראשי">
+          <ul>
+            <li><a href="/">דף הבית</a></li>
+            <li><a href="/services/">תחומי עיסוק</a></li>
+            <li><a href="/contact/">צור קשר</a></li>
+            <li><a href="/terms.html">תנאי שימוש</a></li>
+            <li><a href="/privacy.html">מדיניות פרטיות</a></li>
+            <li><a href="/accessibility.html">הצהרת נגישות</a></li>
+          </ul>
+        </nav>
 
         <h2>הצוות</h2>
         <ul>
-          <li><strong>עו״ד ליאור חריש</strong> – מייסד המשרד, עורך דין משנת 1995, מגשר מוסמך, מתמחה בתקשורת ומדיה, מקרקעין, תאגידים, צוואות וירושות, דיני עבודה וזכויות בעלי חיים.</li>
-          <li><strong>עו״ד איריס חריש</strong> – מתמחה בדיני עבודה, זכויות יוצרים וקניין רוחני.</li>
+          <li><a href="/team/lior-harish/"><strong>עו״ד ליאור חריש</strong></a> – מייסד המשרד, עורך דין משנת 1995, מגשר מוסמך, מתמחה בתקשורת ומדיה, מקרקעין, תאגידים, צוואות וירושות, דיני עבודה וזכויות בעלי חיים.</li>
+          <li><a href="/team/iris-harish/"><strong>עו״ד איריס חריש</strong></a> – מתמחה בדיני עבודה, זכויות יוצרים וקניין רוחני.</li>
         </ul>
 
-        <h2>תחומי עיסוק</h2>
+        <h2><a href="/services/">תחומי עיסוק</a></h2>
         <ul>
-          <li><strong>מקרקעין ונדל״ן</strong> – רכישה ומכירת דירות ובתים, חוזי שכירות, עסקאות קבלן, מיסוי מקרקעין.</li>
-          <li><strong>משפט מסחרי ותאגידים</strong> – הקמת חברות ועמותות, חוזים מסחריים, הסכמי שותפות, ליווי עסקי.</li>
-          <li><strong>דיני ירושה ועזבונות</strong> – עריכת צוואות, צווי ירושה, ייפוי כוח מתמשך, ניהול עזבונות.</li>
-          <li><strong>תקשורת, מדיה ואינטרנט</strong> – ייצוג גופי שידור, מכרזי תקשורת, קניין רוחני, לשון הרע והגנת הפרטיות.</li>
-          <li><strong>דיני עבודה</strong> – הסכמי העסקה, זכויות סוציאליות, תביעות שכר, הטרדה מינית והתעמרות בעבודה.</li>
-          <li><strong>קשרי ממשל ורגולציה</strong> – ליווי הליכי חקיקה, מכרזים מורכבים, קשר מול גופי ממשל.</li>
+          <li><a href="/services/real-estate/"><strong>מקרקעין ונדל״ן</strong></a> – רכישה ומכירת דירות ובתים, חוזי שכירות, עסקאות קבלן, מיסוי מקרקעין.</li>
+          <li><a href="/services/commercial/"><strong>משפט מסחרי ותאגידים</strong></a> – הקמת חברות ועמותות, חוזים מסחריים, הסכמי שותפות, ליווי עסקי.</li>
+          <li><a href="/services/inheritance/"><strong>דיני ירושה ועזבונות</strong></a> – עריכת צוואות, צווי ירושה, ייפוי כוח מתמשך, ניהול עזבונות.</li>
+          <li><a href="/services/media/"><strong>תקשורת, מדיה ואינטרנט</strong></a> – ייצוג גופי שידור, מכרזי תקשורת, קניין רוחני, לשון הרע והגנת הפרטיות.</li>
+          <li><a href="/services/labor-law/"><strong>דיני עבודה</strong></a> – הסכמי העסקה, זכויות סוציאליות, תביעות שכר, הטרדה מינית והתעמרות בעבודה.</li>
+          <li><a href="/services/regulation/"><strong>קשרי ממשל ורגולציה</strong></a> – ליווי הליכי חקיקה, מכרזים מורכבים, קשר מול גופי ממשל.</li>
         </ul>
 
-        <h2>צור קשר</h2>
+        <h2><a href="/contact/">צור קשר</a></h2>
         <address>
           %FIRM_NAME%, דליה 7, גבעתיים<br />
           טלפון: <a href="tel:+97237528111">03-7528111</a><br />
@@ -197,7 +215,7 @@
           דוא״ל: <a href="mailto:harish-l@barak.net.il">harish-l@barak.net.il</a>
         </address>
       </main>
-    </noscript>
+    </div>
 
     <script type="module" src="/src/main.tsx"></script>
   </body>

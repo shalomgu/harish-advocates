@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>הדף לא נמצא | %FIRM_NAME%</title>
+    <!-- Not a real page: keep it out of the index and point crawlers home. -->
+    <meta name="robots" content="noindex, follow" />
+    <link rel="canonical" href="https://www.harish-adv.com/" />
+    <!-- Bounce humans back to the single-page app shortly after landing here. -->
+    <meta http-equiv="refresh" content="3; url=/" />
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --navy: #062642;
+        --navy-dark: #031729;
+        --gold: #c7a24a;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Heebo', system-ui, -apple-system, 'Segoe UI', sans-serif;
+        color: #fff;
+        background: radial-gradient(circle at 50% -10%, #0b3154 0%, var(--navy) 45%, var(--navy-dark) 100%);
+        line-height: 1.7;
+        text-align: center;
+      }
+      main {
+        max-width: 640px;
+        padding: 40px 24px;
+      }
+      h1 {
+        font-size: clamp(28px, 6vw, 40px);
+        margin: 0 0 8px;
+      }
+      p {
+        margin: 0 0 24px;
+        color: #d7e3f1;
+      }
+      nav a {
+        display: inline-block;
+        margin: 6px 10px;
+        color: var(--navy-dark);
+        background: var(--gold);
+        text-decoration: none;
+        font-weight: 700;
+        padding: 10px 20px;
+        border-radius: 999px;
+      }
+      .links a {
+        color: #d7e3f1;
+        margin: 0 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>הדף לא נמצא</h1>
+      <p>
+        הדף שחיפשתם אינו קיים. אתם מועברים לדף הבית של %FIRM_NAME% –
+        %FIRM_TAGLINE%.
+      </p>
+      <nav>
+        <a href="/">חזרה לדף הבית</a>
+      </nav>
+      <p class="links">
+        <a href="/terms.html">תנאי שימוש</a>
+        <a href="/privacy.html">מדיניות פרטיות</a>
+        <a href="/accessibility.html">הצהרת נגישות</a>
+      </p>
+    </main>
+  </body>
+</html>

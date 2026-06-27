@@ -3,8 +3,11 @@
 
 import { FIRM_NAME } from './site'
 
+// `import.meta.env.BASE_URL` is a string literal in the Vite app build, but is
+// undefined when this module is imported from the Vite config (Node) context,
+// e.g. by src/content/seo.ts during static-page generation. Fall back to "/".
 export const asset = (name: string): string =>
-  `${import.meta.env.BASE_URL}assets/${name}`
+  `${import.meta.env?.BASE_URL ?? '/'}assets/${name}`
 
 export const shared = {
   firmName: FIRM_NAME,
