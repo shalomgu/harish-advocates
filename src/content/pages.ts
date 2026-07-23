@@ -239,6 +239,7 @@ export const tips = {
       { type: 'video', url: asset('videos/yipuy-koach-mitmashech.mp4'), label: 'ייפוי כוח מתמשך' },
       { type: 'video', url: asset('videos/copy-rights.mp4'), label: 'זכויות יוצרים על רעיון' },
       { type: 'video', url: asset('videos/buying-home-in-a-bag.mp4'), label: 'טיפים לרכישת דירה מקבלן' },
+      { type: 'video', url: asset('videos/give-dira-risk.mp4'), label: 'על הסיכון שבדירה במתנה לקרוב' },
     ] as TipVideo[],
   },
   articles: {
