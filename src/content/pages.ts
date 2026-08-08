@@ -432,6 +432,14 @@ export const contact = {
   phone: { title: '📞 טלפון', titleMobile: '📞 סלולרי', tel: '037528111', telDisplay: '03-7528111', mobile: '0522778848', mobileDisplay: '052-2778848'  },
   email: { title: '✉️ דוא"ל', address: 'harish-l@barak.net.il' },
   hours: { title: '🕐 שעות', lines: ['בתיאום מראש', 'ייעוץ מקצועי זמין'] },
+  // Brevo (Sendinblue) hosted subscription form. Swap iframeSrc after editing
+  // the form in Brevo (e.g. Hebrew copy / extra fields); no API key needed.
+  newsletter: {
+    title: 'הצטרפו לרשימת התפוצה',
+    iframeTitle: 'טופס הרשמה לרשימת תפוצה',
+    iframeSrc:
+      'https://dfa194f2.sibforms.com/v2/serve/MUIFANeqfrdizRaYGv2w8KMdkK2gRcckgZ88NHhe3xpbdbgrrWpEfn7FDoC_yPhWLviG1wSv65phy5imsPztao57eFJYR1XKlzKHSq0Kb5VJcEFpbGTM5xBgeCnelRwdwKOcBTxfh_0gVtOOyKRc7J_ME0kvqLc87frVq8fXiNcwttMQarmyrJgIeBQ7yYNHv95AXqH_fJ6C1EMd8g==',
+  },
 }
 
 export const backCover = {

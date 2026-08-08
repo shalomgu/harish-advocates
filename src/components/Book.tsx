@@ -183,7 +183,14 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, 
     const t = e.touches[0]
     // If the swipe begins inside a horizontal carousel, remember it and its scroll
     // position so we can let the carousel scroll first and only page at its edge.
-    const carousel = (e.target as HTMLElement | null)?.closest<HTMLElement>('.video-grid, .article-grid') ?? null
+    const target = e.target as HTMLElement | null
+    // Skip page-flip swipes that begin on the Brevo newsletter iframe — the
+    // form owns those gestures (typing / scrolling inside the embed).
+    if (target?.closest('.contact-newsletter')) {
+      touchStart.current = null
+      return
+    }
+    const carousel = target?.closest<HTMLElement>('.video-grid, .article-grid') ?? null
     touchStart.current = { x: t.clientX, y: t.clientY, carousel, scrollLeft: carousel?.scrollLeft ?? 0 }
   }
   const onTouchEnd = (e: React.TouchEvent) => {

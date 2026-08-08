@@ -47,6 +47,16 @@ const ContactPage = forwardRef<HTMLDivElement>(function ContactPage(_props, ref)
         </article>
 
       </div>
+
+      <section className="contact-newsletter" aria-label={contact.newsletter.title}>
+        <h3>{contact.newsletter.title}</h3>
+        <iframe
+          className="contact-newsletter-frame"
+          src={contact.newsletter.iframeSrc}
+          title={contact.newsletter.iframeTitle}
+          loading="lazy"
+        />
+      </section>
     </Page>
   )
 })
