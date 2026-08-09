@@ -1,8 +1,11 @@
-import { forwardRef } from 'react'
+import { forwardRef, useState } from 'react'
 import Page from '../components/Page'
+import NewsletterPopup from '../components/NewsletterPopup'
 import { contact } from '../content/pages'
 
 const ContactPage = forwardRef<HTMLDivElement>(function ContactPage(_props, ref) {
+  const [newsletterOpen, setNewsletterOpen] = useState(false)
+
   return (
     <Page
       ref={ref}
@@ -45,18 +48,20 @@ const ContactPage = forwardRef<HTMLDivElement>(function ContactPage(_props, ref)
             <a href={`mailto:${contact.email.address}`}>{contact.email.address}</a>
           </p>
         </article>
-
       </div>
 
       <section className="contact-newsletter" aria-label={contact.newsletter.title}>
         <h3>{contact.newsletter.title}</h3>
-        <iframe
-          className="contact-newsletter-frame"
-          src={contact.newsletter.iframeSrc}
-          title={contact.newsletter.iframeTitle}
-          loading="lazy"
-        />
+        <button
+          type="button"
+          className="contact-newsletter-btn"
+          onClick={() => setNewsletterOpen(true)}
+        >
+          {contact.newsletter.button}
+        </button>
       </section>
+
+      {newsletterOpen && <NewsletterPopup onClose={() => setNewsletterOpen(false)} />}
     </Page>
   )
 })
