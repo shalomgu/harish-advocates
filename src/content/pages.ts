@@ -432,6 +432,23 @@ export const contact = {
   phone: { title: '📞 טלפון', titleMobile: '📞 סלולרי', tel: '037528111', telDisplay: '03-7528111', mobile: '0522778848', mobileDisplay: '052-2778848'  },
   email: { title: '✉️ דוא"ל', address: 'harish-l@barak.net.il' },
   hours: { title: '🕐 שעות', lines: ['בתיאום מראש', 'ייעוץ מקצועי זמין'] },
+  // Brevo list signup via NewsletterPopup: we POST ?isAjax=1 ourselves and
+  // ignore Brevo's double-opt-in redirect so the flipbook stays open.
+  newsletter: {
+    title: 'הצטרפו לרשימת התפוצה',
+    button: 'להרשמה לרשימת התפוצה',
+    popupTitle: 'טופס הרשמה לרשימת תפוצה',
+    heading: 'ניוזלטר',
+    intro: 'הירשמו לניוזלטר שלנו והישארו מעודכנים',
+    emailLabel: 'הזינו את כתובת האימייל שלכם כדי להירשם',
+    emailPlaceholder: 'email@example.com',
+    submit: 'הרשמה',
+    success:
+      'כמעט שם! שלחנו אימייל לאישור — לחצו על הקישור בהודעה כדי להשלים את ההרשמה.',
+    error: 'לא ניתן היה לשמור את ההרשמה. נסו שוב.',
+    formAction:
+      'https://dfa194f2.sibforms.com/serve/MUIFANeqfrdizRaYGv2w8KMdkK2gRcckgZ88NHhe3xpbdbgrrWpEfn7FDoC_yPhWLviG1wSv65phy5imsPztao57eFJYR1XKlzKHSq0Kb5VJcEFpbGTM5xBgeCnelRwdwKOcBTxfh_0gVtOOyKRc7J_ME0kvqLc87frVq8fXiNcwttMQarmyrJgIeBQ7yYNHv95AXqH_fJ6C1EMd8g==',
+  },
 }
 
 export const backCover = {
