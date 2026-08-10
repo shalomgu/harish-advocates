@@ -42,7 +42,7 @@ export default function NewsletterPopup({ onClose }: { onClose: () => void }) {
     const email = new FormData(form).get('EMAIL')
     if (typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
       setStatus('error')
-      setMessage(newsletter.error)
+      setMessage(newsletter.invalidEmail)
       return
     }
 
@@ -69,22 +69,25 @@ export default function NewsletterPopup({ onClose }: { onClose: () => void }) {
           setMessage(newsletter.success)
           return
         }
-        throw new Error('bad response')
+        setStatus('error')
+        setMessage(newsletter.error)
+        return
       }
 
       if (data.success) {
         // Ignore data.redirect — that is Brevo's DOI confirmation page.
         setStatus('success')
-        setMessage(data.message?.trim() || newsletter.success)
+        setMessage(newsletter.success)
         return
       }
 
       const fieldError = data.errors && Object.values(data.errors)[0]
+      const serverMessage = fieldError || data.message?.trim()
       setStatus('error')
-      setMessage(fieldError || data.message?.trim() || newsletter.error)
+      setMessage(serverMessage || newsletter.error)
     } catch {
       setStatus('error')
-      setMessage(newsletter.error)
+      setMessage(newsletter.networkError)
     }
   }
 

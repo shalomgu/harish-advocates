@@ -445,6 +445,8 @@ export const contact = {
     submit: 'הרשמה',
     success:
       'כמעט שם! שלחנו אימייל לאישור — לחצו על הקישור בהודעה כדי להשלים את ההרשמה.',
+    invalidEmail: 'נא להזין כתובת אימייל תקינה.',
+    networkError: 'אין חיבור לשרת. בדקו את הרשת ונסו שוב.',
     error: 'לא ניתן היה לשמור את ההרשמה. נסו שוב.',
     formAction:
       'https://dfa194f2.sibforms.com/serve/MUIFANeqfrdizRaYGv2w8KMdkK2gRcckgZ88NHhe3xpbdbgrrWpEfn7FDoC_yPhWLviG1wSv65phy5imsPztao57eFJYR1XKlzKHSq0Kb5VJcEFpbGTM5xBgeCnelRwdwKOcBTxfh_0gVtOOyKRc7J_ME0kvqLc87frVq8fXiNcwttMQarmyrJgIeBQ7yYNHv95AXqH_fJ6C1EMd8g==',
