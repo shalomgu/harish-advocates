@@ -112,67 +112,65 @@ export default function NewsletterPopup({ onClose }: { onClose: () => void }) {
         className="iframe-popup-stage iframe-popup-stage--newsletter newsletter-popup"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="newsletter-sib">
-          {status === 'error' && (
-            <div className="newsletter-flash newsletter-flash--error" role="alert">
-              {message || newsletter.error}
+        {status === 'error' && (
+          <div className="newsletter-flash newsletter-flash--error" role="alert">
+            {message || newsletter.error}
+          </div>
+        )}
+        {status === 'success' && (
+          <div className="newsletter-flash newsletter-flash--success" role="status">
+            {message || newsletter.success}
+          </div>
+        )}
+
+        {status !== 'success' && (
+          <form id="sib-form" method="POST" action={newsletter.formAction} onSubmit={onSubmit} noValidate>
+            <div className="newsletter-block">
+              <h3 className="newsletter-heading">{newsletter.heading}</h3>
+              <p className="newsletter-intro">{newsletter.intro}</p>
             </div>
-          )}
-          {status === 'success' && (
-            <div className="newsletter-flash newsletter-flash--success" role="status">
-              {message || newsletter.success}
-            </div>
-          )}
 
-          {status !== 'success' && (
-            <form id="sib-form" method="POST" action={newsletter.formAction} onSubmit={onSubmit} noValidate>
-              <div className="newsletter-block">
-                <h3 className="newsletter-heading">{newsletter.heading}</h3>
-                <p className="newsletter-intro">{newsletter.intro}</p>
-              </div>
-
-              <div className="newsletter-block">
-                <label className="entry__label" htmlFor="EMAIL">
-                  {newsletter.emailLabel}
-                </label>
-                <div className="entry__field">
-                  <input
-                    className="input"
-                    type="email"
-                    id="EMAIL"
-                    name="EMAIL"
-                    autoComplete="email"
-                    placeholder={newsletter.emailPlaceholder}
-                    required
-                    disabled={status === 'loading'}
-                  />
-                </div>
-              </div>
-
-              <div className="newsletter-block">
-                <button
-                  className="newsletter-submit"
-                  type="submit"
+            <div className="newsletter-block">
+              <label className="newsletter-label" htmlFor="EMAIL">
+                {newsletter.emailLabel}
+              </label>
+              <div className="newsletter-field">
+                <input
+                  className="newsletter-input"
+                  type="email"
+                  id="EMAIL"
+                  name="EMAIL"
+                  autoComplete="email"
+                  placeholder={newsletter.emailPlaceholder}
+                  required
                   disabled={status === 'loading'}
-                >
-                  {status === 'loading' ? '...' : newsletter.submit}
-                </button>
+                />
               </div>
+            </div>
 
-              {/* Brevo honeypot — leave empty */}
-              <input
-                type="text"
-                name="email_address_check"
-                defaultValue=""
-                className="input--hidden"
-                tabIndex={-1}
-                autoComplete="off"
-                aria-hidden="true"
-              />
-              <input type="hidden" name="locale" value="he" />
-            </form>
-          )}
-        </div>
+            <div className="newsletter-block">
+              <button
+                className="newsletter-submit"
+                type="submit"
+                disabled={status === 'loading'}
+              >
+                {status === 'loading' ? '...' : newsletter.submit}
+              </button>
+            </div>
+
+            {/* Brevo honeypot — leave empty */}
+            <input
+              type="text"
+              name="email_address_check"
+              defaultValue=""
+              className="newsletter-honeypot"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+            />
+            <input type="hidden" name="locale" value="he" />
+          </form>
+        )}
       </div>
     </div>,
     document.body,

@@ -649,7 +649,7 @@ body {
   color: rgba(199, 162, 74, 0.55);
 }
 
-/* ---- Iframe popup stage (legal pages, Brevo form; reuses .media-lightbox) ---- */
+/* ---- Iframe popup stage (legal pages; reuses .media-lightbox) ---- */
 .iframe-popup-stage,
 .legal-stage {
   position: relative;
@@ -669,7 +669,7 @@ body {
   border: 0;
 }
 
-/* Compact stage for the in-app Brevo HTML newsletter form. */
+/* Compact stage for the in-app newsletter subscribe popup. */
 .iframe-popup-stage--newsletter {
   width: min(540px, 94vw);
   height: auto;
@@ -682,16 +682,6 @@ body {
   direction: rtl;
   text-align: right;
   box-sizing: border-box;
-}
-
-.newsletter-popup .newsletter-sib,
-.newsletter-popup .sib-form-container,
-.newsletter-popup #sib-container {
-  background: transparent !important;
-  border: 0 !important;
-  max-width: none !important;
-  text-align: right !important;
-  direction: rtl;
 }
 
 .newsletter-popup .newsletter-heading {
@@ -713,7 +703,7 @@ body {
   padding: 8px 0;
 }
 
-.newsletter-popup .entry__label {
+.newsletter-popup .newsletter-label {
   display: block;
   margin-bottom: 8px;
   font-size: 14px;
@@ -721,7 +711,7 @@ body {
   color: #3c4858;
 }
 
-.newsletter-popup .entry__field .input {
+.newsletter-popup .newsletter-input {
   width: 100%;
   box-sizing: border-box;
   padding: 12px 14px;
@@ -733,7 +723,7 @@ body {
   text-align: left;
 }
 
-.newsletter-popup .entry__field .input:focus {
+.newsletter-popup .newsletter-input:focus {
   outline: 2px solid var(--accent, #1d4f8f);
   outline-offset: 1px;
   border-color: var(--accent, #1d4f8f);
@@ -766,7 +756,7 @@ body {
   filter: none;
 }
 
-.newsletter-popup .input--hidden {
+.newsletter-popup .newsletter-honeypot {
   position: absolute !important;
   left: -9999px !important;
   width: 1px !important;
