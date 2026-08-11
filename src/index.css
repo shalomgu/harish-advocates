@@ -750,6 +750,15 @@ body {
   cursor: pointer;
 }
 
+.newsletter-popup .newsletter-turnstile {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.newsletter-popup .newsletter-turnstile > div {
+  min-height: 65px;
+}
+
 .newsletter-popup .newsletter-submit {
   display: inline-flex;
   align-items: center;
