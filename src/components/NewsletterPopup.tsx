@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { createPortal } from 'react-dom'
 import { contact } from '../content/pages'
+import { loadTurnstile } from '../lib/turnstile'
 import { useFocusTrap } from '../lib/useFocusTrap'
 
 type Status = 'idle' | 'loading' | 'success' | 'error'
@@ -16,6 +17,10 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 /** Israeli national number: mobile 5X… or landline area 2–4/8–9 + 7 digits. */
 const IL_NATIONAL_RE = /^(?:5\d|[2-489])\d{7}$/
 const IL_COUNTRY_CODE = '+972'
+/** Canonical Turnstile token field name (Spin / Cloudflare). */
+const TURNSTILE_FIELD = 'cf-turnstile-response'
+/** Stable action for this surface; Brevo verifies the token server-side. */
+const TURNSTILE_ACTION = 'newsletter'
 
 function digitsOnly(raw: string): string {
   return raw.trim().replace(/\D/g, '')
@@ -35,12 +40,20 @@ function toBrevoSmsNumber(raw: string): string | null {
  * We POST with `?isAjax=1` ourselves and never load Brevo's main.js — that
  * script calls `window.top.location.replace(redirect)` on double-opt-in, which
  * kicks the user out of the flipbook to sibforms.com.
+ *
+ * Cloudflare Turnstile (site key in config / VITE_TURNSTILE_SITE_KEY) must match
+ * the keys configured on the Brevo form; Brevo verifies the secret server-side.
  */
 export default function NewsletterPopup({ onClose }: { onClose: () => void }) {
   const dialogRef = useRef<HTMLDivElement>(null)
+  const turnstileHostRef = useRef<HTMLDivElement>(null)
+  const widgetIdRef = useRef<string | null>(null)
   const { newsletter } = contact
+  const siteKey =
+    import.meta.env.VITE_TURNSTILE_SITE_KEY || newsletter.turnstileSiteKey || ''
   const [status, setStatus] = useState<Status>('idle')
   const [message, setMessage] = useState('')
+  const [turnstileToken, setTurnstileToken] = useState('')
   useFocusTrap(true, dialogRef)
 
   useEffect(() => {
@@ -50,6 +63,54 @@ export default function NewsletterPopup({ onClose }: { onClose: () => void }) {
     window.addEventListener('keydown', onKey, true)
     return () => window.removeEventListener('keydown', onKey, true)
   }, [onClose])
+
+  useEffect(() => {
+    if (!siteKey) return
+    const host = turnstileHostRef.current
+    if (!host) return
+
+    let cancelled = false
+
+    loadTurnstile()
+      .then((api) => {
+        if (cancelled || !turnstileHostRef.current) return
+        if (widgetIdRef.current != null) {
+          api.remove(widgetIdRef.current)
+          widgetIdRef.current = null
+        }
+        turnstileHostRef.current.innerHTML = ''
+        widgetIdRef.current = api.render(turnstileHostRef.current, {
+          sitekey: siteKey,
+          action: TURNSTILE_ACTION,
+          theme: 'light',
+          language: 'he',
+          callback: (token) => setTurnstileToken(token),
+          'expired-callback': () => setTurnstileToken(''),
+          'error-callback': () => setTurnstileToken(''),
+        })
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setStatus('error')
+          setMessage(newsletter.turnstileError)
+        }
+      })
+
+    return () => {
+      cancelled = true
+      if (widgetIdRef.current != null && window.turnstile) {
+        window.turnstile.remove(widgetIdRef.current)
+        widgetIdRef.current = null
+      }
+    }
+  }, [siteKey, newsletter.turnstileError])
+
+  function resetTurnstile() {
+    setTurnstileToken('')
+    if (widgetIdRef.current != null && window.turnstile) {
+      window.turnstile.reset(widgetIdRef.current)
+    }
+  }
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -81,6 +142,18 @@ export default function NewsletterPopup({ onClose }: { onClose: () => void }) {
       return
     }
 
+    if (!siteKey) {
+      setStatus('error')
+      setMessage(newsletter.turnstileError)
+      return
+    }
+
+    if (!turnstileToken) {
+      setStatus('error')
+      setMessage(newsletter.turnstileRequired)
+      return
+    }
+
     setStatus('loading')
     setMessage('')
 
@@ -90,6 +163,7 @@ export default function NewsletterPopup({ onClose }: { onClose: () => void }) {
       body.set('SMS__COUNTRY_CODE', IL_COUNTRY_CODE)
       body.set('SMS', smsNumber)
       body.delete('CONSENT')
+      body.set(TURNSTILE_FIELD, turnstileToken)
 
       const action = newsletter.formAction
       const url = `${action}${action.includes('?') ? '&' : '?'}isAjax=1`
@@ -111,6 +185,7 @@ export default function NewsletterPopup({ onClose }: { onClose: () => void }) {
         }
         setStatus('error')
         setMessage(newsletter.error)
+        resetTurnstile()
         return
       }
 
@@ -125,9 +200,11 @@ export default function NewsletterPopup({ onClose }: { onClose: () => void }) {
       const serverMessage = fieldError || parsed.message?.trim()
       setStatus('error')
       setMessage(serverMessage || newsletter.error)
+      resetTurnstile()
     } catch {
       setStatus('error')
       setMessage(newsletter.networkError)
+      resetTurnstile()
     }
   }
 
@@ -221,6 +298,15 @@ export default function NewsletterPopup({ onClose }: { onClose: () => void }) {
                 />
                 <span>{newsletter.consentLabel}</span>
               </label>
+            </div>
+
+            <div className="newsletter-block newsletter-turnstile">
+              <div
+                ref={turnstileHostRef}
+                className="cf-turnstile"
+                data-sitekey={siteKey}
+                data-action={TURNSTILE_ACTION}
+              />
             </div>
 
             <div className="newsletter-block">

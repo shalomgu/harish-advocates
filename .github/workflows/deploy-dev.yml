@@ -36,6 +36,7 @@ jobs:
         run: npm run build
         env:
           VITE_BASE: ${{ env.DEV_BASE }}
+          VITE_TURNSTILE_SITE_KEY: 0x4AAAAAAENVv0BEkuqP5TkO
 
       # The prod CNAME (www.harish-adv.com) lives in public/ and is copied into
       # dist/. Remove it so the dev repo's Pages doesn't try to claim that domain.

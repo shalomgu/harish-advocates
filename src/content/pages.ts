@@ -450,8 +450,13 @@ export const contact = {
     invalidEmail: 'נא להזין כתובת אימייל תקינה.',
     invalidPhone: 'נא להזין מספר טלפון או נייד תקין.',
     consentRequired: 'יש לאשר קבלת מידע ועדכונים כדי להירשם.',
+    turnstileRequired: 'נא לאשר שאינך רובוט לפני השליחה.',
+    turnstileError: 'לא ניתן היה לטעון את אימות האבטחה. רעננו ונסו שוב.',
     networkError: 'אין חיבור לשרת. בדקו את הרשת ונסו שוב.',
     error: 'לא ניתן היה לשמור את ההרשמה. נסו שוב.',
+    // Cloudflare Turnstile site key (public). Overridden by VITE_TURNSTILE_SITE_KEY
+    // at build time when set. Must match the Site Key configured on the Brevo form.
+    turnstileSiteKey: '0x4AAAAAAENVv0BEkuqP5TkO',
     // Same Brevo form as the iframe embed (EMAIL + SMS). We POST /serve/…?isAjax=1
     // ourselves so the flipbook is not redirected by Brevo's embed script.
     formAction:
