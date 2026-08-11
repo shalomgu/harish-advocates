@@ -12,6 +12,23 @@ type BrevoAjaxResponse = {
   errors?: Record<string, string>
 }
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+/** Israeli national number: mobile 5X… or landline area 2–4/8–9 + 7 digits. */
+const IL_NATIONAL_RE = /^(?:5\d|[2-489])\d{7}$/
+const IL_COUNTRY_CODE = '+972'
+
+function digitsOnly(raw: string): string {
+  return raw.trim().replace(/\D/g, '')
+}
+
+/** National number for Brevo SMS field (no country code, no leading 0). */
+function toBrevoSmsNumber(raw: string): string | null {
+  let digits = digitsOnly(raw)
+  if (digits.startsWith('972')) digits = digits.slice(3)
+  if (digits.startsWith('0')) digits = digits.slice(1)
+  return IL_NATIONAL_RE.test(digits) ? digits : null
+}
+
 /**
  * In-app Brevo subscribe popup.
  *
@@ -39,10 +56,28 @@ export default function NewsletterPopup({ onClose }: { onClose: () => void }) {
     e.stopPropagation()
 
     const form = e.currentTarget
-    const email = new FormData(form).get('EMAIL')
-    if (typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+    const data = new FormData(form)
+    const email = data.get('EMAIL')
+    const phoneRaw = data.get('SMS')
+    const consented = data.get('CONSENT') === '1'
+
+    if (typeof email !== 'string' || !EMAIL_RE.test(email.trim())) {
       setStatus('error')
       setMessage(newsletter.invalidEmail)
+      return
+    }
+
+    const smsNumber =
+      typeof phoneRaw === 'string' ? toBrevoSmsNumber(phoneRaw) : null
+    if (!smsNumber) {
+      setStatus('error')
+      setMessage(newsletter.invalidPhone)
+      return
+    }
+
+    if (!consented) {
+      setStatus('error')
+      setMessage(newsletter.consentRequired)
       return
     }
 
@@ -51,6 +86,11 @@ export default function NewsletterPopup({ onClose }: { onClose: () => void }) {
 
     try {
       const body = new FormData(form)
+      // Brevo SMS field expects country code + national number separately.
+      body.set('SMS__COUNTRY_CODE', IL_COUNTRY_CODE)
+      body.set('SMS', smsNumber)
+      body.delete('CONSENT')
+
       const action = newsletter.formAction
       const url = `${action}${action.includes('?') ? '&' : '?'}isAjax=1`
       const res = await fetch(url, {
@@ -59,9 +99,9 @@ export default function NewsletterPopup({ onClose }: { onClose: () => void }) {
         headers: { Accept: 'application/json' },
       })
       const text = await res.text()
-      let data: BrevoAjaxResponse = {}
+      let parsed: BrevoAjaxResponse = {}
       try {
-        data = text ? (JSON.parse(text) as BrevoAjaxResponse) : {}
+        parsed = text ? (JSON.parse(text) as BrevoAjaxResponse) : {}
       } catch {
         // Non-JSON body — treat HTTP ok as success (DOI often still redirects in HTML).
         if (res.ok) {
@@ -74,15 +114,15 @@ export default function NewsletterPopup({ onClose }: { onClose: () => void }) {
         return
       }
 
-      if (data.success) {
+      if (parsed.success) {
         // Ignore data.redirect — that is Brevo's DOI confirmation page.
         setStatus('success')
         setMessage(newsletter.success)
         return
       }
 
-      const fieldError = data.errors && Object.values(data.errors)[0]
-      const serverMessage = fieldError || data.message?.trim()
+      const fieldError = parsed.errors && Object.values(parsed.errors)[0]
+      const serverMessage = fieldError || parsed.message?.trim()
       setStatus('error')
       setMessage(serverMessage || newsletter.error)
     } catch {
@@ -152,6 +192,38 @@ export default function NewsletterPopup({ onClose }: { onClose: () => void }) {
             </div>
 
             <div className="newsletter-block">
+              <label className="newsletter-label" htmlFor="SMS">
+                {newsletter.phoneLabel}
+              </label>
+              <div className="newsletter-field">
+                <input
+                  className="newsletter-input"
+                  type="tel"
+                  id="SMS"
+                  name="SMS"
+                  autoComplete="tel"
+                  inputMode="tel"
+                  placeholder={newsletter.phonePlaceholder}
+                  required
+                  disabled={status === 'loading'}
+                />
+              </div>
+            </div>
+
+            <div className="newsletter-block">
+              <label className="newsletter-consent">
+                <input
+                  type="checkbox"
+                  name="CONSENT"
+                  value="1"
+                  required
+                  disabled={status === 'loading'}
+                />
+                <span>{newsletter.consentLabel}</span>
+              </label>
+            </div>
+
+            <div className="newsletter-block">
               <button
                 className="newsletter-submit"
                 type="submit"
@@ -172,6 +244,7 @@ export default function NewsletterPopup({ onClose }: { onClose: () => void }) {
               aria-hidden="true"
             />
             <input type="hidden" name="locale" value="he" />
+            <input type="hidden" name="SMS__COUNTRY_CODE" value={IL_COUNTRY_CODE} />
           </form>
         )}
       </div>

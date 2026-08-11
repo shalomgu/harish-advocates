@@ -440,14 +440,20 @@ export const contact = {
     popupTitle: 'טופס הרשמה לרשימת תפוצה',
     heading: 'ניוזלטר',
     intro: 'הירשמו לניוזלטר שלנו והישארו מעודכנים',
-    emailLabel: 'הזינו את כתובת האימייל שלכם כדי להירשם',
+    emailLabel: 'דוא״ל',
     emailPlaceholder: 'email@example.com',
+    phoneLabel: 'טלפון / נייד',
+    phonePlaceholder: '05X-XXXXXXX',
+    consentLabel: 'מאשר/ת קבלת מידע ועדכונים מחריש עורכי דין',
     submit: 'הרשמה',
-    success:
-      'כמעט שם! שלחנו אימייל לאישור — לחצו על הקישור בהודעה כדי להשלים את ההרשמה.',
+    success: 'בקשתך התקבלה.',
     invalidEmail: 'נא להזין כתובת אימייל תקינה.',
+    invalidPhone: 'נא להזין מספר טלפון או נייד תקין.',
+    consentRequired: 'יש לאשר קבלת מידע ועדכונים כדי להירשם.',
     networkError: 'אין חיבור לשרת. בדקו את הרשת ונסו שוב.',
     error: 'לא ניתן היה לשמור את ההרשמה. נסו שוב.',
+    // Same Brevo form as the iframe embed (EMAIL + SMS). We POST /serve/…?isAjax=1
+    // ourselves so the flipbook is not redirected by Brevo's embed script.
     formAction:
       'https://dfa194f2.sibforms.com/serve/MUIFANeqfrdizRaYGv2w8KMdkK2gRcckgZ88NHhe3xpbdbgrrWpEfn7FDoC_yPhWLviG1wSv65phy5imsPztao57eFJYR1XKlzKHSq0Kb5VJcEFpbGTM5xBgeCnelRwdwKOcBTxfh_0gVtOOyKRc7J_ME0kvqLc87frVq8fXiNcwttMQarmyrJgIeBQ7yYNHv95AXqH_fJ6C1EMd8g==',
   },

@@ -673,7 +673,7 @@ body {
 .iframe-popup-stage--newsletter {
   width: min(540px, 94vw);
   height: auto;
-  max-height: min(88vh, 640px);
+  max-height: min(88vh, 720px);
   overflow: auto;
 }
 
@@ -727,6 +727,27 @@ body {
   outline: 2px solid var(--accent, #1d4f8f);
   outline-offset: 1px;
   border-color: var(--accent, #1d4f8f);
+}
+
+.newsletter-popup .newsletter-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.45;
+  color: #3c4858;
+  cursor: pointer;
+}
+
+.newsletter-popup .newsletter-consent input {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: var(--accent, #1d4f8f);
+  cursor: pointer;
 }
 
 .newsletter-popup .newsletter-submit {
