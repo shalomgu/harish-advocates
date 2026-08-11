@@ -17,7 +17,10 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 /** Israeli national number: mobile 5X… or landline area 2–4/8–9 + 7 digits. */
 const IL_NATIONAL_RE = /^(?:5\d|[2-489])\d{7}$/
 const IL_COUNTRY_CODE = '+972'
+/** Canonical Turnstile token field name (Spin / Cloudflare). */
 const TURNSTILE_FIELD = 'cf-turnstile-response'
+/** Stable action for this surface; Brevo verifies the token server-side. */
+const TURNSTILE_ACTION = 'newsletter'
 
 function digitsOnly(raw: string): string {
   return raw.trim().replace(/\D/g, '')
@@ -78,6 +81,7 @@ export default function NewsletterPopup({ onClose }: { onClose: () => void }) {
         turnstileHostRef.current.innerHTML = ''
         widgetIdRef.current = api.render(turnstileHostRef.current, {
           sitekey: siteKey,
+          action: TURNSTILE_ACTION,
           theme: 'light',
           language: 'he',
           callback: (token) => setTurnstileToken(token),
@@ -138,7 +142,13 @@ export default function NewsletterPopup({ onClose }: { onClose: () => void }) {
       return
     }
 
-    if (siteKey && !turnstileToken) {
+    if (!siteKey) {
+      setStatus('error')
+      setMessage(newsletter.turnstileError)
+      return
+    }
+
+    if (!turnstileToken) {
       setStatus('error')
       setMessage(newsletter.turnstileRequired)
       return
@@ -153,7 +163,7 @@ export default function NewsletterPopup({ onClose }: { onClose: () => void }) {
       body.set('SMS__COUNTRY_CODE', IL_COUNTRY_CODE)
       body.set('SMS', smsNumber)
       body.delete('CONSENT')
-      if (turnstileToken) body.set(TURNSTILE_FIELD, turnstileToken)
+      body.set(TURNSTILE_FIELD, turnstileToken)
 
       const action = newsletter.formAction
       const url = `${action}${action.includes('?') ? '&' : '?'}isAjax=1`
@@ -290,11 +300,14 @@ export default function NewsletterPopup({ onClose }: { onClose: () => void }) {
               </label>
             </div>
 
-            {siteKey ? (
-              <div className="newsletter-block newsletter-turnstile">
-                <div ref={turnstileHostRef} />
-              </div>
-            ) : null}
+            <div className="newsletter-block newsletter-turnstile">
+              <div
+                ref={turnstileHostRef}
+                className="cf-turnstile"
+                data-sitekey={siteKey}
+                data-action={TURNSTILE_ACTION}
+              />
+            </div>
 
             <div className="newsletter-block">
               <button

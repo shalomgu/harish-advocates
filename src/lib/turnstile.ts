@@ -1,6 +1,7 @@
 /** Minimal Cloudflare Turnstile typings used by NewsletterPopup. */
 export type TurnstileRenderOptions = {
   sitekey: string
+  action?: string
   theme?: 'light' | 'dark' | 'auto'
   language?: string
   callback?: (token: string) => void
