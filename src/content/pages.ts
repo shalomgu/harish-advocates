@@ -262,6 +262,12 @@ export const tips = {
         ],
       },
       {
+        title: 'בלוג על חקיקה למען כלבים שסיימו שירות בגופי ביטחון',
+        source: 'A-LAW',
+        thumbnail: asset('articles/treatment-of-military-dogs-law.png'),
+        pdf: asset('articles/treatment-of-military-dogs-law.pdf'),
+      },
+      {
         title: 'על ניצול כלכלי של קשישים',
         source: 'דה מרקר',
         thumbnail: asset('articles/nizul-kshihim.png'),
