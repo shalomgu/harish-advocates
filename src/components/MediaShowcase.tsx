@@ -1,7 +1,52 @@
-import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from 'react'
 import { createPortal } from 'react-dom'
 import { readGuideSlug, type TipArticle, type TipVideo } from '../content/pages'
+import { shared } from '../content/shared'
 import { useFocusTrap } from '../lib/useFocusTrap'
+
+type FullscreenDocument = Document & {
+  webkitFullscreenElement?: Element | null
+  webkitExitFullscreen?: () => void
+}
+
+type FullscreenElement = HTMLElement & {
+  webkitRequestFullscreen?: () => void
+}
+
+type SafariVideo = HTMLVideoElement & {
+  webkitEnterFullscreen?: () => void
+  webkitExitFullscreen?: () => void
+}
+
+function fsElement(): Element | null {
+  const doc = document as FullscreenDocument
+  return document.fullscreenElement ?? doc.webkitFullscreenElement ?? null
+}
+
+async function requestFs(el: HTMLElement): Promise<void> {
+  if (el.requestFullscreen) {
+    await el.requestFullscreen()
+    return
+  }
+  ;(el as FullscreenElement).webkitRequestFullscreen?.()
+}
+
+async function exitFs(): Promise<void> {
+  if (document.fullscreenElement) {
+    await document.exitFullscreen()
+    return
+  }
+  ;(document as FullscreenDocument).webkitExitFullscreen?.()
+}
 
 type LightboxItem =
   | { kind: 'video'; src: string; poster?: string; alt: string; audio?: boolean }
@@ -80,10 +125,130 @@ function AudioStage({
   )
 }
 
+/**
+ * Self-hosted MP4 in the lightbox. Native <video> fullscreen is unreliable
+ * inside a modal (Chrome enters then immediately exits), so the control bar
+ * fullscreen button is hidden and we fullscreen this stage ourselves.
+ */
+function VideoStage({
+  src,
+  poster,
+  onEnded,
+}: {
+  src: string
+  poster?: string
+  onEnded: () => void
+}) {
+  const stageRef = useRef<HTMLDivElement>(null)
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const [expanded, setExpanded] = useState(false)
+
+  useEffect(() => {
+    const video = videoRef.current
+    let enteredAt = 0
+    const sync = () => {
+      const el = fsElement()
+      if (el === video) {
+        enteredAt = Date.now()
+        return
+      }
+      // Native <video> fullscreen often enters then exits within a tick;
+      // recover by using the document fullscreen path that already works.
+      if (!el && enteredAt && Date.now() - enteredAt < 500) {
+        enteredAt = 0
+        void requestFs(document.documentElement).then(() => setExpanded(true))
+        return
+      }
+      if (!el) setExpanded(false)
+    }
+    document.addEventListener('fullscreenchange', sync)
+    document.addEventListener('webkitfullscreenchange', sync)
+    return () => {
+      document.removeEventListener('fullscreenchange', sync)
+      document.removeEventListener('webkitfullscreenchange', sync)
+    }
+  }, [])
+
+  const toggleFullscreen = (e: React.PointerEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    const stage = stageRef.current
+    const video = videoRef.current as SafariVideo | null
+    if (!stage || !video) return
+
+    if (fsElement()) {
+      if (expanded) {
+        void exitFs()
+        setExpanded(false)
+      } else {
+        setExpanded(true)
+      }
+      return
+    }
+
+    // Swallow the leftover click so Chrome does not treat it as "click outside
+    // fullscreen" and immediately exit.
+    const swallow = (ev: Event) => {
+      ev.stopPropagation()
+      ev.preventDefault()
+    }
+    document.addEventListener('click', swallow, true)
+    document.addEventListener('pointerup', swallow, true)
+    window.setTimeout(() => {
+      document.removeEventListener('click', swallow, true)
+      document.removeEventListener('pointerup', swallow, true)
+    }, 500)
+
+    // Fullscreen the document (same path as the app toolbar), then expand the
+    // stage with CSS. Native <video> fullscreen inside this modal is cancelled
+    // by Chrome as soon as it starts.
+    void requestFs(document.documentElement)
+      .then(() => setExpanded(true))
+      .catch(() => {
+        if (video.webkitEnterFullscreen) video.webkitEnterFullscreen()
+        else setExpanded((v) => !v)
+      })
+  }
+
+  const stop = (e: React.SyntheticEvent) => e.stopPropagation()
+
+  return (
+    <div
+      ref={stageRef}
+      className={`media-stage${expanded ? ' media-stage--expanded' : ''}`}
+      onPointerDown={stop}
+      onClick={stop}
+    >
+      <video
+        ref={videoRef}
+        src={src}
+        poster={poster}
+        controls
+        controlsList="nofullscreen"
+        autoPlay
+        playsInline
+        onEnded={onEnded}
+      />
+      <button
+        type="button"
+        className="media-video-fs"
+        onPointerDown={toggleFullscreen}
+        aria-label={shared.nav.fullscreen}
+        title={shared.nav.fullscreen}
+      >
+        ⛶
+      </button>
+    </div>
+  )
+}
+
 function Lightbox({ item, onClose }: { item: LightboxItem; onClose: () => void }) {
   const count = item.kind === 'image' ? item.images.length : 0
   const [active, setActive] = useState(0)
   const dialogRef = useRef<HTMLDivElement>(null)
+  // Native video fullscreen starts on pointerdown; the matching click can land
+  // on the backdrop after the element moves. Only close when both events hit it.
+  const downOnBackdrop = useRef(false)
   useFocusTrap(true, dialogRef)
 
   const go = useCallback(
@@ -98,6 +263,9 @@ function Lightbox({ item, onClose }: { item: LightboxItem; onClose: () => void }
     // Capture phase so arrow keys drive the carousel instead of flipping the book behind it.
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
+        if (document.fullscreenElement) return
+        const doc = document as FullscreenDocument
+        if (doc.webkitFullscreenElement) return
         onClose()
         return
       }
@@ -115,7 +283,18 @@ function Lightbox({ item, onClose }: { item: LightboxItem; onClose: () => void }
     return () => window.removeEventListener('keydown', onKey, true)
   }, [onClose, go, count, item.kind])
 
-  const stop = (e: React.MouseEvent) => e.stopPropagation()
+  const stop = (e: React.SyntheticEvent) => e.stopPropagation()
+
+  const onBackdropPointerDown = (e: React.PointerEvent) => {
+    downOnBackdrop.current = e.target === e.currentTarget
+  }
+
+  const onBackdropClick = (e: React.MouseEvent) => {
+    if (!downOnBackdrop.current || e.target !== e.currentTarget) return
+    if (document.fullscreenElement) return
+    if ((document as FullscreenDocument).webkitFullscreenElement) return
+    onClose()
+  }
 
   return createPortal(
     <div
@@ -124,7 +303,8 @@ function Lightbox({ item, onClose }: { item: LightboxItem; onClose: () => void }
       role="dialog"
       aria-modal="true"
       aria-label={item.alt}
-      onClick={onClose}
+      onPointerDown={onBackdropPointerDown}
+      onClick={onBackdropClick}
     >
       <button className="media-lightbox-close" onClick={(e) => { stop(e); onClose() }} aria-label="סגירה">
         ×
@@ -154,9 +334,7 @@ function Lightbox({ item, onClose }: { item: LightboxItem; onClose: () => void }
       ) : item.kind === 'video' && item.audio ? (
         <AudioStage src={item.src} poster={item.poster} alt={item.alt} onEnded={onClose} />
       ) : item.kind === 'video' ? (
-        <div className="media-stage" onClick={stop}>
-          <video src={item.src} poster={item.poster} controls autoPlay playsInline onEnded={onClose} />
-        </div>
+        <VideoStage src={item.src} poster={item.poster} onEnded={onClose} />
       ) : count > 1 ? (
         <>
           <div className="carousel3d" onClick={stop}>
@@ -237,6 +415,19 @@ export interface ShowcaseArticles {
   empty?: string
 }
 
+const LightboxDispatch = createContext<(item: LightboxItem | null) => void>(() => {})
+
+/** Hosts the media lightbox outside the flipbook so a resize remount cannot kill playback. */
+export function MediaLightboxHost({ children }: { children: ReactNode }) {
+  const [item, setItem] = useState<LightboxItem | null>(null)
+  return (
+    <LightboxDispatch.Provider value={setItem}>
+      {children}
+      {item && <Lightbox item={item} onClose={() => setItem(null)} />}
+    </LightboxDispatch.Provider>
+  )
+}
+
 export default function MediaShowcase({
   videos,
   articles,
@@ -246,7 +437,7 @@ export default function MediaShowcase({
   articles?: ShowcaseArticles
   showHeadings?: boolean
 }) {
-  const [active, setActive] = useState<LightboxItem | null>(null)
+  const setActive = useContext(LightboxDispatch)
 
   // Honor a ?guide=<slug> deep link: if one of this showcase's articles carries
   // the requested slug, open its carousel automatically on first mount. Only the
@@ -388,8 +579,6 @@ export default function MediaShowcase({
         )}
       </section>
       )}
-
-      {active && <Lightbox item={active} onClose={() => setActive(null)} />}
     </div>
   )
 }

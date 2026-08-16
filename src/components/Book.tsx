@@ -84,6 +84,10 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, 
   // full container width and ignores maxHeight, which overflows; computing an
   // exact fit avoids that.
   const measure = useCallback(() => {
+    // Native / element fullscreen changes dvh and would remount the flipbook
+    // (its key includes pixel size), which destroys any open media player.
+    const doc = document as Document & { webkitFullscreenElement?: Element | null }
+    if (document.fullscreenElement || doc.webkitFullscreenElement) return
     const stage = wrapRef.current?.parentElement
     if (!stage) return
     const availW = Math.max(260, stage.clientWidth)
@@ -111,7 +115,16 @@ const Book = forwardRef<BookHandle, BookProps>(function Book({ mode, onState }, 
     const stage = wrapRef.current?.parentElement
     const ro = new ResizeObserver(measure)
     if (stage) ro.observe(stage)
-    return () => ro.disconnect()
+    const onFs = () => {
+      if (!document.fullscreenElement) measure()
+    }
+    document.addEventListener('fullscreenchange', onFs)
+    document.addEventListener('webkitfullscreenchange', onFs)
+    return () => {
+      ro.disconnect()
+      document.removeEventListener('fullscreenchange', onFs)
+      document.removeEventListener('webkitfullscreenchange', onFs)
+    }
   }, [measure])
 
   const api = useCallback(() => flipRef.current?.pageFlip(), [])

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Book, { type BookHandle, type RtlMode } from './components/Book'
 import AccessibilityWidget from './components/AccessibilityWidget'
+import { MediaLightboxHost } from './components/MediaShowcase'
 import { shared } from './content/shared'
 import { FIRM_NAME, FIRM_TITLE } from './content/site'
 import { guideDeepLinks, pageTitles, readGuideSlug, readPageParam } from './content/pages'
@@ -84,6 +85,7 @@ export default function App() {
   const atLast = current >= total - 1
 
   return (
+    <MediaLightboxHost>
     <div className="app">
       <a className="skip-link" href="#main-content">
         {shared.a11y.skipToContent}
@@ -189,5 +191,6 @@ export default function App() {
 
       <AccessibilityWidget />
     </div>
+    </MediaLightboxHost>
   )
 }
