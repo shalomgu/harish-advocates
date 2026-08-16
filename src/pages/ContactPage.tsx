@@ -3,9 +3,6 @@ import Page from '../components/Page'
 import NewsletterPopup from '../components/NewsletterPopup'
 import { contact } from '../content/pages'
 
-const showContactList =
-  new URLSearchParams(window.location.search).get('showlist') === 'true'
-
 const ContactPage = forwardRef<HTMLDivElement>(function ContactPage(_props, ref) {
   const [newsletterOpen, setNewsletterOpen] = useState(false)
 
@@ -53,7 +50,7 @@ const ContactPage = forwardRef<HTMLDivElement>(function ContactPage(_props, ref)
         </article>
       </div>
 
-      {showContactList && (
+      {(
         <>
           <section className="contact-newsletter" aria-label={contact.newsletter.title}>
             <h3>{contact.newsletter.title}</h3>
