@@ -241,6 +241,7 @@ export const tips = {
       { type: 'video', url: asset('videos/buying-home-in-a-bag.mp4'), label: 'טיפים לרכישת דירה מקבלן' },
       { type: 'video', url: asset('videos/give-dira-risk.mp4'), label: 'על הסיכון שבדירה במתנה לקרוב' },
       { type: 'video', url: asset('videos/present-for-kids.mp4'), label: 'על ההגנות הדרושות בסיוע לילדים במימון רכישת דירה' },
+      { type: 'video', url: asset('videos/fixes-in-rented-house.mp4'), label: 'האחריות לתיקון ליקויים בדירה שכורה' },
     ] as TipVideo[],
   },
   articles: {
@@ -260,6 +261,12 @@ export const tips = {
           asset('renters-slide-7.png'),
           asset('renters-slide-8.png'),
         ],
+      },
+      {
+        title: 'בלוג על חקיקה למען כלבים שסיימו שירות בגופי ביטחון',
+        source: 'A-LAW',
+        thumbnail: asset('articles/treatment-of-military-dogs-law.png'),
+        pdf: asset('articles/treatment-of-military-dogs-law.pdf'),
       },
       {
         title: 'על ניצול כלכלי של קשישים',
