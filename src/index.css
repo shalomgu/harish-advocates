@@ -1208,9 +1208,24 @@ body {
   display: grid;
   place-items: center;
   padding: 4vh 4vw;
+  animation: lightbox-fade 0.15s ease;
+}
+
+/* Dim/blur on a sibling layer, not on the dialog itself. A filter or
+   backdrop-filter on an ancestor makes Chromium cancel native <video>
+   fullscreen as soon as it starts. */
+.media-lightbox::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
   background: rgba(6, 16, 28, 0.82);
   backdrop-filter: blur(2px);
-  animation: lightbox-fade 0.15s ease;
+  pointer-events: none;
+}
+
+.media-lightbox > *:not(.media-lightbox-close) {
+  z-index: 1;
 }
 
 @keyframes lightbox-fade {
@@ -1274,6 +1289,71 @@ body {
   border-radius: 14px;
   background: #000;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+
+/* controlsList="nofullscreen" only greys the native control in Chrome; hide it. */
+.media-stage video::-webkit-media-controls-fullscreen-button {
+  display: none;
+}
+
+.media-stage video:fullscreen,
+.media-stage video:-webkit-full-screen,
+.media-stage:fullscreen video,
+.media-stage:-webkit-full-screen video,
+.media-stage--expanded video {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  border-radius: 0;
+  box-shadow: none;
+  object-fit: contain;
+}
+
+.media-stage:fullscreen,
+.media-stage:-webkit-full-screen,
+.media-stage--expanded {
+  max-width: none;
+  max-height: none;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  background: #000;
+}
+
+.media-stage--expanded {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+}
+
+.media-video-fs {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.media-video-fs:hover,
+.media-video-fs:focus-visible {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.media-stage:fullscreen .media-video-fs,
+.media-stage:-webkit-full-screen .media-video-fs,
+.media-stage--expanded .media-video-fs {
+  background: rgba(0, 0, 0, 0.7);
 }
 
 /* YouTube (and other landscape embeds): keep a 16:9 frame that fills the popup. */
