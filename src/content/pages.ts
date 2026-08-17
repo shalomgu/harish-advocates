@@ -211,6 +211,18 @@ export interface TipVideo {
   audio?: boolean
 }
 
+/** JSON shape written by the admin UI (append-only list for מאמרים ומדריכים). */
+export interface ArticlesVideoEntry {
+  type: 'video'
+  file: string
+  label: string
+}
+
+export interface ArticlesVideosFile {
+  heading: string
+  items: ArticlesVideoEntry[]
+}
+
 export interface TipArticle {
   title: string
   // Optional deep-link slug. When the site is opened with ?guide=<slug>, the
