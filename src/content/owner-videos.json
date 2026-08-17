@@ -1,16 +1,5 @@
 {
-  "infoVideos": [
-    {
-      "type": "video",
-      "file": "test-vid.mp4",
-      "label": "בדיקה גיא"
-    },
-    {
-      "type": "video",
-      "file": "1000193503.mp4",
-      "label": "המלצות להסדר פנסיוני בעסודה"
-    }
-  ],
+  "infoVideos": [],
   "articlesVideos": [],
   "radioTvVideos": [],
   "pressVideos": []
