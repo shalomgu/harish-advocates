@@ -2,6 +2,7 @@ import { defineConfig, type Plugin, type ResolvedConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { promises as fs } from 'node:fs'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { FIRM_NAME, FIRM_TAGLINE, FIRM_TITLE } from './src/content/site'
 import {
   ORIGIN,
@@ -10,6 +11,8 @@ import {
   type SeoLink,
   type SeoPage,
 } from './src/content/seo'
+
+const rootDir = path.dirname(fileURLToPath(import.meta.url))
 
 // Central brand strings (src/content/site.ts) injected wherever these
 // placeholders appear, so the firm name/tagline live in exactly one place:
@@ -315,4 +318,12 @@ export default defineConfig(() => ({
   base: process.env.VITE_BASE ?? '/harish-advocates/',
   // seoPages() runs after brandVars() so its sitemap.xml write is the final one.
   plugins: [react(), brandVars(), seoPages()],
+  build: {
+    rollupOptions: {
+      input: {
+        main: path.resolve(rootDir, 'index.html'),
+        admin: path.resolve(rootDir, 'admin.html'),
+      },
+    },
+  },
 }))

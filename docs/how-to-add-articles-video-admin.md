@@ -36,7 +36,7 @@ Optional env overrides at build/dev time:
 
 1. Open the admin page:
    - Local: `pnpm dev` → `http://localhost:5173/harish-advocates/admin.html`
-   - Dev site: `https://…/admin.html` (same base path as the flipbook)
+   - Dev site: [https://shalomgu.github.io/harish-advocates-dev/admin.html](https://shalomgu.github.io/harish-advocates-dev/admin.html)
 2. Paste the PAT (stored only in `sessionStorage` for this tab).
 3. Choose the target page:
    1. **סרטוני מידע**
