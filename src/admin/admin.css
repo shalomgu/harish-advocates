@@ -96,6 +96,38 @@ body {
   line-height: 1.4;
 }
 
+.admin-fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.admin-fieldset legend {
+  padding: 0;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.admin-radios {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-radio {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.admin-radio input {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--accent);
+}
+
 .admin-actions {
   display: flex;
   flex-wrap: wrap;

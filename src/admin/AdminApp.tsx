@@ -1,5 +1,7 @@
 import { useState, type FormEvent } from 'react'
-import { commitArticlesVideo } from './github'
+import { OWNER_VIDEO_TARGETS } from '../content/ownerVideos'
+import type { OwnerVideoTarget } from '../content/pages'
+import { commitOwnerVideo } from './github'
 import {
   clearStoredPat,
   githubConfig,
@@ -14,6 +16,7 @@ type Phase = 'idle' | 'working' | 'done' | 'error'
 export default function AdminApp() {
   const { owner, repo, branch } = githubConfig()
   const [pat, setPat] = useState(() => readStoredPat())
+  const [target, setTarget] = useState<OwnerVideoTarget>('articlesVideos')
   const [title, setTitle] = useState('')
   const [file, setFile] = useState<File | null>(null)
   const [phase, setPhase] = useState<Phase>('idle')
@@ -67,20 +70,22 @@ export default function AdminApp() {
     }
 
     const filename = slugifyVideoFilename(file.name)
+    const targetLabel = OWNER_VIDEO_TARGETS.find((t) => t.id === target)?.label ?? target
     setPhase('working')
     setStatus('מתחילים…')
 
     try {
-      const result = await commitArticlesVideo({
+      const result = await commitOwnerVideo({
         pat: token,
         title: label,
         file,
         filename,
+        target,
         onProgress: setStatus,
       })
       setPhase('done')
       setStatus(
-        `נשמר ב־${branch}: ${result.filename}. פעולת deploy-dev אמורה לרוץ אוטומטית.`,
+        `נשמר ב־${branch} לדף ״${targetLabel}״: ${result.filename}. פעולת deploy-dev אמורה לרוץ אוטומטית.`,
       )
       setResultUrl(result.htmlUrl ?? null)
       setTitle('')
@@ -94,7 +99,7 @@ export default function AdminApp() {
   return (
     <div className="admin">
       <header className="admin-header">
-        <h1>הוספת סרטון ל״מאמרים ומדריכים״</h1>
+        <h1>הוספת סרטון לאתר</h1>
         <p className="admin-meta">
           נשמר לענף <code>{branch}</code> ב־
           <code>
@@ -118,6 +123,24 @@ export default function AdminApp() {
             נשמר רק ב־sessionStorage של הדפדפן. הרשאה: Contents Read and write לענף {branch}.
           </span>
         </label>
+
+        <fieldset className="admin-field admin-fieldset" disabled={phase === 'working'}>
+          <legend>לאיזה דף להוסיף את הסרטון?</legend>
+          <div className="admin-radios">
+            {OWNER_VIDEO_TARGETS.map((opt) => (
+              <label key={opt.id} className="admin-radio">
+                <input
+                  type="radio"
+                  name="target"
+                  value={opt.id}
+                  checked={target === opt.id}
+                  onChange={() => setTarget(opt.id)}
+                />
+                <span>{opt.label}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
 
         <label className="admin-field">
           <span>כותרת (עברית)</span>
