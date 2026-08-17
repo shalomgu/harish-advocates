@@ -1,12 +1,6 @@
 {
   "infoVideos": [],
-  "articlesVideos": [
-    {
-      "type": "video",
-      "file": "test-vid.mp4",
-      "label": "וידאו בדיקה"
-    }
-  ],
+  "articlesVideos": [],
   "radioTvVideos": [],
   "pressVideos": []
 }
