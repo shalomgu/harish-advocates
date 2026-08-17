@@ -1,5 +1,11 @@
 {
-  "infoVideos": [],
+  "infoVideos": [
+    {
+      "type": "video",
+      "file": "test-vid.mp4",
+      "label": "בדיקה גיא"
+    }
+  ],
   "articlesVideos": [],
   "radioTvVideos": [],
   "pressVideos": []
