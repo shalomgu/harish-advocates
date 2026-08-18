@@ -211,6 +211,28 @@ export interface TipVideo {
   audio?: boolean
 }
 
+/** JSON entry written by the admin UI (append-only per page target). */
+export interface OwnerVideoEntry {
+  type: 'video'
+  file: string
+  label: string
+}
+
+/** Admin targets — keys match src/content/owner-videos.json. */
+export type OwnerVideoTarget = 'infoVideos' | 'articlesVideos' | 'radioTvVideos' | 'pressVideos'
+
+export interface OwnerVideosFile {
+  infoVideos: OwnerVideoEntry[]
+  articlesVideos: OwnerVideoEntry[]
+  radioTvVideos: OwnerVideoEntry[]
+  pressVideos: OwnerVideoEntry[]
+}
+
+/** @deprecated Use OwnerVideoEntry / OwnerVideosFile */
+export type ArticlesVideoEntry = OwnerVideoEntry
+/** @deprecated Use OwnerVideosFile */
+export type ArticlesVideosFile = { heading: string; items: OwnerVideoEntry[] }
+
 export interface TipArticle {
   title: string
   // Optional deep-link slug. When the site is opened with ?guide=<slug>, the

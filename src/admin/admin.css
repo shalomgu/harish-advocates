@@ -1,0 +1,189 @@
+:root {
+  --accent: #1d4f8f;
+  --bg: #f4f6f9;
+  --card: #fff;
+  --text: #1a2332;
+  --muted: #5a6a7a;
+  --danger: #8b1e1e;
+  --ok: #0d5c2e;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Heebo', Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  direction: rtl;
+}
+
+.admin {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 32px 20px 48px;
+}
+
+.admin-header h1 {
+  margin: 0 0 8px;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1.35;
+}
+
+.admin-meta {
+  margin: 0 0 24px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.admin-meta code {
+  font-size: 0.85em;
+  background: rgba(29, 79, 143, 0.08);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.admin-form {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 8px 28px rgba(10, 30, 60, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.admin-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.admin-field input[type='text'],
+.admin-field input[type='password'] {
+  font: inherit;
+  font-weight: 400;
+  padding: 10px 12px;
+  border: 1px solid #c5d0dc;
+  border-radius: 8px;
+  direction: ltr;
+  text-align: left;
+}
+
+.admin-field input[type='file'] {
+  font: inherit;
+  font-weight: 400;
+  font-size: 0.9rem;
+}
+
+.admin-field input:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  border-color: var(--accent);
+}
+
+.admin-hint {
+  font-weight: 400;
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.admin-fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.admin-fieldset legend {
+  padding: 0;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.admin-radios {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-radio {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.admin-radio input {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--accent);
+}
+
+.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.admin-btn {
+  font: inherit;
+  font-weight: 700;
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+}
+
+.admin-btn:hover:not(:disabled),
+.admin-btn:focus-visible:not(:disabled) {
+  filter: brightness(1.06);
+}
+
+.admin-btn:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.admin-btn--ghost {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+}
+
+.admin-status {
+  margin: 18px 0 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: rgba(29, 79, 143, 0.08);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.admin-status.is-error {
+  background: #ffeded;
+  color: var(--danger);
+  border: 1px solid #ffb4b4;
+}
+
+.admin-status.is-ok {
+  background: #e7faf0;
+  color: var(--ok);
+  border: 1px solid #8fd9a8;
+}
+
+.admin-status a {
+  color: inherit;
+  font-weight: 700;
+}
