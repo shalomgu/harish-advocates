@@ -48,5 +48,6 @@ export function githubConfig() {
     owner: import.meta.env.VITE_GITHUB_OWNER || 'shalomgu',
     repo: import.meta.env.VITE_GITHUB_REPO || 'harish-advocates',
     branch: import.meta.env.VITE_GITHUB_BRANCH || 'dev',
+    mainBranch: import.meta.env.VITE_GITHUB_MAIN_BRANCH || 'main',
   }
 }

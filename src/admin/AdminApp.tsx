@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { OWNER_VIDEO_TARGETS } from '../content/ownerVideos'
 import type { OwnerVideoTarget } from '../content/pages'
-import { commitOwnerVideo } from './github'
+import { commitOwnerVideo, promoteOwnerVideosViaPr } from './github'
 import {
   clearStoredPat,
   githubConfig,
@@ -14,9 +14,9 @@ import {
 type Phase = 'idle' | 'working' | 'done' | 'error'
 
 export default function AdminApp() {
-  const { owner, repo, branch } = githubConfig()
+  const { owner, repo, branch, mainBranch } = githubConfig()
   const [pat, setPat] = useState(() => readStoredPat())
-  const [target, setTarget] = useState<OwnerVideoTarget>('articlesVideos')
+  const [target, setTarget] = useState<OwnerVideoTarget>('infoVideos')
   const [title, setTitle] = useState('')
   const [file, setFile] = useState<File | null>(null)
   const [phase, setPhase] = useState<Phase>('idle')
@@ -85,11 +85,45 @@ export default function AdminApp() {
       })
       setPhase('done')
       setStatus(
-        `נשמר ב־${branch} לדף ״${targetLabel}״: ${result.filename}. פעולת deploy-dev אמורה לרוץ אוטומטית.`,
+        `נשמר ב־${branch} לדף ״${targetLabel}״: ${result.filename}. בדקו באתר ה־dev, ואז השתמשו ב״פרסום ל־main״.`,
       )
       setResultUrl(result.htmlUrl ?? null)
       setTitle('')
       setFile(null)
+    } catch (err) {
+      setPhase('error')
+      setStatus(err instanceof Error ? err.message : 'שגיאה לא צפויה.')
+    }
+  }
+
+  async function onPromoteToMain() {
+    setResultUrl(null)
+    const token = pat.trim()
+    if (!token) {
+      setPhase('error')
+      setStatus('יש להדביק Personal Access Token.')
+      return
+    }
+    if (
+      !window.confirm(
+        `ליצור Pull Request ל־${mainBranch} עם כל סרטוני ה־owner מ־${branch}?\n(רק קבצי וידאו + JSON — לא כל ענף ${branch})`,
+      )
+    ) {
+      return
+    }
+
+    setPhase('working')
+    setStatus('מתחילים פרסום…')
+    try {
+      const result = await promoteOwnerVideosViaPr({
+        pat: token,
+        onProgress: setStatus,
+      })
+      setPhase('done')
+      setStatus(
+        `נפתח PR #${result.prNumber} ל־${mainBranch} (${result.fileCount} קבצי וידאו). אשרו את ה־PR ב־GitHub כדי לפרסם לפרודקשן.`,
+      )
+      setResultUrl(result.prUrl)
     } catch (err) {
       setPhase('error')
       setStatus(err instanceof Error ? err.message : 'שגיאה לא צפויה.')
@@ -101,7 +135,7 @@ export default function AdminApp() {
       <header className="admin-header">
         <h1>הוספת סרטון לאתר</h1>
         <p className="admin-meta">
-          נשמר לענף <code>{branch}</code> ב־
+          העלאה ל־<code>{branch}</code> · פרסום דרך PR ל־<code>{mainBranch}</code> ב־
           <code>
             {owner}/{repo}
           </code>
@@ -119,9 +153,6 @@ export default function AdminApp() {
             placeholder="github_pat_… או ghp_…"
             disabled={phase === 'working'}
           />
-          <span className="admin-hint">
-            נשמר רק ב־sessionStorage של הדפדפן. הרשאה: Contents Read and write לענף {branch}.
-          </span>
         </label>
 
         <fieldset className="admin-field admin-fieldset" disabled={phase === 'working'}>
@@ -182,6 +213,21 @@ export default function AdminApp() {
         </div>
       </form>
 
+      <section className="admin-promote">
+        <h2>פרסום לפרודקשן</h2>
+        <p className="admin-hint">
+        אחרי שבדקת באתר הפיתוח לחץ על הכפתור          
+        </p>
+        <button
+          type="button"
+          className="admin-btn admin-btn--promote"
+          onClick={onPromoteToMain}
+          disabled={phase === 'working' || !pat.trim()}
+        >
+          פרסום ל־main (יצירת <strong>Pull Request</strong>)
+        </button>
+      </section>
+
       {status && (
         <p
           className={`admin-status${
@@ -194,7 +240,7 @@ export default function AdminApp() {
             <>
               {' '}
               <a href={resultUrl} target="_blank" rel="noreferrer">
-                צפייה ב־commit
+                פתיחה ב־GitHub
               </a>
             </>
           )}
