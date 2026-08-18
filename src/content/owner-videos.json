@@ -1,5 +1,11 @@
 {
-  "infoVideos": [],
+  "infoVideos": [
+    {
+      "type": "video",
+      "file": "1000193503.mp4",
+      "label": "המלצות להסדר פנסיוני אופטימלי בעבודה"
+    }
+  ],
   "articlesVideos": [],
   "radioTvVideos": [],
   "pressVideos": []
