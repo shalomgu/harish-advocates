@@ -28,7 +28,7 @@ async function readGhError(res: Response): Promise<string> {
 
 function authError(detail: string, step: string): Error {
   return new Error(
-    `אימות/הרשאה נכשלו (${step}): ${detail}. בדקו: PAT בתוקף, גישה ל־repo, Contents Read and write, והרשאה לדחוף ל־dev.`,
+    `אימות/הרשאה נכשלו (${step}): ${detail}. בדקו: PAT בתוקף, גישה ל־repo, Contents Read and write, ו־Pull requests Read and write (לפרסום ל־main).`,
   )
 }
 
@@ -271,6 +271,190 @@ export async function commitOwnerVideo(opts: {
   )
 
   return { commitSha: commit.sha, filename, target, htmlUrl: commit.html_url }
+}
+
+export type PromoteVideosResult = {
+  branch: string
+  prNumber: number
+  prUrl: string
+  fileCount: number
+}
+
+/**
+ * Copy owner-videos.json + all referenced MP4s from the upload branch (`dev`)
+ * onto a new branch based on `main`, then open a PR into `main` (required when
+ * main is protected).
+ */
+export async function promoteOwnerVideosViaPr(opts: {
+  pat: string
+  onProgress?: (step: string) => void
+}): Promise<PromoteVideosResult> {
+  const pat = opts.pat.trim()
+  const { onProgress } = opts
+  const { owner, repo, branch: sourceBranch, mainBranch } = githubConfig()
+
+  onProgress?.(`קוראים את רשימת הסרטונים מ־${sourceBranch}…`)
+  const sourceJson = await fetchJsonFile(pat, owner, repo, sourceBranch, JSON_PATH)
+  if (!sourceJson.ok) {
+    if (sourceJson.status === 401 || sourceJson.status === 403) {
+      throw authError(sourceJson.detail, 'קריאת JSON מ־dev')
+    }
+    if (sourceJson.status === 404) {
+      throw new Error(`אין עדיין owner-videos.json בענף ${sourceBranch}. העלו סרטון קודם.`)
+    }
+    throw new Error(`שגיאה בקריאת JSON מ־${sourceBranch} (${sourceJson.status}).`)
+  }
+
+  const ownerVideos = parseOwnerVideosFile(JSON.parse(decodeBase64Utf8(sourceJson.content)))
+  const entries = [
+    ...ownerVideos.infoVideos,
+    ...ownerVideos.articlesVideos,
+    ...ownerVideos.radioTvVideos,
+    ...ownerVideos.pressVideos,
+  ]
+  if (entries.length === 0) {
+    throw new Error('רשימת הסרטונים ריקה — אין מה לפרסם ל־main.')
+  }
+
+  const uniqueFiles = [...new Set(entries.map((e) => e.file))]
+  onProgress?.(`אוספים ${uniqueFiles.length} קבצי וידאו מ־${sourceBranch}…`)
+
+  type TreeEntry = { path: string; mode: '100644'; type: 'blob'; sha: string }
+  const treeEntries: TreeEntry[] = []
+
+  // Re-create the JSON blob so the PR always carries the current list text.
+  const jsonBlob = await gh<{ sha: string }>(
+    pat,
+    `/repos/${owner}/${repo}/git/blobs`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        content: JSON.stringify(ownerVideos, null, 2) + '\n',
+        encoding: 'utf-8',
+      }),
+    },
+    'יצירת blob ל־JSON',
+  )
+  treeEntries.push({ path: JSON_PATH, mode: '100644', type: 'blob', sha: jsonBlob.sha })
+
+  for (const file of uniqueFiles) {
+    const path = `${VIDEO_DIR}/${file}`
+    const metaRes = await fetch(
+      `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${sourceBranch}`,
+      { headers: authHeaders(pat) },
+    )
+    if (metaRes.status === 401 || metaRes.status === 403) {
+      throw authError(await readGhError(metaRes), `קריאת ${file}`)
+    }
+    if (!metaRes.ok) {
+      throw new Error(`הקובץ ${file} חסר בענף ${sourceBranch} אך רשום ב־JSON.`)
+    }
+    const meta = (await metaRes.json()) as { sha: string }
+    treeEntries.push({ path, mode: '100644', type: 'blob', sha: meta.sha })
+  }
+
+  onProgress?.(`יוצרים ענף מ־${mainBranch}…`)
+  const mainRef = await gh<{ object: { sha: string } }>(
+    pat,
+    `/repos/${owner}/${repo}/git/ref/heads/${mainBranch}`,
+    {},
+    `קריאת ענף ${mainBranch}`,
+  )
+  const mainSha = mainRef.object.sha
+  const mainCommit = await gh<{ tree: { sha: string } }>(
+    pat,
+    `/repos/${owner}/${repo}/git/commits/${mainSha}`,
+    {},
+    `קריאת commit של ${mainBranch}`,
+  )
+
+  const promoteBranch = `promote-owner-videos-${Date.now()}`
+  await gh(
+    pat,
+    `/repos/${owner}/${repo}/git/refs`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        ref: `refs/heads/${promoteBranch}`,
+        sha: mainSha,
+      }),
+    },
+    'יצירת ענף לפרסום',
+  )
+
+  onProgress?.('כותבים את קבצי הסרטונים לענף החדש…')
+  const tree = await gh<{ sha: string }>(
+    pat,
+    `/repos/${owner}/${repo}/git/trees`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        base_tree: mainCommit.tree.sha,
+        tree: treeEntries,
+      }),
+    },
+    'יצירת tree לפרסום',
+  )
+
+  const commit = await gh<{ sha: string }>(
+    pat,
+    `/repos/${owner}/${repo}/git/commits`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: `content: promote owner videos from ${sourceBranch}`,
+        tree: tree.sha,
+        parents: [mainSha],
+      }),
+    },
+    'יצירת commit לפרסום',
+  )
+
+  await gh(
+    pat,
+    `/repos/${owner}/${repo}/git/refs/heads/${promoteBranch}`,
+    {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sha: commit.sha }),
+    },
+    'עדכון ענף הפרסום',
+  )
+
+  onProgress?.('פותחים Pull Request ל־main…')
+  const pr = await gh<{ number: number; html_url: string }>(
+    pat,
+    `/repos/${owner}/${repo}/pulls`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title: 'content: promote owner videos to production',
+        head: promoteBranch,
+        base: mainBranch,
+        body: [
+          '## Summary',
+          `- Promotes \`owner-videos.json\` and ${uniqueFiles.length} owner-uploaded MP4(s) from \`${sourceBranch}\` to \`${mainBranch}\`.`,
+          '- Does **not** merge the rest of \`dev\` — video content only.',
+          '',
+          '## Test plan',
+          '- [ ] Confirm videos appear on the target flipbook pages after production deploy',
+        ].join('\n'),
+      }),
+    },
+    'יצירת Pull Request',
+  )
+
+  return {
+    branch: promoteBranch,
+    prNumber: pr.number,
+    prUrl: pr.html_url,
+    fileCount: uniqueFiles.length,
+  }
 }
 
 /** @deprecated Use commitOwnerVideo */

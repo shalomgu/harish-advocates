@@ -162,6 +162,29 @@ body {
   border: 1px solid var(--accent);
 }
 
+.admin-promote {
+  margin-top: 20px;
+  background: var(--card);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 8px 28px rgba(10, 30, 60, 0.08);
+}
+
+.admin-promote h2 {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+  color: var(--accent);
+}
+
+.admin-promote .admin-hint {
+  margin: 0 0 14px;
+  display: block;
+}
+
+.admin-btn--promote {
+  background: #0d5c2e;
+}
+
 .admin-status {
   margin: 18px 0 0;
   padding: 12px 14px;
